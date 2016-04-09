@@ -3,21 +3,30 @@ Hello, world!
 
 ## Test Section 1
 This is a lorem ipsum test section 1
+
 With a 2nd paragraph
 
 ## Test Section 2
 This is a lorem ipsum test section 2
+
 With a 2nd paragraph
+
+I> ## Sample Information
+I>
+I> Only a small selection of chapters are added
+
 And a third paragraph
 
 A> Note about something that is very interesting
+
+{pagebreak}
 
 
 ## Test Section 3
 This is a lorem ipsum test section 2
 With a 2nd paragraph
 
-![Leanpub Logo](images/logo.png)
+![MEAN.JS Logo](images/logo.png)
 
 And a third paragraph
 
@@ -31,15 +40,14 @@ A>The examples here are mainly focused on how the PDF output looks,
 
 Then another paragraph just for fun
 
-{lang=js}
-~~~
+```js
 [
   {
     "caption": "Show Me",
     "command": "show"
   }
 ]
-~~~
+```
 
 ### Sub Section 5
 Showing us some G aside
@@ -52,7 +60,19 @@ G>
 
 {pagebreak}
 
-~~~
+Some paragraph of text, still belonging to Sub Section 5
+
 {line-numbers=off,lang=js}
 <<(code/test.js)
-~~~
+
+
+# Section 6
+
+After this paragraph we get a blockquote
+
+$ This
+$ is
+$ it,
+$ baby
+
+<<(code/test.js)
