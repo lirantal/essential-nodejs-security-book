@@ -66,13 +66,8 @@ Some paragraph of text, still belonging to Sub Section 5
 <<(code/test.js)
 
 
-# Section 6
+## Section 6
 
 After this paragraph we get a blockquote
-
-$ This
-$ is
-$ it,
-$ baby
 
 <<(code/test.js)
