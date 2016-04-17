@@ -40,3 +40,91 @@ Lusca integrates with ExpressJS web applications using a middleware implementati
 T> ## Security-oriented frameworks
 T>
 T> Lusca is a library which is part of a bigger web application framework called [kraken.js](https://github.com/krakenjs/kraken-js) that focuses on security first, and is too, officially maintained by PayPal's own people.
+
+## Strict Transport Security
+
+Strict Transport Security, also known as HSTS, is a protocol standard to enforce secure connections to the server via HTTP over SSL/TLS.
+HSTS is configured and transmitted from the server to any HTTP web client using the HTTP header *Strict-Transport-Security* which specifies a time interval during which the web client should only communicate over an HTTP secured connection (HTTPS).
+
+T> ## Tip
+T>
+T> When a *Strict-Transport-Security* header is sent over HTTP the web client ignores it because the connection is unsecured to begin with.
+
+### The Risk
+
+The risks that may arise when communicating over a secure HTTPS connection is that a malicious user can perform an Man-In-The-Middle (MITM) attack and down-grade future requests to the web server to use an HTTP connection, thus being able to sniff and read all the data that flows through.
+
+I> ## Interesting fact:
+I> The [original HSTS draft](https://tools.ietf.org/html/rfc6797) was published in 2011 by Jeff Hodges from PayPal,
+I> Collin Jackson from Carnegie Mellon University, and Adam Barth from Google.
+I>
+
+Sending HTTP requests to the web server even though an HTTPS connection was initially made is not a problem on its own, as the user is unaware of why this is happening and wouldn't necessarily suspect. Perhaps the server has a REST endpoint which is not yet HTTPS-supported?
+
+In the following flow diagram, Figure 1-1, we can see an example scenario where the server returns an HTML file for the login page to the browser, which includes some resources that are accessible over HTTP, like the submit button's image. If an attacker is able to perform a Man-In-The-Middle attack and "sit on the wire" to listen and sniff any un-encrypted traffic that flows through, then they can essential access and read those HTTP requests which include sensitive data such as the user's cookie.
+Even worse scenarios may include HTTP resources set for POST or PUT endpoints where actual data is being sent and can be sniffed.
+
+![Figure 1-1 - Visualizing HTTPS MITM Attack](images/figure1-1.png)
+
+### The Solution
+
+When web servers want to protect their web clients through a secured HTTPS connection, they need to send the *Strict-Transport-Security* header with a given value which represents the duration of time in seconds which the web client should send future requests over a secured HTTPS connection.
+
+e.g. telling the web client to send further secure HTTPS requests for the next hour.
+```
+Strict-Transport-Security: max-age=3600
+```
+
+### Helmet Implementation
+
+To use Helmet's HSTS library we need to download the npm package and we will also add it as a package dependency to the NodeJS project we're working on:
+
+```bash
+npm install hsts --save
+```
+
+Let's setup the hsts middleware to indicate web client such as a browser that it should only send HTTPS requests to our server's hostname for the next 1 month:
+
+```js
+var hsts = require('hsts');
+
+// Set the expiration time of HTTPS requests to the server to 1 month, specified in milliseconds
+var reqDuration = 2629746000;
+
+app.use(hsts({
+  maxAge: requestsDuration
+}));
+```
+
+In the above snippet `app` is an ExpressJS app object, which we are instructing to use the hsts library.
+
+A quite common case is where web servers also have sub-domains to fetch assets from, or make REST API calls to, in which case we would also like to protect them and enforce HTTPS requests. To do that, we can include the following optional parameter to the hsts options object:
+
+```js
+  includeSubDomains: true
+```
+
+### Lusca Implementation
+
+If Lusca is not yet installed we can install it with npm as follows:
+
+```bash
+npm install lusca --save
+```
+
+Once lusca is installed, we can set it up for HSTS support with an ExpressJS application setup:
+
+```js
+var lusca = require('lusca');
+
+// Set the expiration time of HTTPS requests to the server to 1 month, specified in milliseconds
+var reqDuration = 2629746000;
+
+app.use(lusca({
+  hsts: {
+    maxAge: requestsDuration
+  }
+}));
+```
+
+As can be seen, using lusca is very similar to using helmet, including their optional arguments like `maxAge`, and `includeSubDomains`.
