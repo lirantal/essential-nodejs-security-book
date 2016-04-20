@@ -128,3 +128,87 @@ app.use(lusca({
 ```
 
 As can be seen, using lusca is very similar to using helmet, including their optional arguments like `maxAge`, and `includeSubDomains`.
+
+## X-Frame-Options
+
+The [X-Frame-Options](http://tools.ietf.org/html/7034) HTTP header was introduced to mitigate an attack called Clickjacking which allows an attacker to disguise page elements such as buttons, and text inputs by hiding their view behind real web pages which render on the screen using an iframe HTML element, or similar objects.
+
+I> ## Deprecation notice
+I>
+I> The X-Frame-Options header was never standardized as part of an official specification but many of the popular browsers today still support it.
+I> It's successor is the Content-Security-Policy header which will be covered in the next section and one should focus on implementing CSP for new websites being built.
+
+
+### The Risk
+
+[Clickjacking](https://www.owasp.org/index.php/Clickjacking) attack is about mis-leading the user to perform a seemingly naive and harmless operation while in reality the user is clicking buttons of other elements or typing text into an input field which is under the user's control.
+
+Common examples of employing Clickjacking attack:
+1. If a bank, or email account website doesn't employ an X-Frame-Options HTTP header then a malicious attacker can render them on an iframe, and place the attacker's own input fields on the exact location of the bank or email website's input for username and password and to record your credentials information.
+2. A web application for video or voice chat that is in-secure can be exploited by this attack to let the user mistakenly assume they are just clicking around on the screen, or playing a game, while in reality a series of clicks are actually turning on your web camera or microphone.
+
+### The Solution
+
+To mitigate the problem, a web server can respond to a browser's request with an `X-Frame-Options` HTTP header which is set to one of the following possible values:
+1. DENY - Specifies that the website can not be rendered in an iframe, frame, or object HTML elements.
+2. SAMEORIGIN - Specifies that the website can be rendered only if it is requested to be embedded on an iframe, frame or object HTML elements from the same domain.
+3. ALLOW-FROM <URI> - Specifies that the website can be framed and rendered from the provided URI value. Important to notice that you can't specify multiple URI values, but are limited to just one.
+
+A few examples to show how this header is set are:
+```
+X-Frame-Options: ALLOW-FROM http://www.mydomain.com
+```
+
+and
+
+```
+X-Frame-Options: DENY
+```
+
+T> ## Caution of Proxies
+T>
+T> Web proxies are often used as a means of caching and they natively perform a lot of headers manipulation.
+T> Beware of proxies which may remove this or other security related headers.
+
+### Helmet Implementation
+
+With helmet, implementing this header is as simple as requiring the helmet package and using ExpressJS's `app` object to instruct ExpressJS to use the xframe middleware provided by helmet.
+
+Setting the X-Frame-Options to completely deny any frames:
+
+```js
+var helmet = require('helmet');
+
+app.use(helmet.frameguard({
+  action: 'deny'
+}));
+```
+
+Similarly, we can allow frames to occur only from the same origin by providing the following object:
+```js
+{
+  action: 'sameorigin'
+}
+```
+
+Or to allow frames to occur from a specified host:
+```js
+{
+  action: 'allow-from',
+  domain: 'https://mydomain.com'
+}
+```
+
+
+### Lusca Implementation
+
+If lusca library is already installed and our ExpressJS application is already configured and provides the `app` object, then:
+
+```js
+var lusca = require('lusca');
+
+app.use(lusca({
+    xframe: 'SAMEORIGIN'
+  }
+));
+```
