@@ -212,3 +212,207 @@ app.use(lusca({
   }
 ));
 ```
+
+## Content-Security-Policy
+
+As reviewed before with the X-Frame-Options header, there are many attacks related to content injection in the user's browser whether it is the Clickjacking attack, or other forms of attacks such as Cross-Site-Scripting (XSS). Another improvement to the previous set of headers is a header which can tell the browser which content to trust so that the browser is able to prevent attempts to disable malicious content injection that is specified not to be trusted by web servers.
+
+With [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Introducing_Content_Security_Policy) (CSP) it is possible to prevent a wide range of attacks, including Cross-site scripting and other content injections, incluing Clickjacking which we already reviewed and in this regard if CSP is implemented then it obsoletes the need to also use the X-Frame-Options header.
+
+### The Risk
+
+By default, the CSP header will prevent and mitigate severe issues such as:
+* Inline JavaScript code specified with `<script>` tags, and any DOM events which trigger JavaScript execution such as `onClick()` etc.
+* Inline CSS code specified via a `<style>` tag or attribute elements
+
+### The Solution
+
+With CSP we can whitelist many configurations for trusted content and as such the initial setup can grow to a set of complex directives.
+Let's review one directive called *connect-src*. It is used to control which remotes the browser is allowed to connect via XHR, or WebSockets.
+Acceptable values that we can set for this or other directives are:
+* *'none'* - not allowing remote calls such as XHR at all
+* *'self'* - only allow remote calls to our own domain (an exact domain/hostname. sub-domains aren't allowed)
+
+An example for this directive being set by the web server and allows remote calls only to our own domain and to Google's API domain:
+```
+Content-Security-Policy: connect-src 'self' https://apis.google.com;
+```
+
+Another directive to control the whitelist for JavaScript sources is called *script-src*.
+Such directive helps mitigate Cross-Site-Scripting (XSS) attacks by instructing the browser what is valid source for evaluating and executing JavaScript source code.
+
+*script-src* supports the *'none'* and *'self'* keywords as values, including the following options too:
+* *'unsafe-inline'* - allow any inline JavaScript source code such as `<script>`, and DOM events triggering like `onClick()`, or `javascript:` URIs. It is also affecting CSS for inline tags.
+* *'unsafe-eval'* - allows executing `eval()` code
+
+For example, a policy for allowing JavaScript to be executed only from our own domain, from Google's, and allows inline JavaScript code as well:
+```
+Content-Security-Policy: script-src 'self' https://apis.google.com 'unsafe-inline'
+```
+
+A full list of supported directives can be found on the [CSP policy directives page on MDN](https://developer.mozilla.org/en-US/docs/Web/Security/CSP/CSP_policy_directives) but let's cover some othert common options and their values.
+
+* *default-src* - where a directive doesn't have a value, it defaults to an open, non-restricting configuration. It's safer to set a default for all of the un-configured options and this is the purpose of the *default-src* directive.
+* *script-src* - a directive to set which locations we allow to load or execute JavaScript sources from. If it's set to a value of *'self'* then no inline JavaScript tags are allowed, such as `<script>`, and only sources from our own domain.
+
+I> ## On implementing CSP
+I>
+I> It should also be noted that the CSP configuration needs to meet the implementation of your web application architecture so that if you
+I> deny inline <script> blocks then your R&D team is aware of this and do not rely on such inline JavaScript code blocks, otherwise you will be
+I> breaking features and functionality.
+
+### Helmet Implementation
+
+Using helmet we can configure a secured policy for trusted content.
+Due to the potential for a complex configuration we will review several different policies in smaller blocks of code to easily explain what is happening when we implement CSP.
+
+The following NodeJS code will add helmet's CSP middleware one each request so that the server responds with a CSP header and a simple security policy.
+We define a whitelist where JavaScript code and CSS resources are only allowed to be loaded from the current origin, which is the exact hostname or domain (no sub-domains will be allowed):
+
+```js
+var helmet = require('helmet');
+
+app.use(helmet.csp({
+  directives: {
+    scriptSrc: ["'self'"],
+    styleSrc: ["'self'"]
+  }
+}));
+```
+
+It is important to remember that if no default policy is specified then all other types of content policies are open and allowed, and also some content policies simply don't have a default and must be specified to be overridden.
+
+Let's construct the following content policy for our web application:
+* By default, allow resources to be loaded only from our own domain origin, or from our Amazon CDN.
+* JavaScript sources are restricted to our own domain and Google's hosted libraries domain so we can load AngularJS from Google.
+* Because our web application doesn't need any kind of iframes, or objects to be embedded and rendered we will disable them.
+* Forms are always only submitted to our own domain origin
+
+```js
+var helmet = require('helmet');
+
+app.use(helmet.csp({
+  directives: {
+    defaultSrc: ["'self'", 'https://cdn.amazon.com'],
+    scriptSrc: ["'self'", 'https://ajax.googleapis.com'],
+    childSrc: ["'none'"],
+    objectSrc: ["'none'"],
+    formSrc: ["'none'"]
+  }
+}));
+```
+
+### Lusca Implementation
+
+Lusca's CSP option has three main objects that can be set:
+* `policy` - an object for defining the content policy
+* `reportOnly` - a true or false for defining whether the browser should only report for violations of the content policy or actually deny such attempts
+* `reportUri` - the URI string to send reporting data as JSON documents via POST requests being made from the browser
+
+With this simple setup constructing a content policy is very similar to the official documentation with regards to directives and their values.
+
+For example, let's setup the following content policy:
+* Allow by default content only from our own origin domain, and from https://ajax.googleapis.com
+* For any content violations just report the error, don't actually deny requests from being sent
+* For any content violations send a report to a remote system
+
+```js
+var lusca = require('lusca');
+
+app.use(lusca.csp({
+  policy: {
+    'default-src': "'self' https://ajax.googleapis.com"
+  },
+  reportOnly: true,
+  reportUri: 'https://mydomain.com/report'
+}));
+```
+
+### Gradual CSP Implementation
+
+Your Content Security Policy will grow and change as your web application grows too.
+With the wide and varied directives it could be challenging to introduce a policy all at once so instead a learning curve for what works is recommended.
+
+The CSP header has a built-in directive which help in understanding how your web application makes use of content policy.
+This directive is used for reporting any actions performed by the browser for any of the directives and the origins that they call.
+
+It's simple to add to any running web application:
+```
+Content-Security-Policy: default-src 'self'; report-uri https://mydomain.com/report
+```
+
+Once added, the browser will send a POST request to the URI provided with a JSON format in the body for anything that violates the content security policy of serving content from our own origin domain where the page is served.
+
+With Helmet this is easily configured:
+```js
+var helmet = require('helmet');
+
+app.use(helmet.csp({
+  directives: {
+    defaultSrc: ['self'],
+    reportUri: 'https://mydomain.com/report'
+  }
+}));
+```
+
+Another useful configuration for helmet when we are still evaluating is to instruct the browser to only report on content policy violation and not block them:
+
+```js
+var helmet = require('helmet');
+
+app.use(helmet.csp({
+  directives: {
+    defaultSrc: ['self'],
+    reportUri: 'https://mydomain.com/report'
+  },
+  reportOnly: true
+}));
+```
+
+
+## Other HTTP headers
+
+Some other non-standard HTTP headers exist which are not part of any official specification such as IANA, but are worth looking into as they do provide another layer of security for your users.
+
+### X-XSS-Protection
+
+The HTTP header *X-XSS-Protection* is used by IE8 and IE9, allows toggling on or off the Cross-Site-Scripting (XSS) filter capability that is built into the browser.
+
+Turning XSS filtering for any IE8 and IE9 browsers on your web application requires to send the following HTTP header:
+```
+X-XSS-Protection: 1; mode=block
+```
+
+With Helmet, this protection can be turned on using the following snippet:
+```js
+var helmet = require('helmet');
+
+app.use(helmet.xssFilter());
+```
+
+With Lusca, this is quite simple as well:
+```js
+var lusca = require('lusca');
+
+app.use(lusca.xssProtection(true));
+```
+
+### X-Content-Type-Options
+
+The *X-Content-Type-Options* HTTP header is used by IE, Chrome, and Opera and is used to mitigate a MIME based attack.
+
+The purpose of this header is mostly to instruct the browser to not sniff override the web server's content type and render the stream as is given from the server.
+
+An example of setting this header:
+```
+X-Content-Type-Options: nosniff
+```
+
+Helmet's implementation:
+```js
+var helmet = require('helmet');
+
+app.use(helmet.noSniff());
+```
+
+Lusca has no support for this HTTP header built in.
