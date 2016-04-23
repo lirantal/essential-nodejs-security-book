@@ -80,19 +80,19 @@ Strict-Transport-Security: max-age=3600
 To use Helmet's HSTS library we need to download the npm package and we will also add it as a package dependency to the NodeJS project we're working on:
 
 ```bash
-npm install hsts --save
+npm install helmet --save
 ```
 
 Let's setup the hsts middleware to indicate web client such as a browser that it should only send HTTPS requests to our server's hostname for the next 1 month:
 
 ```js
-var hsts = require('hsts');
+var helmet = require('helmet');
 
 // Set the expiration time of HTTPS requests to the server to 1 month, specified in milliseconds
 var reqDuration = 2629746000;
 
-app.use(hsts({
-  maxAge: requestsDuration
+app.use(helmet.hsts({
+  maxAge: reqDuration
 }));
 ```
 
