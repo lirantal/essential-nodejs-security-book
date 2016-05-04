@@ -1,4 +1,4 @@
 frontmatter.md
 backmatter.md
 chapter1.md
-test-chapter.md
+chapter2.md
