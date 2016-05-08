@@ -61,3 +61,45 @@ app.use(session({
   }
 }));
 ```
+
+
+### Secure cookie access to communication protocol only
+
+Browsers feature a method for accessing client side cookie information through the common use of the `document.cookie` object. When a web application is made vulnerable to Cross-Site-Scripting (XSS) attacks then it can be exploited to run any arbitrary JavaScript code, such as to access cookie information and perform any action on it, such as send it to a remote service controlled or monitored by the attacker, or just print it to the generated HTML page output.
+
+To mitigate this issue, we can limit the access to the cookie information so that the browser knows to only send/receive cookie data via the HTTP/HTTPS communication protocol over the wire. Any attempts to execute JavaScript functions to get the cookie object will then fail.
+
+```js
+var session = require('express-session');
+
+app.use(session({
+  cookie: {
+    httpOnly: true
+  }
+}));
+```
+
+### Secure storage of session cookie
+
+The session cookie is used to identify the user's browsing session at least, and may contain more sensitive information about the user and the web application in other cases. Due to the sensitive data that the cookie holds it's persistence and storage in the browser's client side makes it an appealing target for attackers and thus another very important aspect of security.
+
+We identify two types of cookie storage: persistent and non-persistent cookies.
+Persistent cookies are specified by a *Max-Age* or *Expires* attribute and value which define the amount of time to store on the browser's disk storage. Non-persistent which are more secured will be stored in the browser's memory for the remainder of time when the browser process is open. Once closed, any cookie information that was saved in the browser is no longer available.
+
+With express-session, the *maxAge* value is by default set to *null* which makes for a secure cookie configuration but it is worth forcing this value for clarity and for future updates to the library:
+
+```js
+var session = require('express-session');
+
+app.use(session({
+  cookie: {
+    // If required to set a persistent cookie to a specified time
+    // then use a maxAge value in milliseconds
+    maxAge: null;
+  }
+}));
+```
+
+T> ## Did you ever toggle the Remember Me option?
+T>
+T> Web applications make use of persisting the cookie data to the user's disk storage in order to provide a more convenient user experience which doesn't require the user to always login. If the cookie is available on disk, the user's session remains active and can be continued from the point it was left off.
