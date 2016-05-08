@@ -25,3 +25,39 @@ The risk and impact of any session attack is owning the user's identity and thus
 T> ## On Session Management
 T>
 T> OWASP maintains an up to date [Session Management](https://www.owasp.org/index.php/Session_Management_Cheat_Sheet) checklist to validate your web security compliance with security standards.
+
+## Session Security in NodeJS and ExpressJS
+
+ExpressJS utilizes the [express-session](https://github.com/expressjs/session) middleware for session management.
+The project is well maintained, tested and de-facto solution for session management in NodeJS.
+
+[![npm version](https://img.shields.io/npm/v/express-session.svg)](https://npmjs.org/package/express-session)
+[![npm downloads](https://img.shields.io/npm/dm/express-session.svg)](https://npmjs.org/package/express-session)
+[![Build Status](https://img.shields.io/travis/expressjs/session/master.svg)](https://travis-ci.org/expressjs/session)
+[![Test Coverage](https://img.shields.io/coveralls/expressjs/session/master.svg)](https://coveralls.io/r/expressjs/session?branch=master)
+
+Installing express-session:
+```
+npm install express-session --save
+```
+
+The following sections of this chapter will review how to safely configure a secured session management policy, building step-by-step on the available options of express-session.
+
+The summary of this chapter will feature a complete session management configuration for your convenience.
+
+### Secure your traffic with HTTPs
+
+Routing all of your HTTP traffic through a secured sockets layer such as SSL or TLS prevents attackers from sniffing your data on the wire and makes it harder for them to perform MITM attacks to eavesdrop your traffic.
+
+Cookies may be set on the user browser with a flag to instruct the browser to only transmit cookies when working with HTTPS communication.
+
+
+```js
+var session = require('express-session');
+
+app.use(session({
+  cookie: {
+    secure: true
+  }
+}));
+```
