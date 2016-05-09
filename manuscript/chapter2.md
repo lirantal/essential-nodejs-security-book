@@ -103,3 +103,55 @@ app.use(session({
 T> ## Did you ever toggle the Remember Me option?
 T>
 T> Web applications make use of persisting the cookie data to the user's disk storage in order to provide a more convenient user experience which doesn't require the user to always login. If the cookie is available on disk, the user's session remains active and can be continued from the point it was left off.
+
+
+### Obscuring the session identifier
+
+The cookie name seems like a basic and unimportant piece of information as it's merely the name of the cookie but reality is far from basic.
+
+Fingerprinting is an field in security which attempts to identify the services and their versions that power a service based on how they work and what they send.
+For example, a common PHP web application sets the cookie name to PHPSESSION, providing an attacker with a head-start of knowing already which platform is powering a web application, how and where to focus the vector of attack. In such cases, the attacker had already gathered information on the system without needing to do anything.
+
+In NodeJS case, ExpressJS's session middleware defaults to a cookie with a name of *connect.sid*.
+In attempt to hide this information from the outside world we can change the cookie name to anything else:
+
+```js
+var session = require('express-session');
+
+app.use(session({
+  name: 'CR7';
+}));
+```
+
+T> ## Blackhatter?
+T>
+T> If you ever wish to wear that black hat and explore other systems then you might want to use [OWASP's Cookie Database](https://www.owasp.org/index.php/Category:OWASP_Cookies_Database) which is essentially a list of cookie names used by vendors, which will save you the trouble of fingerprinting this information on your own.
+
+### Secure session ID
+
+When session IDs are the keys to identify users then their generation and randomness is of crucial importance.
+If they are generated in a way which allows to predict future values then they pose an immense risk as an attacker could attempt to brute force user sessions based on generating a predictable value until a hit is matched.
+
+There are two aspects to session IDs: generating them, and signing them. With express-session we get access to influence both of those and can further secure our session identifiers.
+
+Signing the session id with a long string provides more entropy. A good value will be at least 64 bits which gets added to the SHA-256 hashing of the cookie id being generated:
+
+```js
+var session = require('session');
+
+app.use(session({
+  secret: 'THEWALL'
+}));
+```
+
+Generating session ids is less likely to be altered from the default used by express-session which is the *uid-safe* library. If you do however require to override it with your own unique generator then it can be done by providing a function callback to the *genid* property.
+
+```js
+var session = require('session');
+
+app.use(session({
+  genid: function(req) {
+    return uniqueValue();
+  }
+}));
+```
