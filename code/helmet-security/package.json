@@ -1,0 +1,16 @@
+{
+  "name": "helmet-security",
+  "version": "1.0.0",
+  "description": "nodejs security book example of using helmet for securing expressjs web applications",
+  "main": "index.js",
+  "keywords": [
+    "helmet",
+    "security"
+  ],
+  "author": "Liran Tal",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.4",
+    "helmet": "^1.3.0"
+  }
+}
