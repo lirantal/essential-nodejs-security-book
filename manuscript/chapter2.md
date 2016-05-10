@@ -155,3 +155,41 @@ app.use(session({
   }
 }));
 ```
+
+### Re-generating session IDs
+
+The sensitive nature of the session identifier calls for more ways to protect it.
+A good defense against session fixation and also works well against session hijacking is to re-generate the session identifier. Doing this for every request might be an overkill, but it is quite common to do it before sensitive actions that are taken by the user and before any privilege escalation.
+
+A good strategy for re-generating the session identifier is in all of the following cases:
+* User login - after the user logged-in to the system, a new session identifier needs to be generated
+* Sensitive actions, depending on the application but here is a reference:
+  * Password change, email update and other personal details identifying the user
+  * Assigning roles and permissions to other users
+  * Deletion of records
+  * Money transfer in banking applications, or buying stocks, and similar scenarios.
+
+When using express-session, the middleware populates the `req.session` object with several methods and objects providing useful access to session management. One of those is `req.session.regenerate()` which is used for creating a new session identifier and is used as follows:
+
+```js
+req.session.regenerate(function(err) {
+  // new session identifier has been created
+  // the req.session object has been re-instantiated with new values
+});
+```
+
+### Summary: Reference for secure session configuration
+
+```js
+var session = require('express-session');
+
+app.use(session({
+  name: 'REPLACE_WITH_UNIQUE_NAME',
+  secret: 'REPLACE_WITH_UNIQUE_SECRET',
+  cookie: {
+    maxAge: null,
+    httpOnly: true,
+    secure: true
+  }
+}));
+```
