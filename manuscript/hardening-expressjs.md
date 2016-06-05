@@ -88,3 +88,67 @@ The *lookup* key passed to the *limits* object is very flexible and by default i
 Usually other middlewares like *passport* which provide authentication and authorization capabilities extend the *req* object with more data such as the user information when logged in. Therefore another option to limit requests by is per the user id: *user.id*, or by username: *user.username*.
 
 More information on how to limit requests based on other methods is available on [express-limiter GitHub page](https://github.com/ded/express-limiter).
+
+## Advanced Functionality Limiting
+
+More tweaking can be performed to your web server layer to further close down on possible attack vectors.
+A library from Yahoo! allow for alerting these settings and is called [limits](https://github.com/yahoo/node-limits), or *node-limits* if you would like to research it more on their GitHub page.
+
+For example, if your web application has no notion of file uploads then you can disable completely these types of form submissions. If you do allow file uploads, you can limit the maximum size of a request that is sent to you for processing. These can help reduce any attempts to slow down your bandwidth and network pipeline and reduce temporary disk space or any operations that are performed by your web application to process file uploads.
+
+Other tweaks this library provide is to configure timeout thresholds. For example, you may want to set a global timeout for incoming connections to make sure that an attacker does not attempt to keep many sockets opened on your web server OS.
+
+Installing the *limits* library and updating the *package.json*:
+```
+npm install limits --save
+```
+
+Creating the following limit configuration:
+* Disable file uploads
+* Limit all requests to a total of 2 megabytes
+* Set a global timeout for incoming connections to 1 minute
+
+```js
+var nodeLimits = require('limits');
+
+app.use(nodeLimits({
+  file_uploads: false,
+  post_max_size: 2000000,
+  inc_req_timeout: 1000*60*60
+}));
+```
+
+## body-parser middleware
+
+The [body-parser](https://github.com/expressjs/body-parser) middleware augments ExpressJS web framework with support for requests being made and parsing the HTTP body data for common data types such as JSON. *body-parser* is quite popular and is reported to serve more than five million downloads a month.
+
+[![NPM Version][https://img.shields.io/npm/v/body-parser.svg][https://npmjs.org/package/body-parser]
+[![NPM Downloads][https://img.shields.io/npm/dm/body-parser.svg]][https://npmjs.org/package/body-parserl]
+[![Build Status][https://img.shields.io/travis/expressjs/body-parser/master.svg]][https://travis-ci.org/expressjs/body-parser]
+[![Test Coverage][https://img.shields.io/coveralls/expressjs/body-parser/master.svg]][https://coveralls.io/r/expressjs/body-parser?branch=master]
+
+As seen with the previous *limits* library, it is possible to limit the incoming request size so it doesn't cause server CPU strain to parse the body object. Where the *limits* library may be an overkill for some web applications, *body-parser* is quite common and can be set to limit the specific requests it handles to provide security.
+
+To install and update the *package.json* file with the *body-parser* library:
+
+```
+npm install body-parser --save
+```
+
+Limiting request sizes works as follows:
+
+```js
+var bodyParser = require('body-parser');
+
+// instruct bodyParser to parse JSON data and populate the body data payload
+// in the request object *req* with an actual JSON object
+app.use(bodyParser.json({
+  limit: '1mb'
+}));
+```
+
+Once the limit has been set, when an incoming request is bigger than the limit then ExpressJS will emit the error *request entity too large* which is a standard HTTP response and reply with a 413 HTTP code.
+
+I> ## enforcing limits
+I>
+I> Remember that *body-parser* only handles non-multipart form submissions so setting this limit will not affect file uploads being sent to your web application.
