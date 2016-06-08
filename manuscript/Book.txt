@@ -3,3 +3,4 @@ backmatter.md
 utilize-the-transport.md
 session-management.md
 hardening-expressjs.md
+csrf.md
