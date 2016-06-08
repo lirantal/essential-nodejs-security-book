@@ -1,0 +1,9 @@
+{
+  "name": "express-limiter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": ["express-limiter", "limiter", "nodejsecurity", "security", "limit"],
+  "author": "Liran Tal",
+  "license": "ISC"
+}
