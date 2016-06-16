@@ -48,3 +48,16 @@ This AJAX request can also run automatically when the user loads the attacker's 
 
 An even greater risk is where the target web application is actually hosting the CSRF code.
 For example, if the web application allows rich text comments, forums, or any other rich user input then it makes a very appealing target for attackers to inject a CSRF attck there and greatly increase this vulnerability.
+
+## The Solution
+
+As described when reviewing the possible risks of CSRF, any attempts to attempt and harden an HTML FORM entity are futile and are mere annoyance for an attacker to workaround, but such attempts are definitely not the solution.
+
+To be clear, let's review what would be a wrong way of approaching a CSRF solution:
+1. Changing the FORM *method* attribute from GET to POST
+2. Changing the FORM *action* attribute value from HTTP to HTTPS endpoint, or updating the URI to a full URL.
+3. Deprecating all the FORM elements and converting them to API endpoint
+4. Adding further actions to confirm the FORM submission such as popups or secondary forms
+5. Storing any hidden information inside a Cookie to authorize requests
+
+All of the above are examples of what not to do in order to protect against CSRF vulnerabilities, because some are either wrong, give an illusion of a solution, or simply do not fix the problem entirely.
