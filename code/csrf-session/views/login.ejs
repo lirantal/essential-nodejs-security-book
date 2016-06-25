@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+  <body>
+    <form action="/login" method="post">
+    <select name="bestPlayer">
+      <option value="cr7">Cristiano Ronaldo</option>
+      <option value="messi">Lionel Messi</option>
+    </select>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>
