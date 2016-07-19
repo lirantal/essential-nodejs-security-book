@@ -43,3 +43,51 @@ The risk presented with this attack is that web applications that attempt to bla
 More resources to get aquainted with XSS related injection:
 * **XSS syntax variations** - OWASP Wiki includes a comprehensive and very detailed [XSS Filter Evasion Cheat Sheet](https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet) which features the many variations of possible injections that can be employed by an attacker to bypass your protection controls and succeed with an XSS attack.
 * **HTML5 Security** - Due to the new HTML5 specification, browsers are adopting new directives, attributes, elements and this introduces new vectors of attack, some of which are related to XSS. [html5sec](https://html5sec.org/) is a good reference website to keep up to date with such vulnerabilities related to insecure adoption of HTML5 features.
+
+## The Solution
+
+XSS vulnerabilities expose and attack the end user by exploiting browser execution of unintentional injected code into the page. As such, the path for defending against XSS attacks lies on the client side when outputting potentially dangerous user data input.
+
+There are two primary methods to prevent XSS attacks:
+* Filtering - by filtering, or sanitizing the untrusted data that originated from the user's input the end result is that the data is modified and removed of the original text that it contained. If for example a user on a blog wanted to comment and give an example of the use of <script> tags then filtering based on a blacklist/whitelist  will remove any offending tags such as <script>, even if the user did not intend to execute this code on the browser maliciously but rather just to print it and share the text on the website. Pitfalls of filtering is that it relies on a blacklist or a whitelist which could be subject to frequent changes, hence it requires maintaince and error-prone, and it usually requires complex string manipulation logic that is often based on regular expressions which by themselves can become a security threat or simply not being written correctly to address future changes and string alterations that the programmer did not expect thus could be bypassed.
+* Escaping/Encoding - Unlike filtering, encoding the untrusted data preserves all the input which the user supplied by escaping potentially malicious characters with their display character encoding. For example, if the input from the user is expected to be an HTML text and it is also treated as such, then in cases where the input is  `<script>alert('xss')</script>` then it is possible to encode the `<` symbol to its HTML entity representation which is `&lt;`. This character entity has also a number associated with, so the `<` symbol could also be represented with the string `&#60;` which will result in the same encoding behavior. Browsers know how to parse these entities and display them correctly. The important nuance of encoding data is to encode it with the correct context of where it will be used. JSON, HTML, and CSS are all different in their encoding and one does not match the other so based on where the input is planned to be utilized the correct form of encoding should be used.
+
+In summary, filtering is not the ideal solution to prevent XSS attacks and validation and filtering of the data should happen on the user's data input and not on the output processing. Encoding the outputted data is on the other hand a better path to take to prevent XSS attacks as it renders any data as plain text which the browser won't be tricked into executing.
+
+I> ## XSS attacks evolve
+I>
+I> Specifications, browsers, and the web in it's entirety constantly changes and introduces new technologies that web applications adopt and security needs to be adopted for as well. As such, XSS attacks have a great variety of attack vectors to exploit and increasingly harder to defend from and patch.
+
+### Encoding libraries - node-esapi
+
+OWASP has their own [ESAPI](https://www.owasp.org/index.php/ESAPI) project which aims to provide security relates tools, libraries and APIs that developers can adopt in order to provide essential security. This project has been ported to a Node.js library that is available as an npm package and is called *node-esapi*.
+
+[node-esapi](https://github.com/ESAPI/node-esapi) can be installed as any other npm package, and also update the *package.json* file with its dependency:
+```
+npm install node-esapi --save
+```
+
+Once installed, the library provides encoding functions for each type of data that should be encoded, so that the following general guideline should be applied:
+* Use JavaScript encoding when untrusted input data is to be placed within the context of an executable JavaScript code. For example, a string of input from the user is expected to be used in a JavaScript source code such as `<script>showErrorMessage(userInput)</script>`.
+* Use HTML encoding when untrusted input data is to placed within HTML markup. For example if the data is to be placed inside `<div>` tags, `<span>` tags, etc.
+
+To encode HTML:
+
+```js
+var esapi = require('node-esapi');
+var esapiEncoder = esapi.encoder();
+
+app.get('/', function(req, res, next) {
+
+  // example for unsafe user input intended for embedding in HTML markup
+  // req.query.userinput may include the string: <div><span>Example</span><script>alert('xss')</script></div>
+  var userInputExample = req.query.userinput;
+
+  // encodedInput is now safe to output in an HTML context of the web page
+  var encodedInput = esapiEncoder.encodeForHTML(userInputExample);
+});
+```
+
+T> ## Encoding for other data representations.
+T>
+T> node-esapi also includes encoders for CSS, URL, HTML Attributes, and for Base64 representation of data.
