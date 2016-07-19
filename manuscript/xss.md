@@ -10,7 +10,7 @@ To explore an example of a simple use case - A web page which reads the user's n
   <h2>{{name}}</h2>
 </div>
 ```
-What would happen if someone were to replace the string *John* with JavaScript code? http://example.com/profile?name=<script>alert("xss")</script>.
+What would happen if someone were to replace the string *John* with JavaScript code? `http://example.com/profile?name=<script>alert("xss")</script>`.
 If no string escaping is performed on the *name* parameter at the output level, or at least some sanitization on the data that is expected for the *name* parameter to be valid, then the rendered page will actually have the JavaScript code printed out to the user and the browser which renders this script will display an alert dialog box:
 ```html
 <div>
