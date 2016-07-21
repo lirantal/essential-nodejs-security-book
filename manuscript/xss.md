@@ -91,3 +91,66 @@ app.get('/', function(req, res, next) {
 T> ## Encoding for other data representations.
 T>
 T> node-esapi also includes encoders for CSS, URL, HTML Attributes, and for Base64 representation of data.
+
+### Encoding libraries - xss-filters
+
+From the home of Yahoo!, [xss-filters](https://github.com/yahoo/xss-filters) is another XSS encoding library. It is designed to follow HTML5 Specification for implementation of XSS filters, and is constantly reviewed by security researchers from Yahoo!. It is important to notice that *xss-filters* is intended to be used only inside an HTML markup context. You should not use it for any untrusted user input in other contexts like JavaScript or CSS code, or other specific objects like *<svg>*, *<object>*, and *embed* tags.
+
+T> ## Yahoo! is quite active in the Node.js community
+T>
+T> Did you know that Yahoo! is an active player in the Node.js community? They have contributed to the npm repository about a hundred of packages altogether with general JavaScript, and frontend libraries, amongst Node.js.
+
+Installing *xss-filters*:
+```
+npm install xss-filters --save
+```
+
+Using the library to encode
+
+```js
+var xssFilters = require('xss-filters');
+
+app.get('/', function(req, res, next) {
+  var userInput = req.query.userinput;
+  var safeUserInput = xssFilters.inHTMLData(userInput);
+
+  // do something with safeUserInput that is now encoded and safe to print
+  // out in an HTML context
+});
+```
+
+Except for *inHTMLData* there are other APIs that exist to handle encoding untrusted data in other context:
+* HTML comments *inHTMLComment* - to encode data in HTML comment's such as `<!-- {{comment}} -->`
+* HTML attributes - to encode data in HTML attributes it is required to make use of the appropriate quoting notation used in the attributes context, such as:
+When using a single quote notation in attributes then use the *inSingleQuoteAttr* method:
+
+```js
+var safeUserInput = xssFilters.inSingleQuotedAttr(userInput);
+```
+
+```html
+<input value='{{safeUserInput}}'/>
+```
+When using double quotes notation in attributes then use the *inDoubleQuotedAttr* method:
+```js
+var safeUserInput = xssFilters.inDoubleQuotedAttr(userInput);
+```
+
+```html
+<input value="{{safeUserInput}}"/>
+```
+When not using any type quotation as attributes in HTML elements, for example to specify attribute keywords `hidden` which is applied to an HTML element and makes it invisible then use the *inUnQuotedAttr* method:
+```js
+var safeUserInput = xssFilters.inUnQuotedAttr(userInput);
+```
+
+```html
+<input name="csrfToken" value="{{csrfValue}}" {{safeUserInput}}/>
+```
+
+To further fine-tune the context of the untrusted input from the user, such as whether it is originated from a URI input then it is possible to use a specific method such as:
+```js
+var userURIInput = xssFilters.uriInHTMLData();
+var userURIPathInput = xssFilters.uriPathInHTMLData();
+var userURIGragmentInput = xssFilters.uriFragmentInHTMLData();
+```
