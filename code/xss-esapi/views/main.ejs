@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+  <body>
+    <div>
+      <p>
+        Vulnerable form to XSS. Submit something malicious, I dare you:
+      </p>
+      <form action="/" method="get">
+      <input type="text" name="nameRaw" value="" />
+      <button type="submit">Submit</button>
+      </form>
+      <div>
+      Your name is: <%- nameRaw %>
+      </div>
+    </div>
+
+    <div>
+      <p>
+        Protected XSS with the use of encoding
+      </p>
+      <form action="/" method="get">
+      <input type="text" name="nameEncoded" value="" />
+      <button type="submit">Submit</button>
+      </form>
+      <div>
+      Your name is: <%- nameEncoded %>
+      </div>
+    </div>
+
+    <div>
+      <p>
+        "Protected XSS" with the built-in HTML encoding in EJS.
+        Throw a number at me!
+      </p>
+      <form action="/" method="get">
+      <input type="text" name="numberSafeEJS" value="" />
+      <button type="submit">Submit</button>
+      <label>
+        Try sending: 5; alert(1);
+      </label>
+      </form>
+      <div>
+      <p> You gussed: <span id="numberGuessed"></span> </p>
+      </div>
+      <script type="text/javascript">
+        var count = <%= numberSafeEJS %>;
+        document.getElementById('numberGuessed').innerHTML = count;
+      </script>
+    </div>
+  </body>
+</html>
