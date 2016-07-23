@@ -5,3 +5,4 @@ session-management.md
 hardening-expressjs.md
 csrf.md
 xss.md
+secure-code-guidelines.md
