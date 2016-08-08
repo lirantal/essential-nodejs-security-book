@@ -33,7 +33,6 @@ app.get('/login', function(req, res) {
 
 app.post('/login', function(req, res) {
   console.log('Performing login');
-  console.log(req.body);
 
   User.find({ username: req.body.username, password: req.body.password }, function(err, users) {
     if (err) {
@@ -51,7 +50,6 @@ app.get('/loginSecured', function(req, res) {
 
 app.post('/loginSecured', function(req, res) {
   console.log('Performing secure login');
-  console.log(req.body);
 
   // coerce the req.body properties into strings, resulting in [object object] in case
   // of a converted object instead of a real string
