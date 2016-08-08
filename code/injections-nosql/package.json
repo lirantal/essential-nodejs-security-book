@@ -1,5 +1,5 @@
 {
-  "name": "xss-nosql",
+  "name": "injections-nosql",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
