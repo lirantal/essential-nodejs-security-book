@@ -53,7 +53,10 @@ app.post('/loginSecured', function(req, res) {
   console.log('Performing secure login');
   console.log(req.body);
 
-  User.find({ username: req.body.username, password: req.body.password }, function(err, users) {
+  // coerce the req.body properties into strings, resulting in [object object] in case
+  // of a converted object instead of a real string
+  // another convention is to call the object's .toString();
+  User.find({ username: String(req.body.username), password: String(req.body.password) }, function(err, users) {
     if (err) {
       res.status(500).send(err);
     } else {
