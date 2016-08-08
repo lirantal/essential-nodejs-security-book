@@ -26,12 +26,31 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
+// un-secured version which produces sql-injections
 app.get('/login', function(req, res) {
   res.sendFile('./login.html', { root: __dirname } );
 });
 
 app.post('/login', function(req, res) {
   console.log('Performing login');
+  console.log(req.body);
+
+  User.find({ username: req.body.username, password: req.body.password }, function(err, users) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(users);
+    }
+  });
+});
+
+// secure version which mitigates sql injections
+app.get('/loginSecured', function(req, res) {
+  res.sendFile('./loginSecured.html', { root: __dirname } );
+});
+
+app.post('/loginSecured', function(req, res) {
+  console.log('Performing secure login');
   console.log(req.body);
 
   User.find({ username: req.body.username, password: req.body.password }, function(err, users) {
