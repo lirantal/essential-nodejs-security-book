@@ -49,3 +49,340 @@ Validating e-mail addresses:
 var validator = require('validator');
 var isValidEmail = validator.isEmail('foo@bar.com');
 ```
+
+## Output Encoding
+
+Output Encoding is a mechanism that is used at the presentation layer, where data that is passed from the server-side to a view, such as a web browser, which should be encoded or sanitized from malicious payloads which seek to exploit vulnerabilities in the presentation layer engine.
+
+Implementing output encoding mitigates attacks such as Cross Site Scripting (XSS) because such malicious data is being encoded when it is output by the application to the presentation layer, hence circumventing any attempt to trick, or trigger an incorrect execution that is not a simple string representation of the data.
+
+T> ## Terminology
+T>
+T> Output Encoding is often referred to as Output Escaping, Output Handling.
+T> Often times another term is associated with output encoding - Canonicalization, which means to convert the untrusted data input into an expected representation in the correct context. For example, a given user input of `<script>alert()</script>` will be canonicalized to `&lt;script&gt;alert();&lt;/script&gt;`
+
+Context is the most important thing about getting output encoding right. It is crucial to apply the type of encoding data for output based on the correct context of the presentation layer. When output is used in an HTML context, the encoding needs to apply HTML entities encoding, where-as when the output is used in a JavaScript context, then another type of encoding needs to happen to properly escape JavaScript code so it is not executed. Other output contexts to name a few are URLs, SQL, or system command calls.
+
+### Using ESAPI for Output Encoding
+
+[Node ESAPI](https://github.com/ESAPI/node-esapi) is OWASP's Enterprise Security API ported to NodeJS.
+
+The Node ESAPI project provides the functionality of encoding output for proper contexts, and it features both a functional way of using it like other npm packages, as well as integration with ExpressJS middleware layer.
+
+Encoding output in the context of HTML:
+```js
+var esapi = require('node-esapi');
+var esapiEncoder = esapi.encoder();
+
+var htmlOutput = esapiEncoder.encodeForHTML('<div> Hello World! <script type="javascript"> alert("Got you!") </script> </div>');
+```
+
+The result of `htmlOutput` will be properly encoded to escape the malicious script tags:
+```html
+&lt;div&gt; Hello World&#x21; &lt;script type&#x3d;&quot;javascript&quot;&gt; alert&#x28;&quot;Got you&#x21;&quot;&#x29; &lt;&#x2f;script&gt; &lt;&#x2f;div&gt;
+```
+
+ESAPI provides the functionality for the following output encoding contexts:
+* HTML - encodeForHTML
+* CSS - encodeForCSS
+* JavaScript - encodeForJS
+* URL - encodeForURL
+* HTML Attributes - encodeForHTMLAttribute
+* Base64 - encodeForBase64
+
+
+## OS Command Injection
+
+Care consideration must be given when resorting to the undesired option of executing Operating System (OS) commands to execute a program, or shell script. While there may be valid reasons for doing so in some situations, the potential for a critical security vulnerability is great because of the OS-level context. When this is done incorrectly, it may lead to OS command injection and thus compromising the underlying server OS.
+
+In similar to other injection vulnerabilities, the focus on mitigating this kind of attack is to use a proper string binding with a secure shell execution function call, and apply proper output encoding, which in this case is in the context of an Operating System command shell.
+
+Node.js provides OS command execution using child processes set of functions, and specifically using the `child_process` module.
+The `child_process.exec()` function allows to spawn a shell and then execute a given command within that shell context. Taking into account the following example:
+
+```js
+var child_process = require('child_process');
+
+function listPath(directory) {
+  var cmd = "ls -alh";
+  child_process.exec(cmd + ' ' + directory, function(err, data) {
+    console.log(data);
+  });
+}
+```
+
+In the above code snippet, the `listPath` function takes a directory reference as a parameter and appends it to the command that gets executed in a shell. The `directory` parameter to the function should be regarded as an untrusted source, such as one that originates from untrusted user input. What would happen if that parameter will be set to `; cat /etc/passwd` ?
+Similar to how SQL injection attacks work, the special semi-colon char will end one command statement, and begin a new one, leading to an execution as follows:
+```bash
+$ ls -alh
+$ cat /etc/passwd
+```
+
+Due to this vulnerability, the `child_process.exec()` function should be avoided entirely at all circumstances, and instead one should make use of `child_process.execFile()`, which executes a single and bound command, and allows passing it any number of arguments that cannot be altered and spawned as individual commands.
+
+Thus, a safe command execution methodology:
+```js
+var child_process = require('child_process');
+
+function listPath(directory) {
+  var cmd = "ls";
+  var cmdParams = ['ls'];
+  cmdParams.push(directory);
+  child_process.execFile(cmd, cmdParams, function(err, data) {
+    console.log(data);
+  });
+}
+```
+
+By no means, should the `execFile()` function leave a comfort feeling of safeness. Some Linux OS shell commands do allow invoking other programs from their own execution, so just limiting the passing of parameters to that command is not helpful.
+
+W> ## Avoid when possible
+W>
+W> Avoid at all costs executing arbitrary commands from within your Node.js program. In the last resort when that is required, always make use of execFile function call, and only to known and well-understood OS commands which can not be tricked into running commands passed in parameters.
+
+
+## Regular Expressions
+
+The use of Regular Expressions (RegEx) is quite common among software engineers and DevOps or IT roles where they specify a string pattern to match a specific string in a text. This can be used to perform wild-card fuzzy search to match and test occurrences of strings.
+
+Often, programmers will use RegEx to validate that an input received from a user conforms to an expected condition. To list several examples:
+1. Testing that a user's provided e-mail address is valid:
+```js
+var testEmail = /^([a-zA-Z0-9])(([\-.]|[_]+)?([a-zA-Z0-9]+))*(@){1}[a-z0-9]+[.]{1}(([a-z]{2,3})|([a-z]{2,3}[.]{1}[a-z]{2,3}))$/.exec('john@example.com');
+```
+2. Testing that a user's provided input is a valid ASCII alphanumeric text:
+```js
+var testAlphanumeric = /^[a-zA-Z0-9]*$/.exec('abc123');
+```
+
+The risk that is inherent with the use of Regular Expressions is the computational resources that require to parse text and match a given pattern. A flawed Regular Expression pattern can be attacked in a manner where a provided user input for text to match will require an outstanding amount of CPU cycles to process the RegEx execution. Such an attack will render the application unresponsive, and thus is referred to as a ReDoS - Regular Expression Denial of Service.
+
+A vulnerable Regular Expression is known as one which applies repetition to a repeating capturing group, and where the string to match is composed of a suffix of a valid matching pattern plus characters that aren't matching the capturing group. Reviewing this statement with an example makes things easier. Consider the following regular expression:
+```js
+var badRegex = /^((abc)*)+$/;
+```
+The above regular expression attempts to find multiple occurrences of the string "abc", so that the following text snippets would match this regex:
+* abc
+* abcabc
+* abcabcabc
+The following text snippets which this regex attempts to match will fail:
+* abca
+* abc abc
+
+To exploit this vulnerable regular expression an attacker can craft a matching text which is composed first of the suffix from a valid matching pattern, which means that "abc" is a valid pattern so it will begin with that. Following it, a char that begins the new pattern but isn't necessarily matching it - "a". Thus, a maliciously crafted regular expression is "abca". Almost. That's the idea, but that string is very small and the regular expression expansion that happens for every possibility is very small so this regular expression execution will finish very quickly.
+
+Getting the CPU to work hard requires a longer string with more occurrences of the base capturing group "abc". An illustrative example is:
+```
+abc abc abc a
+```
+Thus "abc" is repeating and then ending with the char "a" which begins a new capturing group. However that example string is very small too and any modern CPU will quickly process through that as well. How about if a longer matching text is being evaluated? Try the following:
+```js
+var re = /^((abc)*)+$/;
+console.log(re.exec('abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabca'));
+```
+
+Hopefully this did not run on a production server otherwise Node.js would've taken it's time to work through that. On my local development machine it actually took approximately 40 seconds as can be seen:
+```bash
+$ time node re.js
+null
+node re.js  41.88s user 0.00s system 99% cpu 41.883 total
+```
+
+There are many variations to a vulnerable regular expression, some examples taken from [OWASP](https://www.owasp.org/index.php/Regular_expression_Denial_of_Service_-_ReDoS), and [Wikipedia's ReDoS](https://en.wikipedia.org/wiki/ReDoS) pages are:
+* (a|aa)+
+* ([a-zA-Z]+)*
+
+T> ## Hint
+T> Try exploiting the above two examples by matching them on a text of many a's with an ending ! char. Also, the first example of an e-mail matching regular expression looks suspecious too.
+
+### Safe Regular Expressions
+
+There is no magic to apply on regular expressions to make them safe, but rather the secret lies in crafting a correct, performant and safe regular expression pattern. Software engineers should pay attention for increased security implications when creating regular expressions.
+
+Taking the above example of `/^((abc)*)+$/` is simply a human error in writing a pattern, even though it works it's not safe to use. The same regular expression match would also work if the following pattern was used `/^(abc)*$/`, which is safe as it is not repeating a more complex sub-expression.
+
+I> ## OWASP Validated RegEx
+T> OWASP's website provides a short list of common [validated regular expressions](https://www.owasp.org/index.php/OWASP_Validation_Regex_Repository) which are safe to use as well as links to other useful RegEx resources.
+
+#### Validator.js
+
+[validator.js](https://github.com/chriso/validator.js) is the go-to library for validating user input. It is mature, well tested, and constantly being attacked with multiple attack vectors with an attempt to find flaws and fix them.
+
+[![NPM Version](https://img.shields.io/npm/v/validator.svg)](https://npmjs.org/package/validator)
+[![NPM Downloads](https://img.shields.io/npm/dm/validator.svg)](https://npmjs.org/package/validator)
+[![Build status](https://img.shields.io/travis/chriso/validator.js.svg)](https://travis-ci.org/chriso/validator.js)
+[![Test coverage](https://img.shields.io/coveralls/chriso/validator.js/master.svg)]([https://coveralls.io/r/chriso/validator.js?branch=master)
+
+validator.js is suitable for both frontend JavaScript as well as NodeJS server-side backend. Except from validating input, it also provides sanitization functions for specific input types and expected output.
+
+Installing validator.js for NodeJS:
+```bash
+npm install validator
+```
+
+Complete documentation for all available validation and sanitization functions is available in the project's README page on GitHub: https://github.com/chriso/validator.js
+
+validator.js only accepts strings as input and will otherwise throw an error. An example of validating that a user input is an expected e-mail address:
+
+```js
+var validator = require('validator');
+console.log(validator.isEmail('liran.tal@gmail.com'));
+```
+
+
+#### Safe-RegEx
+
+[safe-regex](https://github.com/substack/safe-regex) is a library that can be used for both NodeJS as well as frontend browsers to test whether a given regular expression pattern is potentially dangerous. The library hasn't been updated in a while, though it does check the very simple rule of repetitions of sub-expressions which is the primary rule for avoiding vulnerable regular expressions.
+
+It is interesting to test the aforementioned e-mail validation regex that was mentioned in an example.
+To begin with installing the library locally:
+
+```bash
+npm install safe-regex
+```
+
+And then testing a regex pattern:
+
+
+```js
+var saferegex = require('safe-regex');
+var emailRegex = /^([a-zA-Z0-9])(([\-.]|[_]+)?([a-zA-Z0-9]+))*(@){1}[a-z0-9]+[.]{1}(([a-z]{2,3})|([a-z]{2,3}[.]{1}[a-z]{2,3}))$/;
+
+console.log(saferegex(emailRegex));
+```
+
+The console output would yield `false` as indeed this example of an e-mail validation rule is vulnerable to ReDoS attacks.
+
+#### RegEx DoS
+
+[RegEx-Dos](https://github.com/jagracey/RegEx-DoS) is a command line tool that aids in searching for vulnerable regular expressions by scanning JavaScript files contents and testing any regular expression patterns with the [safe-regex] library.
+
+It is a handy tool to add to any project on the DevOps pipeline or the build chain to confirm that no vulnerabilities are introduced, and if they do the fix is quick as they are found during the build stage.
+
+
+## Strict Mode and Eval
+
+Strict mode was introduced in [ECMAScript 5.1](http://www.ecma-international.org/ecma-262/5.1/#sec-10.1.1) to enable a restricted version of JavaScript for enhanced security, and error management. It disables some language features which if used, may lead to confusion, inconsistency or security problems. Some of them are:
+* `eval` and `with` are disabled from being referred to as identifiers of any sort.
+* Variables must be explicitly declared
+* Property names can't be duplicated in an object definition, or in parameters passed to functions.
+* Unwanted behavior will now throw errors
+
+For ECMAScript 6, enabling strict mode has some more effect on the language syntax:
+* No values can be set on primitive variables like Boolean, String, or Numbers.
+* Octal values can be assigned to variables only using a "0o" syntax.
+
+It is probable that you have witnessed the strict mode invocation as it became quite the de-facto for writing securely in JavaScript. It is recognized by programs that start with the following line:
+```js
+'use script';
+```
+It affects the entire script, or it can affect only a portion of it, such as a specific function if applied inside.
+
+### Eval
+
+The `eval()` function is perhaps of the most frowned upon JavaScript pieces from a security perspective. It parses a JavaScript string as text, and executes it as if it were a JavaScript code. Mixing that with untrusted user input that might find it's way to `eval()` is a recipe for disaster that can end up with server compromise.
+
+T> The use of `eval()` isn't specific to JavaScript, but is also found in other programming languages such as PHP, Perl, and others.\
+
+While there is no inherent security flaw regarding the use of `eval()` in your code, it is often perceived as bad practice to make use of it. Cases where you might need to use eval are when it is required to dynamically run JavaScript code, such that is somehow generated, put together, and not owned by yourself. Otherwise, there's always the option to refactor the code and avoid using eval altogether.
+
+T> ## Who said it's evil?
+T> The phrase "eval() is evil" is credited to Douglas Crockford
+
+Surprisingly enough, eval has friends: `setTimeout()` and `setInterval()` are also regarded as bad coding practices for the same reason that they both accept string as input, which they parse and evaluate for execution.
+
+
+## Cryptographic Practices
+
+The use of cryptography functions is quite common when building web applications, and is often presenting the use case of maintaining a database of users and their passwords. Encrypting a user's password is another layer of defense to protect against server breach or data leakage through SQL Injection or other attacks.
+
+Hash functions are commonly used for one-way cryptography, such that is used to protect a user's password.
+
+### Risk
+
+There are many cryptographic hashing functions and algorithms which are available to use, but choosing the correct one is important as a best practice to make sure that encrypted data stays confidential even if it ended up as public content.
+
+[MD5](http://en.wikipedia.org/wiki/MD5) and [SHA](http://en.wikipedia.org/wiki/Secure_Hash_Algorithm) are examples of commonly known cryptographic functions which are popular amongst developers to employ, yet they are quite insecure for encrypting data that is meant to remain confidential. The reasons behind this statement are:
+1. These cryptographic hash functions are unsalted, which means they do not take into consideration per hash value randomness and uniqueness, therefore they are vulnerable to brute force attacks using pre-built dictionaries.
+2. MD5 and SHA family of hash functions are very fast in computing a hash, which may seems as a performance feature, but on the other hand they also make it very easy and accessible for an attacker to enumerate such hash quite quickly.
+
+T> ## Rainbow Tables
+T>
+T> [rainbow tables](http://en.wikipedia.org/wiki/Rainbow_table) are pre-computed hash dictionaries for a variety of password policies, for example an alphanumeric 8 limit chars.
+
+Writing up your own hash function is a bad practice, simply because there is so much science into a properly working secure hash and an individual can easily get it wrong. Further read on this topic is available on [OWASP's Cryptographic Storage Cheat Sheet](https://www.owasp.org/index.php/Cryptographic_Storage_Cheat_Sheet).
+
+### The Solution of Secure Hash Functions
+
+To meet security standards we combine a proper hash function with an adequate algorithm which results in a secure hash function. What makes such a hash secure is that it employs the use of salts and are inherently slower so that brute force attacks or dictionary lookups are not worth the effort. Other characteristics makes them secure such as iterating the hash millions of times.
+
+[bcrypt](https://en.wikipedia.org/wiki/Bcrypt) is a commonly accepted secure hash function which employs the Blowfish cipher. When using bcrypt with NodeJS, one should consider the use of native bcrypt libraries which offer superior performance verses the JavaScript implementation which are slower, yet are cross-platform compatible.
+
+I> ## JavaScript bcrypt implementations
+I> Other options to consider for a JavaScript implementation are [bcrypt.js](https://github.com/dcodeIO/bcrypt.js/), [twin-bcrypt](https://github.com/fpirsch/twin-bcrypt)
+
+Using NodeJS native bcrypt we will first install it via npm:
+```bash
+npm install bcrypt
+```
+
+bcrypt provides the following primary methods which work asynchronously:
+* `bcrypt.genSalt(saltRounds, callback(err, salt))` - `genSalt` generates a salt, and can iterate `saltRounds` number of times to further increase salt randomness, taking a `callback` function with an error object as the first argument, or the generated salt in the 2nd argument.
+* `bcrypt.hash(password, salt, callback(err, hash))` - `hash` generates a hash from the an input `password` argument using a `salt`. If `salt` is a number, it uses it as a rounds count to create a salt on it's own. Once a hash is generated, it calls a `callback` function with an error object as the first argument, or the generated hash in the 2nd argument.
+* `bcrypt.compare(password, hashedPassword, callback(err, res))` - `compare` will compare a given password with a given hash and will call a callback function with an error object as the first argument, or a boolean `res` object if there's a match.
+
+When hashing passwords, it is important to understand the cost of the salt rounds count. The following table provides a reference based on my quad core i5-3470 CPU @ 3.20GHz
+| salt rounds | password generation time |
+| ----------- | ------------------------ |
+| 2           | 2ms                      |
+| 8           | 17ms                     |
+| 10          | 68ms                     |
+| 11          | 132ms                    |
+| 12          | 263ms                    |
+| 13          | 526ms                    |
+| 14          | 1s                       |
+| 15          | 2s                       |
+| 17          | 8s                       |
+| 19          | 33s                      |
+| 20          | 1m                       |
+
+When choosing a salt round count one must take into account that CPU power increases in a very fast pace (see [Moore's law](https://en.wikipedia.org/wiki/Moore%27s_law)), and at the end of the day CPU power can be bought so it ends up to be a matter of how much money to invest in attempting to crack a password (imagine a person buying a cluster of CPUs from a cloud service like Amazon or Google just to crack a password).
+
+For this reason, the number of rounds count will change as hardware will become more powerful. A general guideline would be to set a round count to anything between 0.2 seconds to 1 second for a non mission critical web application, depending on your personal paranoia level (PPL).
+
+Creating a hash for a password with bcrypt:
+```js
+var bcrypt = require('bcrypt');
+
+bcrypt.hash("hacktheplanet", 13, function(err, hash) {
+  console.log(hash);
+});
+```
+
+To authenticate the user, it is required to simply compare the original password with it's previously computed hash:
+```js
+var bcrypt = require('bcrypt');
+
+bcrypt.compare("hacktheplanet", hash, function(err, res) {
+  if (!!res) {
+    console.log('password match!');
+  } else {
+    console.log('wrong password');
+  }
+});
+```
+
+bcrypt features a synchronous set of functions for the same aforementioned methods: `genSaltSync`, `hashSync`, and `compareSync`. some input/output limitations with bcrypt are truncating after 72 chars, and allows an input password of up to 51 chars.
+
+T> ## Available Secure Hash Functions
+T> There are other secure hash functions than bcrypt: Argon2 which is the *new kid on the block*, scrypt, and last as well as least preferred PBKDF2.
+
+## User Process Privileges
+
+Running web servers which serve requests from an untrusted and open public medium brings with it an inherent risk where malicious attempts will try to compromise the underlying server and operating system through vulnerabilities in the web server.
+
+Web servers have no reason to operate with a super-user privilege level, except for being able to bind and listen for incoming requests on port 80 or 443 which are allowed only to the super-user in Linux and UNIX variants (non super-users may bind to ports larger than 1024 on those OSs). To mitigate this issue, production environments often feature a more secured transport to handle requests and proxy them to the web server that binds on another port using a regular system user. These transports may vary in purpose and can be idenfitied usually as one of:
+1. Reverse Proxy
+2. Load Balancer
+
+With NodeJS, most frameworks and server setups that are documented will feature a server that listens on high ports such as 8888, 5000, 3000, 9000 to give several examples. This is so that the server runs without the super-user privilege level, and if the NodeJS server is exploited then it doesn't compromise the entire server just from it's own share of OS resources.
