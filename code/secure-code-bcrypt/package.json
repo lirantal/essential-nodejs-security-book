@@ -1,0 +1,15 @@
+{
+  "name": "secure-code-bcrypt",
+  "version": "1.0.0",
+  "description": "secure code example with native bcrypt nodejs module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^0.8.7"
+  }
+}
