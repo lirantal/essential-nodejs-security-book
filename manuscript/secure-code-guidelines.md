@@ -90,6 +90,65 @@ ESAPI provides the functionality for the following output encoding contexts:
 * HTML Attributes - encodeForHTMLAttribute
 * Base64 - encodeForBase64
 
+### Output Encoding Libraries
+
+Except from OWASP's ESAPI project there are other libraries that can be utilized for output encoding in NodeJS server-side.
+As we learned about encoding, it is very important to use libraries to encode their dedicated context only. For example, using the encode-html library to only encode HTML-context text, and nothing else (not JavaScript, or CSS).
+
+#### HTML Encoding
+
+[escape-html](https://www.npmjs.com/package/escape-html) is a very popular and mature library that can be used on the server-side coupled with template engines or views in order to safely encode HTML output sent to the browser.
+
+After installing the library, it only exports a single function and that is `escape`.
+
+
+```js
+var escape = require('escape-html');
+var encodedHTML = escape('<p style="color: red;"> Hello World! <p>');
+```
+
+The `encodedHTML` value will be a valid encoded HTML entities:
+```html
+&lt;p style=&quot;color: red;&quot;&gt; Hello World! &lt;p&gt;
+```
+
+#### CSS Encoding
+
+[cssesc](https://github.com/mathiasbynens/cssesc) is a library that serves both Node.JS and the browsers for escaping and optimizing CSS outupt.
+It has a slimmed down version specifically for Node.JS that is called [CSS.escape](https://github.com/mathiasbynens/CSS.escape).
+
+To install both of them (not actually required):
+```sh
+npm install cssesc
+```
+
+cssesc API exposes a function that takes an input value to escape and a second argument for specifying options.
+```js
+var cssesc = require('cssesc');
+var encodedCSS = cssesc('nodejs security © 2016');
+```
+
+The special copyright character will be encoded properly to be used in a valid CSS file:
+```
+nodejs security \A9  2016
+```
+
+#### JS Encoding
+
+[js-string-escape](https://www.npmjs.com/package/js-string-escape) is another popular library which is used to encode text for a JavaScript specific context.
+
+
+```js
+var jsescape = require('js-string-escape');
+var encodedJS = jsescape('alert("test")'));
+```
+
+A valid JavaScript encoded version of the alert text will be properly escaped as seen below. It isn't however JSON-compliant as can be seen:
+
+```
+alert(\"test\")
+```
+
 
 ## OS Command Injection
 
