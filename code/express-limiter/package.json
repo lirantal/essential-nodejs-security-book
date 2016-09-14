@@ -3,7 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "keywords": ["express-limiter", "limiter", "nodejsecurity", "security", "limit"],
+  "keywords": [
+    "express-limiter",
+    "limiter",
+    "nodejsecurity",
+    "security",
+    "limit"
+  ],
   "author": "Liran Tal",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
 }
