@@ -6,3 +6,4 @@ hardening-expressjs.md
 csrf.md
 xss.md
 secure-code-guidelines.md
+injections.md
