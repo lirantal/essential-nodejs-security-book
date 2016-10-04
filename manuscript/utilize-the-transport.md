@@ -14,10 +14,10 @@ Let's review two libraries which we can use to implement these HTTP headers and 
 
 Helmet is a pluggable library for ExpressJS which provide a wide range of solutions related to the transport security layer, such as Cross-Site-Scripting (XSS) security, X-Frame protection and many others.
 
-![npm version](https://badge.fury.io/js/helmet.svg)
-![npm dependency status](https://david-dm.org/helmetjs/helmet.png)
-![Build Status](https://travis-ci.org/helmetjs/helmet.svg?branch=master)
-![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)
+![npm version](images/badge-helmet-npm.png)
+![npm dependency status](images/badge-helmet-daviddm.png)
+![Build Status](images/badge-helmet-travisci.png)
+![js-standard-style](images/badge-helmet-standardjs.png)
 
 Helmet, being a collection of transport security libraries, is well maintained and kept up to date.
 
@@ -34,8 +34,9 @@ Lusca is another library to help secure the HTTP transport layer, similar to Hel
 
 Lusca integrates with ExpressJS web applications using a middleware implementation to mitigate some of the HTTP transport layer vulnerabilities. It is mainly developed and maintained by team members from PayPal who officialy sponsor the work on this library, currently lead by Jean-Charles Sisk.
 
-[![Build Status](https://travis-ci.org/krakenjs/lusca.svg?branch=master)](https://travis-ci.org/krakenjs/lusca)
-[![NPM version](https://badge.fury.io/js/lusca.svg)](http://badge.fury.io/js/lusca)  
+![npm version](images/badge-lusca-npm.png)
+![Build Status](images/badge-lusca-travisci.png)
+
 
 T> ## Security-oriented frameworks
 T>

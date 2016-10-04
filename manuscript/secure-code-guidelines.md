@@ -39,10 +39,10 @@ The ideal solution for validating user input is to use one of the following libr
 
 [Validator.js](https://github.com/chriso/validator.js) is a well tested JavaScript library, that can be utilized both in the server-side as well as the client-side, for validating string data.
 
-[![NPM Version](http://img.shields.io/npm/v/validator.svg)](https://npmjs.org/package/validator)
-[![NPM Downloads](http://img.shields.io/npm/dm/validator.svg)](https://npmjs.org/package/validator)
-[![Build status](http://img.shields.io/travis/chriso/validator.js.svg)](https://travis-ci.org/chriso/validator.js)
-[![Coveralls Status](http://img.shields.io/coveralls/chriso/validator.js/master.svg)]([https://coveralls.io/r/chriso/validator.js)
+![npm version](images/badge-validator-npm.png)
+![npm downloads](images/badge-validator-downloads.png)
+![Build Status](images/badge-validator-travisci.png)
+![test coverage](images/badge-validator-coverage.png)
 
 Validating e-mail addresses:
 ```js
@@ -267,10 +267,10 @@ T> OWASP's website provides a short list of common [validated regular expression
 
 [validator.js](https://github.com/chriso/validator.js) is the go-to library for validating user input. It is mature, well tested, and constantly being attacked with multiple attack vectors with an attempt to find flaws and fix them.
 
-[![NPM Version](https://img.shields.io/npm/v/validator.svg)](https://npmjs.org/package/validator)
-[![NPM Downloads](https://img.shields.io/npm/dm/validator.svg)](https://npmjs.org/package/validator)
-[![Build status](https://img.shields.io/travis/chriso/validator.js.svg)](https://travis-ci.org/chriso/validator.js)
-[![Test coverage](https://img.shields.io/coveralls/chriso/validator.js/master.svg)]([https://coveralls.io/r/chriso/validator.js?branch=master)
+![npm version](images/badge-validator-npm.png)
+![npm downloads](images/badge-validator-downloads.png)
+![Build Status](images/badge-validator-travisci.png)
+![test coverage](images/badge-validator-coverage.png)
 
 validator.js is suitable for both frontend JavaScript as well as NodeJS server-side backend. Except from validating input, it also provides sanitization functions for specific input types and expected output.
 

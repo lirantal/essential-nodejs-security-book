@@ -145,10 +145,10 @@ function verifytoken(req, tokens, secret, val) {
 
 [csurf](https://github.com/expressjs/csurf) is another middleware from the ExpressJS family, which provides a mechanism to manage CSRF tokens.
 
-[![NPM Version](https://img.shields.io/npm/v/csurf.svg)](https://npmjs.org/package/csurf)
-[![NPM Downloads](https://img.shields.io/npm/dm/csurf.svg)](https://npmjs.org/package/csurf)
-[![Build status](https://img.shields.io/travis/expressjs/csurf/master.svg)](https://travis-ci.org/expressjs/csurf)
-[![Test coverage](https://img.shields.io/coveralls/expressjs/csurf/master.svg)]([https://coveralls.io/r/expressjs/csurf?branch=master)
+![npm version](images/badge-csurf-npm.png)
+![npm downloads](images/badge-csurf-downloads.png)
+![build status](images/badge-csurf-travisci.png)
+![test coverage](images/badge-csurf-coverage.png)
 
 The *csurf* library makes use of either the server's session storage or the client's cookie storage to persist and compare the CSRF token, therefore it must be used together with either of them. This chapter will cover usage with both of these options.
 
@@ -282,8 +282,8 @@ app.post('/login', function(req, res, next) {
 
 [lusca](https://github.com/krakenjs/lusca) is a web application security middleware, which amongst many other features that were covered in earlier chapters, also provides CSRF Token security and integrates with web application frameworks such as ExpressJS.
 
-[![Build Status](https://travis-ci.org/krakenjs/lusca.svg?branch=master)](https://travis-ci.org/krakenjs/lusca)  
-[![NPM version](https://badge.fury.io/js/lusca.svg)](http://badge.fury.io/js/lusca)  
+![npm version](images/badge-lusca-npm.png)
+![Build Status](images/badge-lusca-travisci.png)
 
 Similar to [csurf](https://github.com/expressjs/csurf), *lusca* also requires either a session or cookie middleware for storage and persistence, as well as the *body-parser* middleware.
 
