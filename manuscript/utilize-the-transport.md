@@ -1,4 +1,4 @@
-# Utilizing The Transport: HTTP Headers
+# HTTP Headers Security
 
 Working on web applications mean we ride on communication protocols which already set standards for how to transfer data and how to manage it.
 
@@ -14,10 +14,10 @@ Let's review two libraries which we can use to implement these HTTP headers and 
 
 Helmet is a pluggable library for ExpressJS which provide a wide range of solutions related to the transport security layer, such as Cross-Site-Scripting (XSS) security, X-Frame protection and many others.
 
-[![npm version](https://badge.fury.io/js/helmet.svg)](http://badge.fury.io/js/helmet)
-[![npm dependency status](https://david-dm.org/helmetjs/helmet.png)](https://david-dm.org/helmetjs/helmet)
-[![Build Status](https://travis-ci.org/helmetjs/helmet.svg?branch=master)](https://travis-ci.org/helmetjs/helmet)
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+![npm version](https://badge.fury.io/js/helmet.svg)
+![npm dependency status](https://david-dm.org/helmetjs/helmet.png)
+![Build Status](https://travis-ci.org/helmetjs/helmet.svg?branch=master)
+![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)
 
 Helmet, being a collection of transport security libraries, is well maintained and kept up to date.
 
