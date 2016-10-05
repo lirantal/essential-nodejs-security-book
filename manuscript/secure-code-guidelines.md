@@ -260,7 +260,7 @@ There is no magic to apply on regular expressions to make them safe, but rather 
 
 Taking the above example of `/^((abc)*)+$/` is simply a human error in writing a pattern, even though it works it's not safe to use. The same regular expression match would also work if the following pattern was used `/^(abc)*$/`, which is safe as it is not repeating a more complex sub-expression.
 
-I> ## OWASP Validated RegEx
+T> ## OWASP Validated RegEx
 T> OWASP's website provides a short list of common [validated regular expressions](https://www.owasp.org/index.php/OWASP_Validation_Regex_Repository) which are safe to use as well as links to other useful RegEx resources.
 
 #### Validator.js
