@@ -24,15 +24,16 @@ A popular use-case is where you may have an administrative interface at the */ad
 To help mitigate and limit requests being made to your web application we can leverage a library called [express-limiter](https://github.com/ded/express-limiter) which provides a very flexible configuration to integrate into an ExpressJS application.
 
 I> ## Pre-requisite
-I>
 I> A pre-requisite for using *express-limiter* is that it requires a Redis datastore to connect to and manage the limits it imposes per request.
 
 Installing *express-limiter* and updating our *package.json* file with its entry:
+
 ```
 npm install express-limiter --save
 ```
 
 Let's create the following limit:
+
 * Limit all type of requests (GET, POST, PUT, etc) to the */login* path
 * Limit the requests based on the incoming IP address
 * Allow a total of 20 requests per hour
@@ -72,6 +73,7 @@ app.get('/login', function(req, res, next) {
 ```
 
 The *lookup* key passed to the *limits* object is very flexible and by default it will match any object/property options in ExpressJS request object. A short list of useful and informative request object properties are:
+
 * headers.host
 * headers.user-agent
 * headers.accept-language
@@ -99,11 +101,13 @@ For example, if your web application has no notion of file uploads then you can 
 Other tweaks this library provide is to configure timeout thresholds. For example, you may want to set a global timeout for incoming connections to make sure that an attacker does not attempt to keep many sockets opened on your web server OS.
 
 Installing the *limits* library and updating the *package.json*:
+
 ```
 npm install limits --save
 ```
 
 Creating the following limit configuration:
+
 * Disable file uploads
 * Limit all requests to a total of 2 megabytes
 * Set a global timeout for incoming connections to 1 minute
@@ -122,10 +126,10 @@ app.use(nodeLimits({
 
 The [body-parser](https://github.com/expressjs/body-parser) middleware augments ExpressJS web framework with support for requests being made and parsing the HTTP body data for common data types such as JSON. *body-parser* is quite popular and is reported to serve more than five million downloads a month.
 
-[![NPM Version][https://img.shields.io/npm/v/body-parser.svg][https://npmjs.org/package/body-parser]
-[![NPM Downloads][https://img.shields.io/npm/dm/body-parser.svg]][https://npmjs.org/package/body-parserl]
-[![Build Status][https://img.shields.io/travis/expressjs/body-parser/master.svg]][https://travis-ci.org/expressjs/body-parser]
-[![Test Coverage][https://img.shields.io/coveralls/expressjs/body-parser/master.svg]][https://coveralls.io/r/expressjs/body-parser?branch=master]
+![npm version](images/badge-bodyparser-npm.png)
+![npm downloads](images/badge-bodyparser-downloads.png)
+![build status](images/badge-bodyparser-travisci.png)
+![code coverage](images/badge-bodyparser-coverage.png)
 
 As seen with the previous *limits* library, it is possible to limit the incoming request size so it doesn't cause server CPU strain to parse the body object. Where the *limits* library may be an overkill for some web applications, *body-parser* is quite common and can be set to limit the specific requests it handles to provide security.
 
@@ -152,3 +156,10 @@ Once the limit has been set, when an incoming request is bigger than the limit t
 I> ## enforcing limits
 I>
 I> Remember that *body-parser* only handles non-multipart form submissions so setting this limit will not affect file uploads being sent to your web application.
+
+
+## Summary
+
+In this chapter we reviewed some tools and configurations that aid in hardening an ExpressJS web application, such as implementing rate limiting to mitigate flood of requests, implmenting quota for file uploads and generally hiding the details of ExpressJS as the application framework.
+
+The ExpressJS documentation also provide further details and insights with regards to security best practices that help harden and secure ExpressJS applications. [Product Best Practices](http://expressjs.com/en/advanced/best-practice-security.html) review some of this information and will most probably receive updates in the future so this is always a good resource to keep track on.

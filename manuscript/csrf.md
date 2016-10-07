@@ -3,39 +3,47 @@
 Named after the attack it employs, a CSRF tricks the victim to unknowingly send requests to a system where the user has access to, and is presumably already logged-in to. Usually these attacks are targeted by nature as the attacker would have to craft a CSRF and trick the user into performing an action on another system than that of the attacker. Thus, the attacker probably has previous knowledge of the target system for which the CSRF is crafted.
 
 T> ## Known by other names
-T>
 T> CSRF has a bunch of other names which other vendors and communities use, namely: One-Click attack by Microsoft, Session Riding, and is often even abbreviated as XSRF.
 
 ## The Risk
 
 An example use case is where a vulnerable web application might have a form which makes use of the GET method to be submitted and so it receives its input field data from the query parameters. In this case, a user can be easily tricked into submitting that GET method HTML FORM through several ways:
-* An fake e-mail or website, attracting the user to click on a link or even just try to render an image that will lead to submitting this form. For example:
+
+* A fake e-mail or website, attracting the user to click on a link or even just try to render an image that will lead to submitting this form. For example:
+
 ```html
 <img src="http://target-web-application.com/updateEmailAddress.php?email=attacker@domain.com" />
 ```
+
 When the user's email client will attempt to interpret this HTML piece and render the image tag then it will actually cause the browser to make that request on behalf of the user. If the user is logged-in then this example GET method FORM will be submitted, resulting in the user's email address to be changed.
 
 * A naive-looking link can also lead the user to click on it without the user's knowledge of what this link action actually calls to:
+
 ```html
 <a href="http://target-web-application.com/updateEmailAddress.php?email=attacker@domain.com"> Read More </a>
 ```
 
 Updating the form implementation to use POST or PUT requests doesn't provide any higher level of security for implementing secure forms. Some examples for attacking these forms are:
+
 * The attacker controls a website which can contain a naive-looking form submission with the action path set to the targeted vulnerable web application. For example:
+
 ```html
 <form action="http://target-web-application.com/updateEmailAddress.php" method="post">
 <input type="hidden" name="email" value="attacker@domain.com" />
 <input type="submit" value="Continue" />
 </form>
 ```
+
 When clicked, the browser will send a request to the path specified in the *action* property with a hidden key/value pair of updating the user's email address.
 
 * An attacker can also leverage JavaScript code to submit the former POST method FORM example with the page load event so the user has nothing to say about it (except if the user has JavaScript disabled):
+
 ```html
 <body onLoad="document.forms[0].submit()">
 ```
 
 * Another case which can be exploited by the user is to create an AJAX request which trigger the browser to process and send this request:
+
 ```js
 <script type="text/javascript">
 var xhr = new XMLHttpRequest();
@@ -44,6 +52,7 @@ xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 xhr.send("email=attacker@domain.com");
 </script>
 ```
+
 This AJAX request can also run automatically when the user loads the attacker's web page with simply binding it to the *onLoad* event.
 
 An even greater risk is where the target web application is actually hosting the CSRF code.
@@ -54,6 +63,7 @@ For example, if the web application allows rich text comments, forums, or any ot
 As described when reviewing the possible risks of CSRF, any attempts to attempt and harden an HTML FORM entity are futile and are mere annoyance for an attacker to workaround, but such attempts are definitely not the solution.
 
 To be clear, let's review what would be a wrong way of approaching a CSRF solution:
+
 1. Changing the FORM *method* attribute from GET to POST
 2. Changing the FORM *action* attribute value from HTTP to HTTPS endpoint, or updating the URI to a full URL.
 3. Deprecating all the FORM elements and converting them to API endpoint
@@ -69,9 +79,7 @@ The preferred way to protect against CSRF attacks is by generating a token, whic
 CSRF tokens can be further secured by not using a single token for the entire user session, which might be common with Single Page Application architecture (SPA), but rather new tokens can be generated and compared with for every form action submitted or similar user action being taken.
 
 I> ## Unreadable characters we call CAPTCHAs
-I>
 I> The concept of CAPTCHAs was initially introduced to mitigate user spam, bots, and automated web crwaling. It is a possible solution to add security for forms and actions but it is not user friendly.
-I>
 I> By the way, did you know that the meaning of CAPTCHA is: Completely Automated Public Turing Test To Tell Computers and Humans Apart. Luckily we have an acronym for it.
 
 ### CSRF Tokens Implementation
@@ -86,7 +94,7 @@ This approach requires per page handling of the CSRF token so it must be pre-pla
 
 #### CSRF Cookie
 
-Most web applications require to utilize cookies for client-side storage and maintaining a session in a stateless HTTP protocol. By leveraging the cookie store, the web application can set a CSRF cookie with the token's value. At this point all the cookies for the web application will be sent with every request the user makes to the server, including the previously set CSRF token cookie. When the server receives these requests it is checking the CSRF token cookie value and compares it with what it generated when the session started for the user.
+Most web applications require to utilize cookies for client-side storage and maintaining a session in a stateless HTTP protocol. By leveraging the cookie store, the web application can set a CSRF cookie with the token's value. At this point all the cookies for the web application will be sent with every request the user makes to the server, including the previously set CSRF token cookie. This by itself adds no protection, but implementing what is known as a Double Submit Cookies mechanism will do the job. Double Submit Cookies works by sending random values in both the request query itself as well as a cookie value, which then the server compares and confirms.
 
 #### CSRF Token Header
 
@@ -141,6 +149,8 @@ function verifytoken(req, tokens, secret, val) {
 }
 ```
 
+To summarize, the server which implements the *csurf* library will always look for the CSRF token in either the request parameters, the body payload or in a specific HTTP header. It takes this value and compares it with the value it stored initially to check for a match.
+
 ### ExpressJS csurf Library
 
 [csurf](https://github.com/expressjs/csurf) is another middleware from the ExpressJS family, which provides a mechanism to manage CSRF tokens.
@@ -152,7 +162,7 @@ function verifytoken(req, tokens, secret, val) {
 
 The *csurf* library makes use of either the server's session storage or the client's cookie storage to persist and compare the CSRF token, therefore it must be used together with either of them. This chapter will cover usage with both of these options.
 
-Installing csurf for use in an expressjs project:
+Installing *csurf* for use in an expressjs project:
 
 ```bash
 npm install csurf --save
@@ -160,9 +170,9 @@ npm install csurf --save
 
 #### csurf With Cookies
 
-csurf requires the very least [body-parser](https://github.com/expressjs/body-parser) library to access the data from the *req* object, and then either the session library, or the [cookie-parser](https://www.npmjs.com/package/cookie-parser) library to persist the CSRF token value.
+The minimal requirement for *csurf* is the [body-parser](https://github.com/expressjs/body-parser) library to access the data from the *req* object, and then either the session library *express-session*), or the [cookie-parser](https://www.npmjs.com/package/cookie-parser) library to persist the CSRF token value.
 
-At first, all the libraries are required in the code:
+To begin, all the libraries are required in the code:
 
 ```js
 var bodyParser = require('body-parser');
@@ -219,7 +229,7 @@ app.post('/login', function(req, res, next) {
 
 #### csurf With Session
 
-At first, all the libraries are required in the code:
+The following libraries are first required in the code:
 
 ```js
 var bodyParser = require('body-parser');
@@ -280,7 +290,7 @@ app.post('/login', function(req, res, next) {
 
 ### ExpressJS With lusca Library
 
-[lusca](https://github.com/krakenjs/lusca) is a web application security middleware, which amongst many other features that were covered in earlier chapters, also provides CSRF Token security and integrates with web application frameworks such as ExpressJS.
+[lusca](https://github.com/krakenjs/lusca) is a web application security middleware, which amongst many other features that were covered in earlier chapters, also provide CSRF Token security and integrates with web application frameworks such as ExpressJS.
 
 ![npm version](images/badge-lusca-npm.png)
 ![Build Status](images/badge-lusca-travisci.png)
@@ -333,3 +343,9 @@ app.post('/login', function(req, res, next) {
   });
 });
 ```
+
+## Summary
+
+Implementing CSRF token security to mitigate CSRF attacks is a vital and fundamental layer to secure a web application client-side user.
+
+While we reviewed *csurf* and *lusca* as viable libraries to integrate into a working Node.js application, there are other implementations both client-side and server-side to help protect end-users. One example is AngularJS's built-in support for CSRF token mechanism that can be further consulted in their [$http service documentation](https://docs.angularjs.org/api/ng/service/$http).

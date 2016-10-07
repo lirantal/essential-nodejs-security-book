@@ -1,6 +1,6 @@
-# Session Management
+# Secure Session Management
 
-If your web application is completely stateless and requires no user customization at all, and no user tracking then you probably don't even need to worry about users and sessions management, and your application became way more secure than it was with sessions. Better yet, you can leverage caching proxies, CDNs and very easy
+If your web application is completely stateless and requires no user customization at all, and no user tracking then you probably don't even need to worry about users and sessions management.
 
 The other scenario is that you need to serve content customized for users, allow them to login and perform some actions, or maintain a user related activity.
 This is where things get tricky and need proper attention to whole lot more details of information security.
@@ -13,23 +13,23 @@ The focus of this chapter will discuss Cookies based session management which is
 
 Improper session management in web applications may lead to several vulnerabilities that can be exploited by attackers.
 
-I> To understand session security in depth we first must own a basic understanding I> of sessions management: a web server keeps track of the user's browsing
-I> interaction by saving to the user's browser a token, often refereed to as session I> id, which it uses to identify this unique user for further requests and interactions made between the user and the web server.
+I> To understand session security in depth we first must own a basic understanding of sessions management. A web server keeps track of the user's browsing
+I> interaction by saving to the user's browser a token, often referred to as session id, which it uses to identify this unique user for further requests and interactions made between the user and the web server.
 
 Reviewing a few examples of session related attacks:
+
 * **Session Fixation** - by employing several vectors of attack, it attempts to gain a valid session on the browser, and then fixing the victim's browsing session to use the already existing session that attacker owns. Possible attack vectors are Cross-Site-Scripting (XSS), Meta Tag Injections, Session Adoption and others.
 * **Session Hijacking** - an attacker will employ similar attack vectors such as XSS, and may also employ a MITM attack to reveal a valid user's session id so it can be hijacked by the attacker and made use of.
 
 The risk and impact of any session attack is owning the user's identity and thus having the same privileged session as the user does. To compare with Unix attacks which may exploit root privilege escalation attacks, this introduces possibly the greatest risk for web applications as well.
 
 T> ## On Session Management
-T>
 T> OWASP maintains an up to date [Session Management](https://www.owasp.org/index.php/Session_Management_Cheat_Sheet) checklist to validate your web security compliance with security standards.
 
-## Session Security in NodeJS and ExpressJS
+## Session Security in Node.js and ExpressJS
 
 ExpressJS utilizes the [express-session](https://github.com/expressjs/session) middleware for session management.
-The project is well maintained, tested and de-facto solution for session management in NodeJS.
+The project is well maintained, tested and de-facto solution for session management in Node.js.
 
 ![npm version](images/badge-expresssession-npm.png)
 ![npm downloads](images/badge-expresssession-downloads.png)
@@ -37,6 +37,7 @@ The project is well maintained, tested and de-facto solution for session managem
 ![test coverage](images/badge-expresssession-coverage.png)
 
 Installing express-session:
+
 ```
 npm install express-session --save
 ```
@@ -51,7 +52,6 @@ Routing all of your HTTP traffic through a secured sockets layer such as SSL or 
 
 Cookies may be set on the user browser with a flag to instruct the browser to only transmit cookies when working with HTTPS communication.
 
-
 ```js
 var session = require('express-session');
 
@@ -65,7 +65,8 @@ app.use(session({
 
 ### Secure cookie access to communication protocol only
 
-Browsers feature a method for accessing client side cookie information through the common use of the `document.cookie` object. When a web application is made vulnerable to Cross-Site-Scripting (XSS) attacks then it can be exploited to run any arbitrary JavaScript code, such as to access cookie information and perform any action on it, such as send it to a remote service controlled or monitored by the attacker, or just print it to the generated HTML page output.
+Browsers feature a method for accessing client side cookie information through the common use of the `document.cookie` object.
+When a web application is made vulnerable to Cross-Site-Scripting (XSS) attacks then it can be exploited to run any arbitrary JavaScript code. Some examples are to access cookie information and perform any action on it, such as send it to a remote service controlled or monitored by the attacker, or just print it to the generated HTML page output.
 
 To mitigate this issue, we can limit the access to the cookie information so that the browser knows to only send/receive cookie data via the HTTP/HTTPS communication protocol over the wire. Any attempts to execute JavaScript functions to get the cookie object will then fail.
 
@@ -84,7 +85,10 @@ app.use(session({
 The session cookie is used to identify the user's browsing session at least, and may contain more sensitive information about the user and the web application in other cases. Due to the sensitive data that the cookie holds it's persistence and storage in the browser's client side makes it an appealing target for attackers and thus another very important aspect of security.
 
 We identify two types of cookie storage: persistent and non-persistent cookies.
-Persistent cookies are specified by a *Max-Age* or *Expires* attribute and value which define the amount of time to store on the browser's disk storage. Non-persistent which are more secured will be stored in the browser's memory for the remainder of time when the browser process is open. Once closed, any cookie information that was saved in the browser is no longer available.
+
+Persistent cookies are specified by a *Max-Age* or *Expires* attribute and value which define the amount of time to store on the browser's disk storage.
+
+Non-persistent which are more secured will be stored in the browser's memory for the remainder of time when the browser process is open. Once closed, any cookie information that was saved in the browser is no longer available.
 
 With express-session, the *maxAge* value is by default set to *null* which makes for a secure cookie configuration but it is worth forcing this value for clarity and for future updates to the library:
 
@@ -101,7 +105,6 @@ app.use(session({
 ```
 
 T> ## Did you ever toggle the Remember Me option?
-T>
 T> Web applications make use of persisting the cookie data to the user's disk storage in order to provide a more convenient user experience which doesn't require the user to always login. If the cookie is available on disk, the user's session remains active and can be continued from the point it was left off.
 
 
@@ -112,7 +115,7 @@ The cookie name seems like a basic and unimportant piece of information as it's 
 Fingerprinting is an field in security which attempts to identify the services and their versions that power a service based on how they work and what they send.
 For example, a common PHP web application sets the cookie name to PHPSESSION, providing an attacker with a head-start of knowing already which platform is powering a web application, how and where to focus the vector of attack. In such cases, the attacker had already gathered information on the system without needing to do anything.
 
-In NodeJS case, ExpressJS's session middleware defaults to a cookie with a name of *connect.sid*.
+In Node.js case, ExpressJS's session middleware defaults to a cookie with a name of *connect.sid*.
 In attempt to hide this information from the outside world we can change the cookie name to anything else:
 
 ```js
@@ -124,7 +127,6 @@ app.use(session({
 ```
 
 T> ## Blackhatter?
-T>
 T> If you ever wish to wear that black hat and explore other systems then you might want to use [OWASP's Cookie Database](https://www.owasp.org/index.php/Category:OWASP_Cookies_Database) which is essentially a list of cookie names used by vendors, which will save you the trouble of fingerprinting this information on your own.
 
 ### Secure session ID
@@ -162,6 +164,7 @@ The sensitive nature of the session identifier calls for more ways to protect it
 A good defense against session fixation and also works well against session hijacking is to re-generate the session identifier. Doing this for every request might be an overkill, but it is quite common to do it before sensitive actions that are taken by the user and before any privilege escalation.
 
 A good strategy for re-generating the session identifier is in all of the following cases:
+
 * User login - after the user logged-in to the system, a new session identifier needs to be generated
 * Sensitive actions, depending on the application but here is a reference:
   * Password change, email update and other personal details identifying the user
@@ -178,7 +181,15 @@ req.session.regenerate(function(err) {
 });
 ```
 
-### Summary: Reference for secure session configuration
+## Summary
+
+In this chapter we learned essential session management best practices such as:
+
+* Transmitting cookie information over HTTPS connections only
+* Preventing access to cookie information from JavaScript runtime
+* Obscuring the cookie name to hide your web application stack
+
+### Reference for secure session configuration
 
 ```js
 var session = require('express-session');
@@ -193,3 +204,5 @@ app.use(session({
   }
 }));
 ```
+
+Complete source code for a functional secure session-enabled server can be found in the book's GitHub repository.

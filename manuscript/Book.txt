@@ -1,5 +1,11 @@
+frontmatter:
+
 frontmatter.md
-backmatter.md
+about-the-author.md
+about-the-book.md
+
+mainmatter:
+
 utilize-the-transport.md
 session-management.md
 hardening-expressjs.md
@@ -7,3 +13,15 @@ csrf.md
 xss.md
 secure-code-guidelines.md
 injections.md
+dependency-management.md
+ - npm-package-dependencies.md
+ - nsp
+ - snyk
+ - npmshrinkwrap
+
+ - static code analysis (eslint, git hooks)
+
+backmatter:
+
+backmatter.md
+test-chapter.md
