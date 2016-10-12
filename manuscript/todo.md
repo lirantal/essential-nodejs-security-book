@@ -3,7 +3,8 @@ hardening-expressjs.md
  - http://expressjs.com/en/advanced/best-practice-security.html
  - use an up to date version of expressjs
  - configure secure sockets layer with TLS
- -
+ - static code analysis with eslint
+ - bithound, david-dm
 
 xss.md
  - considering reviewing more resources of xss in nodejs like: secure-filters

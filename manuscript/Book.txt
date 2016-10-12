@@ -14,14 +14,7 @@ xss.md
 secure-code-guidelines.md
 injections.md
 dependency-management.md
- - npm-package-dependencies.md
- - nsp
- - snyk
- - npmshrinkwrap
-
- - static code analysis (eslint, git hooks)
 
 backmatter:
 
 backmatter.md
-test-chapter.md
