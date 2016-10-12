@@ -156,58 +156,6 @@ A valid JavaScript encoded version of the alert text will be properly escaped as
 alert(\"test\")
 ```
 
-
-## OS Command Injection
-
-Care consideration must be given when resorting to the undesired option of executing Operating System (OS) commands to execute a program, or shell script. While there may be valid reasons for doing so in some situations, the potential for a critical security vulnerability is great because of the OS-level context. When this is done incorrectly, it may lead to OS command injection and thus compromising the underlying server OS.
-
-In similar to other injection vulnerabilities, the focus on mitigating this kind of attack is to use a proper string binding with a secure shell execution function call, and apply proper output encoding, which in this case is in the context of an Operating System command shell.
-
-Node.js provides OS command execution using child processes set of functions, and specifically using the `child_process` module.
-The `child_process.exec()` function allows to spawn a shell and then execute a given command within that shell context. Taking into account the following example:
-
-```js
-var child_process = require('child_process');
-
-function listPath(directory) {
-  var cmd = "ls -alh";
-  child_process.exec(cmd + ' ' + directory, function(err, data) {
-    console.log(data);
-  });
-}
-```
-
-In the above code snippet, the `listPath` function takes a directory reference as a parameter and appends it to the command that gets executed in a shell. The `directory` parameter to the function should be regarded as an untrusted source, such as one that originates from untrusted user input. What would happen if that parameter will be set to `; cat /etc/passwd` ?
-Similar to how SQL injection attacks work, the special semi-colon char will end one command statement, and begin a new one, leading to an execution as follows:
-
-```bash
-$ ls -alh
-$ cat /etc/passwd
-```
-
-Due to this vulnerability, the `child_process.exec()` function should be avoided entirely at all circumstances, and instead one should make use of `child_process.execFile()`, which executes a single and bound command, and allows passing it any number of arguments that cannot be altered and spawned as individual commands.
-
-Thus, a safe command execution methodology:
-
-```js
-var child_process = require('child_process');
-
-function listPath(directory) {
-  var cmd = "ls";
-  var cmdParams = ['ls'];
-  cmdParams.push(directory);
-  child_process.execFile(cmd, cmdParams, function(err, data) {
-    console.log(data);
-  });
-}
-```
-
-By no means, should the `execFile()` function leave a comfort feeling of safety. Some Linux OS shell commands do allow invoking other programs from their own execution, so just limiting the passing of parameters to that command is not helpful.
-
-W> ## Avoid when possible
-W> Avoid at all costs executing arbitrary commands from within your Node.js program. In the last resort when that is required, always make use of execFile function call, and only to known and well-understood OS commands which can not be tricked into running commands passed in parameters.
-
-
 ## Regular Expressions
 
 The use of Regular Expressions (RegEx) is quite common among software engineers and DevOps or IT roles where they specify a string pattern to match a specific string in a text. This can be used to perform wild-card fuzzy search to match and test occurrences of strings.
