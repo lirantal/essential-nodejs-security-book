@@ -344,6 +344,8 @@ app.post('/login', function(req, res, next) {
 });
 ```
 
+{pagebreak}
+
 ## Summary
 
 Implementing CSRF token security to mitigate CSRF attacks is a vital and fundamental layer to secure a web application client-side user.

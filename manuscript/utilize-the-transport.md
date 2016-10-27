@@ -4,8 +4,6 @@ Developing web applications means that our program rides on communication protoc
 
 Browsers utilize HTTP headers to enforce and confirm such communication standards as well as security policies. Making use of these HTTP headers to increase security for our clients (web browsers) is a very efficient and quick method to mitigate and prevent many security vulnerabilities.
 
-## Node.js Libraries
-
 Let's review two libraries which we can use to implement these security related HTTP headers and apply the solution required for each security mechanism that we will be reviewing:
 
 * Lusca
@@ -42,6 +40,8 @@ Lusca integrates with ExpressJS web applications using a middleware implementati
 T> ## Security-oriented frameworks
 T>
 T> Lusca is a library that is part of a bigger web application framework called [kraken.js](https://github.com/krakenjs/kraken-js) that focuses on security first, and is too, officially maintained by PayPal's own people.
+
+{pagebreak}
 
 ## Strict Transport Security
 
@@ -135,6 +135,8 @@ app.use(lusca({
 
 As can be seen, using lusca is very similar to using helmet, including their optional arguments like `maxAge`, and `includeSubDomains`.
 
+{pagebreak}
+
 ## X-Frame-Options
 
 The [X-Frame-Options](http://tools.ietf.org/html/7034) HTTP header was introduced to mitigate an attack called Clickjacking which allows an attacker to disguise page elements such as buttons, and text inputs by hiding their view behind real web pages which render on the screen using an iframe HTML element, or similar objects.
@@ -222,6 +224,8 @@ app.use(lusca({
   }
 ));
 ```
+
+{pagebreak}
 
 ## Content-Security-Policy
 
@@ -390,6 +394,7 @@ app.use(helmet.csp({
 }));
 ```
 
+{pagebreak}
 
 ## Other HTTP headers
 
@@ -443,6 +448,7 @@ app.use(helmet.noSniff());
 
 Lusca has no support for this HTTP header built in.
 
+{pagebreak}
 
 ## Summary
 

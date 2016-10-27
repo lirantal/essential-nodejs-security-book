@@ -181,6 +181,8 @@ req.session.regenerate(function(err) {
 });
 ```
 
+{pagebreak}
+
 ## Summary
 
 In this chapter we learned essential session management best practices such as:

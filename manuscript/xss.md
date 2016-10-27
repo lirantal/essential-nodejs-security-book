@@ -26,21 +26,27 @@ If no string escaping is performed on the *name* parameter at the output level, 
 </div>
 ```
 
+{pagebreak}
+
 ## The Risk
 
 XSS vulnerabilities can be classified in one of the following categories:
 
 * Stored/Persistent XSS - As it name implies, a stored XSS attack is when the malicious XSS code is injected to the web application and is stored on the persistent storage which the application implements. For example, if the web application would allow comments, and the comments input is not validated or sanitized then an attacker could inject malicious XSS code as part of the comment. Due to the comment being stored in the web application, when the page renders the comment view for any user it will also expose the user to this attack.
 
+
 * Reflected XSS - This type of XSS attack has the same result for the end user, but is less severe from a stored XSS because the web application is not exposing all users alike to the malicious code but instead, an attacker is able to craft a malicious link that when the user is tricked into viewing it then the request injects the malicious code into the web application and then renders on the user's browser.
 
- For example, imagine a search query being made to the server http://example.com/search?movieName=Inception where a common web application will make use of the *movieName* parameter to inform the user what he searched for. If the web application is insecure a reflected XSS attack can occur with an attacker being able to replace the value for the *movieName* parameter with a malicious JavaScript executable code.
+    For example, imagine a search query being made to the server http://example.com/search?movieName=Inception where a common web application will make use of the *movieName* parameter to inform the user what he searched for. If the web application is insecure a reflected XSS attack can occur with an attacker being able to replace the value for the *movieName* parameter with a malicious JavaScript executable code.
+
 
 * DOM-based XSS - The nature of this XSS attack lies in the web application code making use of DOM methods which rely on insecure user input. Browsers provide the most commonly used *document* object which allows to interact with the web page structure and the current web request that was made. Vulnerable properties of the *document* object are *document.location* or *document.documentURI* to name a few. If a web application uses one of these properties insecurely to parse data from the request being made and then use it in the web page then an attacker is able to alter the request just like with a reflected XSS attack and thus affect the DOM structure and expose the user's browser to execute the malicious code.
+
 
 Briefly reviewing the sources of untrusted input data which may be vulnerable to XSS attacks:
 
 * Query string and parameters - these are the most common input injections and include any *GET* parameters, the URL itself or pieces of it, and general *POST* data or other HTML methods.
+
 
 * Cookies - even cookies may contain data which an attacker was able to somehow inject malicious code into and should be treated with care.
 
@@ -151,13 +157,18 @@ Besides *inHTMLData* there are other APIs that exist to handle encoding untruste
 
 * HTML comments *inHTMLComment* - to encode data in HTML comment's such as `<!-- {{comment}} -->`
 
+
 * HTML attributes - to encode data in HTML attributes it is required to make use of the appropriate quoting notation used in the attributes context.
 
 With regards to HTML attributes, when using a single quote notation in attributes then use the *inSingleQuoteAttr* method:
 
+JavaScript:
+
 ```js
 var safeUserInput = xssFilters.inSingleQuotedAttr(userInput);
 ```
+
+HTML:
 
 ```html
 <input value='{{safeUserInput}}'/>
@@ -165,9 +176,13 @@ var safeUserInput = xssFilters.inSingleQuotedAttr(userInput);
 
 When using double quotes notation in attributes then use the *inDoubleQuotedAttr* method:
 
+JavaScript:
+
 ```js
 var safeUserInput = xssFilters.inDoubleQuotedAttr(userInput);
 ```
+
+HTML:
 
 ```html
 <input value="{{safeUserInput}}"/>
@@ -175,9 +190,13 @@ var safeUserInput = xssFilters.inDoubleQuotedAttr(userInput);
 
 When not using any type quotation as attributes in HTML elements, for example to specify attribute keywords `hidden` which is applied to an HTML element and makes it invisible then use the *inUnQuotedAttr* method:
 
+JavaScript:
+
 ```js
 var safeUserInput = xssFilters.inUnQuotedAttr(userInput);
 ```
+
+HTML:
 
 ```html
 <input name="csrfToken" value="{{csrfValue}}" {{safeUserInput}}/>
@@ -191,9 +210,11 @@ var userURIPathInput = xssFilters.uriPathInHTMLData();
 var userURIGragmentInput = xssFilters.uriFragmentInHTMLData();
 ```
 
+{pagebreak}
+
 ## Summary
 
-OWASP [ranks](https://www.owasp.org/index.php/Top10#OWASP_Top_10_for_2013) Cross Site Scripting (XSS) in the 3rd position of the Top 10 vulnerabilities and attack vectors. As such, our awareness of security concerns should be high for attacks which are very common and easy to exploit.
+OWASP ranks Cross Site Scripting (XSS) in the 3rd position of the [Top 10 vulnerabilities and attack vectors](https://www.owasp.org/index.php/Top10#OWASP_Top_10_for_2013). As such, our awareness of security concerns should be high for attacks which are very common and easy to exploit.
 
 To prevent XSS vulnerabilities, we learned about one of the basic mitigation techniques which is to encode or escape the output data so that malicious user input would not compromise the user's web browser by interpreting a maliciously injected JavaScript code.
 

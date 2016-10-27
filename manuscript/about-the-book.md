@@ -4,7 +4,7 @@ This book is intended to be a hands-on thorough guide for securing web applicati
 
 The main objective of the book is to equip the reader with practical solutions to real world problems, and so this book is heavily saturated with source code examples as well as a high level description of the risks involved with any security topic, and the practical solution to prevent or mitigate it.
 
-Even though ExpressJS is chosen as the case for web application framework, many concepts in this book can and should be taken into account, and implemented with any other framework. Concepts like *secure code*, *nosql injections*, *secure session management* and others are beyond ExpressJS semantics and would benefit any Node.js developer whose primary focus is web development.
+Even though ExpressJS is chosen as the case for web application framework, many concepts in this book can, and should be taken into account, and implemented with any other framework. Concepts like *secure code*, *nosql injections*, *secure session management* and others are important security topics and would benefit any Node.js developer whose primary focus is web development.
 
 ## Source Code
 
