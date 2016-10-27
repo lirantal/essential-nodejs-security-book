@@ -1,6 +1,6 @@
 {frontmatter}
 
-# Foreward
+# Foreword
 
 Node.js, and JavaScript at large are quickly taking over software whether it is StackOverflow[^survey1] and GitHub's[^survey2] statistics for projects growth, the IoT industry, ChatOps projects written in JavaScript and Enterprises adoption is growing as well. With this trend in the rise for the past several years, it is imperative to take into account security practices and learn how to harden Node.js Web Applications.
 
