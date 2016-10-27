@@ -2,6 +2,7 @@ frontmatter:
 
 frontmatter.md
 about-the-author.md
+about-the-reviewers.md
 about-the-book.md
 
 mainmatter:
