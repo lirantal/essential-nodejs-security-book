@@ -78,10 +78,6 @@ nsp has grown beyond a command-line tool and is part of an ecosystem and cloud o
 
 ### Snyk
 
-Snyk VulnDB based off of nsp's advisories database as well as snyk's own database
-
-minimatch is not a direct dependency of the meanjs project, and not even for `grunt-cli` as can be seen in the `path` field of the report, so a patch must be provided to one of the
-
 ## NPM Shrinkwrap
 
 When publishing packages to npm, it is required to maintain [semantic versioning](https://docs.npmjs.com/misc/semver) which is a program version [specification](http://semver.org/) that defines how to properly version software releases.
@@ -160,6 +156,6 @@ The outcome is a JSON file `npm-shrinkwrap.json` which npm will always consult w
 
 
 
-
+{pagebreak}
 
 ## Summary
