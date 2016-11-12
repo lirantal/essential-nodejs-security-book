@@ -129,32 +129,17 @@ npm shrinkwrap
 The outcome is a JSON file `npm-shrinkwrap.json` which npm will always consult when triggered and follow the package versions for it when installing missing packages. For new packages being installed, it will also update this shrinkwrap file with the exact version to pin it down.
 
 
+## Summary
 
+Keeping track of your project's dependency tree is of high importance in order of making sure no vulnerabilities are introduced through 3rd party libraries.
 
+We reviewed a set of tools and techniques to help track them:
 
+* Snyk project is helpful in keeping track of vulnerabilities introduced through your module dependencies, and provides a way to patch your dependencies even if no fix is yet available for them.
 
+* Node Security Platform (nsp) is another useful tool to check for vulnerabilities in 3rd party modules.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+* Npm's shrinkwrap method will lock your module dependencies to a specific known version.
 
 {pagebreak}
 

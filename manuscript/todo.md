@@ -5,6 +5,8 @@ hardening-expressjs.md
  - configure secure sockets layer with TLS
  - static code analysis with eslint
  - bithound, david-dm
+ - http parameter pollution
+ -
 
 xss.md
  - considering reviewing more resources of xss in nodejs like: secure-filters
