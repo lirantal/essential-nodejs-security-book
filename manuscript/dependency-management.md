@@ -77,6 +77,77 @@ T> nsp supports different types of reporting output such as a summary, json outp
 nsp has grown beyond a command-line tool and is part of an ecosystem and cloud offering called [Node Security Platform](https://nodesecurity.io/) that integrates with GitHub public or private repositories to track them and their pull-requests and ensure no insecure dependencies are being introduced to the project.
 
 ### Snyk
+[Snyk](https://snyk.io) is a service for continuously monitoring your project's dependencies for any known vulnerabilities. Snyk provides a command-line interface, as well as a robust GitHub integration that can further simplify the process.
+
+Snyk tests dependencies agains their [open-source vulnerability database](https://snyk.io/vuln/), and has dedicated researchers actively discovering new vulnerabilities to be disclosed. Similar to nsp (Node Security Platform), Snyk's GitHub integration scans a projects `package.json` to see what versions of dependencies are currently installed, and compares those versions to their database. The command-line interface goes a step further and scans the installed packages themselves.
+
+To use the command-line interface, you first install Snyk as a global module:
+
+```bash
+npm install -g snyk
+```
+
+With the Snyk tool installed, you can test your project for vulnerabilities using the `snyk test` command:
+
+```bash
+snyk test
+```
+
+Snyk will test your installed packages against their vulnerability database and output something like the following:
+
+![snyk test scan](images/snyk-test.png)
+
+In this example, you can see that Snyk found two vulnerabilities. For each vulnerability, Snyk provides information about the serverity, a link to a detailed description, and the path through which the vulnerable package got into your system.
+
+Snyk also prompts you to run `snyk wizard` which will walk you through the process of fixing those vulnerabilities. Before you do that, you'll want to authenticate using the authorization token you receive when you first sign up for the service. This ensures you won't run into any API rate limits, and also enables you to setup continuous monitoring, which we'll talk about shortly.
+
+```bash
+snyk auth <your token>
+```
+
+Now authorized, you can run the wizard to help you fix the issues Snyk found.
+
+```bash
+snyk wizard
+```
+
+The wizard will once again test your packages for vulnerabilities. For each vulnerability, you'll be prompted with all the same information you received when you ran `snyk test`. You'll also be provided with remediation options, like so:
+
+![snyk wizard](images/snyk-wizard.png)
+
+In the above example, you can see that for Snyk is providing a few options for how to address the low severity vulnerability found in the `hawk` package, which in turn was introduced via the `tap` package. The basic options are to:
+
+- Upgrade the package to a version where the vulnerability has been fixed. In this case, there is no upgrade that address the issue, which Snyk notes.
+- Patch the issue, which modifies the actual files locally on your machine.
+- Ignore the issue for 30 days, which will ensure that Snyk won't alert you to this vulnerability in subsequent tests until that 30 days has passed.
+- Skip the issue altogether. If you choose to skip, Snyk will still report this issue each time it is run.
+
+Once you've walked through the wizard for each discovered vulnerability, Snyk will apply any patches and upgrades you've selected (modifying `package.json` and running `npm update` as needed) and store your decisions in `.snyk` policy file that it will refer to whenever you run Snyk on that project in the future.
+
+Since you've authenticated, a snapshot of the current state of your dependencies will also be stored to your account.
+
+![snapshot of your project on Snyk.io](images/snyk-monitor-site.png)
+
+This enables Snyk to notify you (using email or Slack) whenever a newly discovered vulnerability impacts your project, letting you address the issue immediately.
+
+As part of the `wizard` process, Snyk will also optionally integrate some tests and protection steps into your `package.json` file. If you decide, you can:
+
+- Have Snyk add `snyk test` to the `test` script, which will query local dependencies for vulnerabilities and throw an error if any are found.
+- Have Snyk add `snyk protect` to your project as a `post-install` step. This way if you publish the module, Snyk can apply any patches you've selected each time the module is installed.
+
+Snyk's command-line interface is great for integrating into your continuous integration systems, but an even more automated process is provided if your application is contained in a GitHub repository.
+
+When you login to your Snyk account, there is a button allowing you to test your GitHub repositories. After you provide Snyk GitHub permissions, Snyk will automatically test these repos and provide the test results in an abbreviate form.
+
+![snyk GitHub integration](images/your-github-repos.png)
+
+You can see in the screenshot above that for each repository, Snyk will tell you the number of high, medium and low priority vulnerabilities, as well as give you the option to "Watch" the repo. Selecting this will add the repository as a project to Snyk so that Snyk can continuously check it against any newly disclosed vulnerabilities.
+
+You also have the option to "Open a fix PR". This will take you to a page where you can review the suggested remediations and create an automated pull request to your project with the required upgrades and patches.
+
+![snyk GitHub PR](images/Open_a_fix_PR.png)
+
+The Snyk service is free for any open-source projects, with different tiers available for private projects depending on the functionality you need.
 
 ## NPM Shrinkwrap
 
