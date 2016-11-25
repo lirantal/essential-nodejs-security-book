@@ -155,10 +155,7 @@ To summarize, the server which implements the *csurf* library will always look f
 
 [csurf](https://github.com/expressjs/csurf) is another middleware from the ExpressJS family, which provides a mechanism to manage CSRF tokens.
 
-![npm version](images/badge-csurf-npm.png)
-![npm downloads](images/badge-csurf-downloads.png)
-![build status](images/badge-csurf-travisci.png)
-![test coverage](images/badge-csurf-coverage.png)
+![](images/csurf-badges.png)
 
 The *csurf* library makes use of either the server's session storage or the client's cookie storage to persist and compare the CSRF token, therefore it must be used together with either of them. This chapter will cover usage with both of these options.
 
@@ -292,8 +289,7 @@ app.post('/login', function(req, res, next) {
 
 [lusca](https://github.com/krakenjs/lusca) is a web application security middleware, which amongst many other features that were covered in earlier chapters, also provide CSRF Token security and integrates with web application frameworks such as ExpressJS.
 
-![npm version](images/badge-lusca-npm.png)
-![Build Status](images/badge-lusca-travisci.png)
+![](images/lusca-badges.png)
 
 Similar to [csurf](https://github.com/expressjs/csurf), *lusca* also requires either a session or cookie middleware for storage and persistence, as well as the *body-parser* middleware.
 

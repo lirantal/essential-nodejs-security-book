@@ -126,10 +126,7 @@ app.use(nodeLimits({
 
 The [body-parser](https://github.com/expressjs/body-parser) middleware augments ExpressJS web framework with support for requests being made and parsing the HTTP body data for common data types such as JSON. *body-parser* is quite popular and is reported to serve more than five million downloads a month.
 
-![npm version](images/badge-bodyparser-npm.png)
-![npm downloads](images/badge-bodyparser-downloads.png)
-![build status](images/badge-bodyparser-travisci.png)
-![code coverage](images/badge-bodyparser-coverage.png)
+![](images/bodyparser-badges.png)
 
 As seen with the previous *limits* library, it is possible to limit the incoming request size so it doesn't cause server CPU strain to parse the body object. Where the *limits* library may be an overkill for some web applications, *body-parser* is quite common and can be set to limit the specific requests it handles to provide security.
 

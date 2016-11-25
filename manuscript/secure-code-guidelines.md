@@ -41,11 +41,6 @@ The ideal solution for validating user input is to use one of the following libr
 
 [Validator.js](https://github.com/chriso/validator.js) is a well tested JavaScript library, that can be utilized both in the server-side as well as the client-side, for validating string data.
 
-![npm version](images/badge-validator-npm.png)
-![npm downloads](images/badge-validator-downloads.png)
-![Build Status](images/badge-validator-travisci.png)
-![test coverage](images/badge-validator-coverage.png)
-
 Validating e-mail addresses:
 
 ```js
@@ -239,10 +234,7 @@ T> OWASP's website provides a short list of common [validated regular expression
 
 [validator.js](https://github.com/chriso/validator.js) is the go-to library for validating user input. It is mature, well tested, and constantly being attacked with multiple attack vectors with an attempt to find flaws and fix them.
 
-![npm version](images/badge-validator-npm.png)
-![npm downloads](images/badge-validator-downloads.png)
-![Build Status](images/badge-validator-travisci.png)
-![test coverage](images/badge-validator-coverage.png)
+![](images/validatorjs-badges.png)
 
 validator.js is suitable for both frontend JavaScript as well as Node.js server-side backend. Except from validating input, it also provides sanitization functions for specific input types and expected output.
 

@@ -31,10 +31,7 @@ T> OWASP maintains an up to date [Session Management](https://www.owasp.org/inde
 ExpressJS utilizes the [express-session](https://github.com/expressjs/session) middleware for session management.
 The project is well maintained, tested and de-facto solution for session management in Node.js.
 
-![npm version](images/badge-expresssession-npm.png)
-![npm downloads](images/badge-expresssession-downloads.png)
-![Build Status](images/badge-expresssession-travisci.png)
-![test coverage](images/badge-expresssession-coverage.png)
+![](images/expressjs-badges.png)
 
 Installing express-session:
 

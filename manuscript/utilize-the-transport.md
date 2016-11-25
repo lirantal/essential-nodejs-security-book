@@ -13,7 +13,7 @@ Let's review two libraries which we can use to implement these security related 
 
 [Helmet](https://github.com/helmetjs/helmet) is a pluggable library for ExpressJS which provides a wide range of solutions related to the transport security layer, such as Cross-Site-Scripting (XSS) security, X-Frame protection and many others.
 
-![npm version](images/helmet-badges.png)
+![](images/helmet-badges.png)
 
 Helmet, being a collection of transport security libraries, is well maintained and kept up to date. As such, it makes a good choice to incorporate in your enterprise or production apps.
 
@@ -30,8 +30,7 @@ Helmet's libraries work by introducing middlewares for ExpressJS which can respo
 
 Lusca integrates with ExpressJS web applications using a middleware implementation to mitigate some of the HTTP transport layer vulnerabilities. It is mainly developed and maintained by team members from PayPal who officialy sponsor the work on this library, currently lead by Jean-Charles Sisk.
 
-![npm version](images/badge-lusca-npm.png)
-![Build Status](images/badge-lusca-travisci.png)
+![](images/lusca-badges.png)
 
 
 T> ## Security-oriented frameworks
