@@ -13,17 +13,7 @@ Let's review two libraries which we can use to implement these security related 
 
 [Helmet](https://github.com/helmetjs/helmet) is a pluggable library for ExpressJS which provides a wide range of solutions related to the transport security layer, such as Cross-Site-Scripting (XSS) security, X-Frame protection and many others.
 
-{width=15%,float=left}
-![npm version](images/badge-helmet-npm.png)
-
-{width=15%,float=left}
-![npm dependency status](images/badge-helmet-daviddm.png)
-
-{width=15%,float=left}
-![Build Status](images/badge-helmet-travisci.png)
-
-{width=15%,float=left}
-![js-standard-style](images/badge-helmet-standardjs.png)
+![npm version](images/helmet-badges.png)
 
 Helmet, being a collection of transport security libraries, is well maintained and kept up to date. As such, it makes a good choice to incorporate in your enterprise or production apps.
 
