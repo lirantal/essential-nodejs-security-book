@@ -12,8 +12,3 @@ All the source code examples, and many more variations of them can be found in t
 
 Feedback and comments are highly appreciated and welcome. If you find any issues, improvements, or room for updates please open a GitHub issue or Pull-Request.
 
-{pagebreak}
-
-| |
-
-{pagebreak}
