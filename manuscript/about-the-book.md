@@ -11,3 +11,9 @@ Even though ExpressJS is chosen as the case for web application framework, many 
 All the source code examples, and many more variations of them can be found in their complete setup and form in the following GitHub repository inside the *code/* directory [https://github.com/lirantal/nodejssecurity](https://github.com/lirantal/nodejssecurity).
 
 Feedback and comments are highly appreciated and welcome. If you find any issues, improvements, or room for updates please open a GitHub issue or Pull-Request.
+
+{pagebreak}
+
+| |
+
+{pagebreak}
