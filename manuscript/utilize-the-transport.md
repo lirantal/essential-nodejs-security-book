@@ -4,6 +4,8 @@ Developing web applications means that our program rides on communication protoc
 
 Browsers utilize HTTP headers to enforce and confirm such communication standards as well as security policies. Making use of these HTTP headers to increase security for our clients (web browsers) is a very efficient and quick method to mitigate and prevent many security vulnerabilities.
 
+## Node.js Packages to Secure The HTTP Transport
+
 Let's review two libraries which we can use to implement these security related HTTP headers and apply the solution required for each security mechanism that we will be reviewing:
 
 * Lusca

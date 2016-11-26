@@ -213,5 +213,3 @@ We reviewed a set of tools and techniques to help track them:
 * Npm's shrinkwrap method will lock your module dependencies to a specific known version.
 
 {pagebreak}
-
-## Summary
