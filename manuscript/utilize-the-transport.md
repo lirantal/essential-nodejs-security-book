@@ -1,9 +1,3 @@
-#
-
-![](images/chapter1-cover.jpg)
-
-{pagebreak}
-
 # HTTP Headers Security
 
 Developing web applications means that our program rides on communication protocols which already set standards for how to transfer data and how to manage it.
