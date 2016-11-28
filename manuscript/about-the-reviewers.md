@@ -14,3 +14,10 @@ anywhere, everywhere web, and was a contributing author for High Performance Ima
 Smashing Book #4: New Perspectives on Web Design, and the Web Performance Daybook 
 Volume 2.
 
+
+## Cody B. Daig
+Cody is a technical mentor at Hack Reactor where he teaches students software 
+engineering in a remote immersive bootcamp. Previously, he has worked as a developer in 
+the 3D printing and affiliate marketing industry. He is currently active with the MEAN.js
+open source project on GitHub. You can find him on twitter `@codydaig` or on his website
+at www.codydaig.me.
