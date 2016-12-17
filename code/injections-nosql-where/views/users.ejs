@@ -1,0 +1,18 @@
+<html>
+<body>
+
+<a href="/user?age=2"> Show me all users with age > 2 </a>
+
+<div>
+    List:
+    <ul>
+    <% users.forEach(function(user) { %>
+        <li>
+            <%= user._id %> = <%= user.age %>
+        </li>
+    <% }); %>
+    </ul>
+</div>
+
+</body>
+</html>
