@@ -138,6 +138,81 @@ console.log(String({"$gt": ""}));
 
 In conclusion, there are many ways to validate and confirm the expected input type is being matched so keeping track of how MongoDB queries are run with regards to the input they match against is crucial. One example is the [passport-local](https://github.com/jaredhanson/passport-local) library which completely ignores the request if the data it received is an object.
 
+## NoSQL SSJS Injections
+
+Server-side JavaScript (SSJS) Injection occurs when a server-side component allows the execution of arbitrary JavaScript code in the server context. It may allow this to provide some extended functionality, but nevertheless, this capability opens the door for untrusted input data by the user to be interpreted and executed.
+ 
+Common server-side JavaScript injections can be referred to any use of `eval()`, `setTimeout()`, `setInterval()`, or, `Function()`. All of which, allow parsing arguments which may wrongly originate from a user controlled input data.
+
+MongoDB's Evaluation Query operator, referred to as `$where` allows to match documents when they satisfy a JavaScript expression.
+
+Let's review an example of such query for a MongoDB database:
+
+```
+> db.users.find( { $where: function() { return (this.country == 'IL'); }});
+```
+
+When executed, MongoDB matches all the user's collection documents where their country field equals to the string 'IL' and will return all those matches.
+This can also be shortened and written as follows:
+
+```
+> db.users.find( { $where: this.country == 'IL' }});
+```
+
+### The Risk
+
+A security vulnerability can be introduced when un-sanitized parameters are passed to the evaluated JavaScript expression for the $where operator.
+
+The following is a very stripped down version of this vulnerability when exploited by an attacker. It demonstrates an ExpressJS application that defined a `/userCountries` GET API which executes a MongoDB injection with a $where operator:  
+
+```
+app.get('/userCountries', function(req, res) {
+
+  var country = req.query.country;
+  var searchCriteria = "this.country == " + "'" + country + "'";
+
+  users.find({
+    $where: searchCriteria
+  }).toArray(function(err, response) {
+
+    res.render('users', { users: response });
+
+  });
+});
+```
+
+The `searchCriteria` variable will build the where expression based on user input, and so the exact MongoDB query that will execute will look as follows:
+
+```
+  $where: "this.country == 'IL'" 
+```
+
+This query awfully resembles traditional SQL injections, and because the $where operator evaluates JavaScript then such insecure method of combining user input with a MongoDB query may result in the following malicious scenario:
+
+An attacker sends a GET request which satisfies the $where operator by providing text to the boolean expression and also closing it with a single quote. Now, it is possible to terminate this string expression and add any valid JavaScript code. Finally, there's a closing single quote that gets concatenated to the string, so the GET request also adds it.  
+
+```
+$ curl "http://localhost:31337/user?country=IL';while(true)\{\};'"
+```
+
+The resulting $where operator expression looks as follows:
+
+```
+  $where: "this.country == 'IL';while(true){};''" 
+```
+
+This valid JavaScript expression is actually triggering a DoS attack on the MongoDB service. While Node.js isn't exploited here and can further serve requests, any additional requests to the Node.js server that require MongoDB will stall. At this point, MongoDB is completely taking up 100% CPU resources in an infinite loop that will end only when watchdogs and timers kick-in. 
+
+### The Solution
+
+In reference to MongoDB itself, the `$where` operator should probably be avoided when possible. The [documentration](https://docs.mongodb.com/manual/reference/operator/query/where/) further elaborates the insecure and inefficient characteristics of the $where operator. It should only be used as a last resort.
+
+Follow these general guidelines to avoid and mitigate NoSQL injection attacks:
+ * Sanitizing and validating user input - do not allow user originating input as is. Always validate, and filter to match the allowed and expected data.
+ * Prepared statements - familiar from traditional SQL methodologies, secure the data passed to queries through prepared statements. Better alternative to the official MongoDB client are ORM and ODMs that provide out of the box security. For example, [sequelizejs](https://github.com/sequelize/sequelize), or [mongoose](https://github.com/Automattic/mongoose).
+ * Don't use insecure JavaScript functions to parse user input, such as: `eval()`, `setTimeout()`, `setInterval()`, and `Function()`.
+
+
 ## OS Command Injection
 
 Care consideration must be given when resorting to the undesired option of executing Operating System (OS) commands to execute a program, or shell script. While there may be valid reasons for doing so in some situations, the potential for a critical security vulnerability is great because of the OS-level context. When this is done incorrectly, it may lead to OS command injection and thus compromising the underlying server OS.
