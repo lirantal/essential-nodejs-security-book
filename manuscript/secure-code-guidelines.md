@@ -348,13 +348,15 @@ To meet security standards we combine a proper hash function with an adequate al
 [bcrypt](https://en.wikipedia.org/wiki/Bcrypt) is a commonly accepted secure hash function which employs the Blowfish cipher. When using bcrypt with Node.js, one should consider the use of native bcrypt libraries which offer superior performance verses the JavaScript implementation which are slower, yet are cross-platform compatible.
 
 I> ## JavaScript bcrypt implementations
-I> Other options to consider for a JavaScript implementation are [bcrypt.js](https://github.com/dcodeIO/bcrypt.js/), and [twin-bcrypt](https://github.com/fpirsch/twin-bcrypt).
+I> Other options to consider for a JavaScript implementation are [bcrypt.js](https://github.com/dcodeIO/bcrypt.js/).
 
 Using Node.js native bcrypt we will first install it via npm:
 
 ```bash
 npm install bcrypt
 ```
+
+The choice for [bcrypt](https://en.wikipedia.org/wiki/Bcrypt) library is due to it's native C++ bindings which makes this library very performant and thus recommended to use on production servers. It is straightforward to install it on a GNU/Linux OS, however Windows or Mac users will need to meet some [dependencies requirements](https://github.com/kelektiv/node.bcrypt.js#dependencies). To make it easy for Windows or Mac users, you can use the aforementioned [bcrypt.js](https://github.com/dcodeIO/bcrypt.js/) library which is a plain JavaScript implementation and compatible with the native bcrypt library.
 
 bcrypt provides the following primary methods which work asynchronously:
 
@@ -409,6 +411,8 @@ bcrypt.compare("hacktheplanet", hash, function(err, res) {
 ```
 
 bcrypt features a synchronous set of functions for the same aforementioned methods: `genSaltSync`, `hashSync`, and `compareSync`. some input/output limitations with bcrypt are truncating after 72 chars, and allows an input password of up to 51 chars.
+
+While a synchronous set of implementation might seem appealing due to the simple nature of code flow, an adept Node.js developer will take into account the fact for Node.js being a single-threaded platform. This comes in to play when a developer might invoke a 10 rounds `hashSync` function call which "eats" about 50ms of CPU time and that means that the event loop is stalling **all** requests to the Node.js server for 50ms.
 
 T> ## Available Secure Hash Functions
 T> There are other secure hash functions than bcrypt: Argon2 which is the *new kid on the block*, scrypt, and last as well as least preferred PBKDF2.
