@@ -417,13 +417,30 @@ T> There are other secure hash functions than bcrypt: Argon2 which is the *new k
 
 Running web servers which serve requests from an untrusted and open public medium brings with it an inherent risk where malicious attempts will try to compromise the underlying server and operating system through vulnerabilities in the web server.
 
-Web servers have no reason to operate with a super-user privilege level, except for being able to bind and listen for incoming requests on port 80 or 443 which are allowed only to the super-user in Linux and UNIX variants (non super-users may bind to ports larger than 1024 on those OSs).
+Web servers have no reason to operate with a super-user privilege level, except for being able to bind and listen for incoming requests on port 80 or 443 which are allowed only to the super-user in Linux and UNIX variants (non super-users may bind to ports larger than 1024 on those operation systems).
 
-To mitigate this issue, production environments often feature a more secured transport to handle requests and proxy them to the web server that binds on another port using a regular system user.
+To mitigate this issue, production environments often feature a more secured medium to handle requests and proxy them to the web server that binds on another port using a regular system user.
 
-These transports may vary in purpose and can be idenfitied usually as one of:
+Such medium may vary in purpose and can be identified usually as one of the following, but not limited to:
 
-1. Reverse Proxy
-2. Load Balancer
+1. A Reverse Proxy
+2. A Load Balancer
 
-With Node.js, most frameworks and server setups that are documented will feature a server that listens on high ports such as 8888, 5000, 3000, 9000 to give several examples. This is so that the server runs without the super-user privilege level, and if the Node.js server is exploited then it doesn't compromise the entire server just from it's own share of OS resources.
+Using a Load Balancer for example, it will most probably terminate the SSL connection to offload this heavy CPU work from web servers, and expose a routable IP and host to the public to access it over a secure HTTP channel. All incoming requests are routed to Node.js web application servers that are not directly exposed outside. 
+
+These Node.js servers would ideally run without a super-user owner, which is why many Node.js frameworks and server setup guides will feature a server that listens on high ports such as 3000, 4000, 5000, 8888, and 9000. This is so that the server can be executed without requiring a super-user privilege. If the Node.js server is exploited then it doesn't compromise the entire server just from it's own share of OS resources, unless a privilege escalation vulnerability exists.
+
+{pagebreak}
+
+# Summary 
+
+Keeping a security-oriented state of mind while writing code and setting up environments is an essential layer of security. Secure code guidelines may vary in different organizations depending on culture, technology stack and other considerations but they should be followed nonetheless.
+
+While not presuming to be a complete list, in this chapter we reviewed the following topics for security best practices and guidelines:
+
+* Input validation
+* Output encoding
+* Regular Expressions
+* JavaScript's Strict Mode
+* Cryptographic Practices
+* User Process Privileges
