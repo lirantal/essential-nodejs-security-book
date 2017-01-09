@@ -26,4 +26,4 @@ at www.codydaig.me.
 Zach is a passionate Web and Mobile Hacker (JavaScript Software Development Engineer), team 
 lead and mentor at War Room labs where he works on open sourcery and enterprise projects. A 
 web & mobile app coding enthusiast and lover of all things JavaScript. You can find him on 
-twitter `@thesosana`or on his github profile at www.github.com/SOSANA/.
+twitter `@thesosana` or on his github profile at www.github.com/SOSANA/.
