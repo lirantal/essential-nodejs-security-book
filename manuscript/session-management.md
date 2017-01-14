@@ -180,14 +180,6 @@ req.session.regenerate(function(err) {
 
 {pagebreak}
 
-## Summary
-
-In this chapter we learned essential session management best practices such as:
-
-* Transmitting cookie information over HTTPS connections only
-* Preventing access to cookie information from JavaScript runtime
-* Obscuring the cookie name to hide your web application stack
-
 ### Reference for secure session configuration
 
 ```js
@@ -205,3 +197,12 @@ app.use(session({
 ```
 
 Complete source code for a functional secure session-enabled server can be found in the book's GitHub repository.
+
+## Summary
+
+In this chapter we learned essential session management best practices such as:
+
+* Transmitting cookie information over HTTPS connections only
+* Preventing access to cookie information from JavaScript runtime
+* Obscuring the cookie name to hide your web application stack
+
