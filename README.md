@@ -1,9 +1,12 @@
 
-# Node.js Security
-GitHub repository for the book: Node.js security
-Note: title subject to change in the final version of the book.
+# Essential Node.js Security
+GitHub repository for the book: *Essential Node.js Security for ExpressJS Web Applications*
+
+![Essential Node.js Security](https://s27.postimg.org/s6cezkhk3/nodejs_book_cover.png)
 
 # Code Samples
+
+All code samples are available at: https://github.com/lirantal/nodejssecurity/tree/master/code
 
 
 # Author
