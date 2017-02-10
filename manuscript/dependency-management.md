@@ -199,6 +199,73 @@ npm shrinkwrap
 
 The outcome is a JSON file `npm-shrinkwrap.json` which npm will always consult when triggered and follow the package versions for it when installing missing packages. For new packages being installed, it will also update this shrinkwrap file with the exact version to pin it down.
 
+# Yarn As npm Package Management
+
+[Yarn](https://yarnpkg.com) is a package management client tool for the command line which serves as an alternative to the ubiquitous `npm` tool.
+
+It's originated from Facebook with the purpose of replacing the `npm` client tool in order to provide reliable package resolution, and fast installs, as is required with the likes of Facebook's scale.
+  
+## Characteristics of Yarn
+
+Yarn's advantage can be characterized by the following:
+
+ * Reliability and Speed
+ * Deterministic Package Resolution
+ * Security
+
+### Reliability and Speed
+
+When Yarn downloads packages it always saves them to a local directory so they can be cached
+locally for offline use. This inherently speeds up the `yarn install` action as there is no
+bandwidth wasted and one can witness a significantly increased speed when installig modules.
+
+Another optimization step that Yarn is performing is to download packages in parallel rather than serially, one after the other.
+
+### Deterministic Package Resolution 
+
+When installing packages using the `npm` client, it will resolve versions of dependencies in
+real time. We learned how to handle this problem of drifting dependencies using the
+`npm-shrinkwrap.json` methodology. However, the shrinkwrap file has been noted to be
+problematic in maintaining the dependency graph and reliably resolving pinned version.
+
+This is where Yarn's method of resolving packages has been improved to become truly deterministic in always resolving to the same version. Yarn generates and maintains it's own `yarn.lock` file and you aren't expected nor shouldn't be editing it manually. This file is expected to be commited to your code repository so it can be shared with the rest of the team and assure everyone are using the same version of packages across developers, test, and production environments.
+
+### Security
+
+Yarn provides security by the means of integrity checking the packages it installs.
+
+When Yarn installs packages it records a SHA1 checksum of the file it downloaded as part of the package information in it's `yarn.lock` file.
+
+While this is not a means of complete security, it provides safety and validation mechanism where if a man-in-the-middle would be tempering with the packages in transit to send a modified version of the package then Yarn will catch it by noticing the checksum change.
+
+
+## Command Line Usage  
+
+It's command line interface is also more restrictive for minimizing human errors. For example, if you were to install the `helmet` library with npm, it would be possible to easily mistake and install it in the local `node_modules/` directory without adding it as a dependency to your project through `package.json`. Such as:
+  
+```bash
+npm install helmet
+```
+
+With Yarn, it is impossible to just install a floating module on the project, and the defaults are safe enough to always add your installed module to `package.json` so you never accidentally push code without the modules it depends on.
+
+## Installing Yarn
+
+Yarn can be installed using a variety of options, the easiest of them is using the `npm` tool itself:
+
+```bash
+npm install -g yarn
+```
+
+I> Other recommended alternative installation methods include the `brew`, and `curl` tools
+I> and are documented here: https://yarnpkg.com/en/docs/install  
+
+## Tracking Dependencies with Yarn
+
+```bash
+yarn outdated
+```
+
 
 ## Summary
 
@@ -211,5 +278,7 @@ We reviewed a set of tools and techniques to help track them:
 * Node Security Platform (nsp) is another useful tool to check for vulnerabilities in 3rd party modules.
 
 * Npm's shrinkwrap method will lock your module dependencies to a specific known version.
+
+* Yarn package manager helps in assuring expected version dependencies 
 
 {pagebreak}
