@@ -199,7 +199,7 @@ npm shrinkwrap
 
 The outcome is a JSON file `npm-shrinkwrap.json` which npm will always consult when triggered and follow the package versions for it when installing missing packages. For new packages being installed, it will also update this shrinkwrap file with the exact version to pin it down.
 
-# Yarn As npm Package Management
+# Yarn as npm Package Management
 
 [Yarn](https://yarnpkg.com) is a package management client tool for the command line which serves as an alternative to the ubiquitous `npm` tool.
 
@@ -220,6 +220,12 @@ locally for offline use. This inherently speeds up the `yarn install` action as 
 bandwidth wasted and one can witness a significantly increased speed when installig modules.
 
 Another optimization step that Yarn is performing is to download packages in parallel rather than serially, one after the other.
+
+T> ## cache for offline
+T> Caching packages means you're easily able to get them when working offline. To find out where exactly Yarn saves them run: `yarn cache dir`
+
+
+
 
 ### Deterministic Package Resolution 
 
