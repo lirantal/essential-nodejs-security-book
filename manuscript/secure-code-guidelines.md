@@ -436,7 +436,7 @@ These Node.js servers would ideally run without a super-user owner, which is why
 
 {pagebreak}
 
-# Summary 
+## Summary 
 
 Keeping a security-oriented state of mind while writing code and setting up environments is an essential layer of security. Secure code guidelines may vary in different organizations depending on culture, technology stack and other considerations but they should be followed nonetheless.
 
