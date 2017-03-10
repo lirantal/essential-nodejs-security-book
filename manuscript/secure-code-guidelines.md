@@ -302,7 +302,7 @@ For ECMAScript 6, enabling strict mode has some more effect on the language synt
 It is probable that you have witnessed the strict mode invocation as it became quite the de-facto for writing securely in JavaScript. It is recognized by programs that start with the following line:
 
 ```js
-'use script';
+'use strict';
 ```
 
 It affects the entire script, or it can affect only a portion of it, such as a specific function if applied inside.
@@ -436,7 +436,7 @@ These Node.js servers would ideally run without a super-user owner, which is why
 
 {pagebreak}
 
-# Summary 
+## Summary 
 
 Keeping a security-oriented state of mind while writing code and setting up environments is an essential layer of security. Secure code guidelines may vary in different organizations depending on culture, technology stack and other considerations but they should be followed nonetheless.
 
