@@ -18,14 +18,14 @@ app.use(helmet.hsts({
 app.use(helmet.frameguard({
   action: 'sameorigin'
 }));
-app.use(helmet.csp({
+app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'", 'https://ajax.googleapis.com'],
     scriptSrc: ["'self'"],
     styleSrc: ["'self'"],
     childSrc: ["'none'"],
     objectSrc: ["'none'"],
-    formSrc: ["'none'"]
+    formAction: ["'none'"]
   }
 }));
 app.use(helmet.xssFilter());

@@ -291,7 +291,7 @@ We define a whitelist where JavaScript code and CSS resources are only allowed t
 ```js
 var helmet = require('helmet');
 
-app.use(helmet.csp({
+app.use(helmet.contentSecurityPolicy({
   directives: {
     scriptSrc: ["'self'"],
     styleSrc: ["'self'"]
@@ -311,13 +311,13 @@ Let's construct the following content policy for our web application:
 ```js
 var helmet = require('helmet');
 
-app.use(helmet.csp({
+app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'", 'https://cdn.amazon.com'],
     scriptSrc: ["'self'", 'https://ajax.googleapis.com'],
     childSrc: ["'none'"],
     objectSrc: ["'none'"],
-    formSrc: ["'none'"]
+    formAction: ["'none'"]
   }
 }));
 ```
