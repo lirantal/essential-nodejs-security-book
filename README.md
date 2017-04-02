@@ -8,10 +8,15 @@ GitHub repository for the book: *Essential Node.js Security for ExpressJS Web Ap
 
 All code samples are available at: https://github.com/lirantal/nodejssecurity/tree/master/code
 
-
 # Author
 
 Liran Tal <liran.tal@gmail.com>
+
+# Contributing
+
+Corrections and improvements are welcome.  Please fork the repository and submit a merge request: <https://github.com/lirantal/nodejssecurity/tree/master>
+
+When you make a pull request, make sure to add your name to the list of contributors in [CONTRIBUTORS.md](CONTRIBUTORS.md).
 
 # License
 
