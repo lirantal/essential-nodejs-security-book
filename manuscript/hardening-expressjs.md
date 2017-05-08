@@ -160,4 +160,4 @@ I> Remember that *body-parser* only handles non-multipart form submissions so se
 
 In this chapter we reviewed some tools and configurations that aid in hardening an ExpressJS web application, such as implementing rate limiting to mitigate flood of requests, implmenting quota for file uploads and generally hiding the details of ExpressJS as the application framework.
 
-The ExpressJS documentation also provide further details and insights with regards to security best practices that help harden and secure ExpressJS applications. [Product Best Practices](http://expressjs.com/en/advanced/best-practice-security.html) review some of this information and will most probably receive updates in the future so this is always a good resource to keep track on.
+The ExpressJS documentation also provides further details and insights with regards to security best practices that help harden and secure ExpressJS applications. [Product Best Practices](http://expressjs.com/en/advanced/best-practice-security.html) review some of this information and will most probably receive updates in the future so this is always a good resource to keep track on.
