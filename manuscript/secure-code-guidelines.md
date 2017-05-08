@@ -302,7 +302,7 @@ For ECMAScript 6, enabling strict mode has some more effect on the language synt
 It is probable that you have witnessed the strict mode invocation as it became quite the de-facto for writing securely in JavaScript. It is recognized by programs that start with the following line:
 
 ```js
-'use script';
+'use strict';
 ```
 
 It affects the entire script, or it can affect only a portion of it, such as a specific function if applied inside.
