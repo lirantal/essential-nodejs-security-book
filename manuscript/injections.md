@@ -205,12 +205,78 @@ This valid JavaScript expression is actually triggering a DoS attack on the Mong
 
 ### The Solution
 
-In reference to MongoDB itself, the `$where` operator should probably be avoided when possible. The [documentration](https://docs.mongodb.com/manual/reference/operator/query/where/) further elaborates the insecure and inefficient characteristics of the $where operator. It should only be used as a last resort.
+In reference to MongoDB itself, the `$where` operator should probably be avoided when possible. The [documentation](https://docs.mongodb.com/manual/reference/operator/query/where/) further elaborates the insecure and inefficient characteristics of the $where operator. It should only be used as a last resort.
 
 Follow these general guidelines to avoid and mitigate NoSQL injection attacks:
  * Sanitizing and validating user input - do not allow user originating input as is. Always validate, and filter to match the allowed and expected data.
  * Prepared statements - familiar from traditional SQL methodologies, secure the data passed to queries through prepared statements. Better alternative to the official MongoDB client are ORM and ODMs that provide out of the box security. For example, [sequelizejs](https://github.com/sequelize/sequelize), or [mongoose](https://github.com/Automattic/mongoose).
  * Don't use insecure JavaScript functions to parse user input, such as: `eval()`, `setTimeout()`, `setInterval()`, and `Function()`.
+
+## Blind NoSQL Injections
+
+The concept behind the blind injection attack is to extract as much information as possible from the database so that even if a direct noSQL injection fails, the database exposes correct and incorrect noSQL statements differently to the user, thus allowing to collect information by sending varying requests. 
+
+A close variant to blind noSQL injection exists in MongoDB through the use of it's operators. One of which is the `$regex` operator which allows to gather information based on varying regular expressions sent as input data to the database.
+
+### The Risk
+
+In the previous section about noSQL Injections we visited a naive example where both the username and password inputs are tested on the database, such as:
+
+```js
+User.find({ username: req.body.username, password: req.body.password}, function(err, document) {})
+```
+
+With the risks and solutions for the above query made clear, one might assume that the next evolutionary step in constructing the user and password validation logic would be to validate the password input vs the actual password stored in the database.
+
+One approach would be to just find the user record and once found, invoke a callback function to validate the passwords match.
+An example of doing this is as follows:
+
+```js
+function userAuth(req) {
+    Users.findOne({username: req.body.username}, compareUserPass);
+    
+    function compareUserPass(err, dbUserRecord) {
+        return dbUserRecord.password === req.body.password;
+        
+        // Tip: next time compare a provided password to a stored hash
+        // in the database, so that you never store plaintext passwords.
+    }
+}
+```
+
+The supposedly enhanced security is achieved by comparing a plaintext password in the database with the plaintext input from the user.
+Implementing the above would mitigate an input such as `{username: {"$gt": ""}, password: {"$gt": ""}}` because even if a user is hit from the database due to the `$gt` operator, the passwords are actually compared and expected to be the same.
+
+### The Attack
+
+What seems like a working solution should still raise a red flag, especially the username being used without being sanitized first.
+
+Because the password is compared to find an identical match, an attack vector would be to blindly try to match a record with a specific password. If the username is indeed un-santizied we can employ other MongoDB operators to find user records based on specific patterns by ending the following query:
+
+```bash
+curl -X POST -H "Content-Type: application/json" --data '{"username":{"regex": "demo"}, "password":"123456"}' http://localhost:31337/login
+```
+
+If an account exists which username is `demo` and password is `123456` (which is [the most used password in 2017](http://www.telegraph.co.uk/technology/2017/01/16/worlds-common-passwords-revealed-using)), then a new valid session will be created and we successfully exploited the database.
+
+In real systems, there would probably be many user accounts registered on the system, hence a simple "demo" regex might not be suffice. Imagine the following usernames:
+
+1. test_demo
+2. user_demo
+3. demo1
+4. demo2
+
+And so on... the Blind NoSQL Injection is thus employed by blindly sending varying requests to try and match an account record so the input payload differs on each request, such as:
+ 
+* `{"username": {"regex": "^demo$"}, "password": "123456"}`
+* `{"username": {"regex": "^demo1$"}, "password": "123456"}`
+* `{"username": {"regex": "^demo2$"}, "password": "123456"}`
+
+### The Solution
+
+Understanding of why Blind NoSQL Injection works is necessary to mitigate such attacks.
+
+At the very least, all input must be validated and sanitized before sent to the database, as we reviewed in earlier sections.
 
 
 ## OS Command Injection
