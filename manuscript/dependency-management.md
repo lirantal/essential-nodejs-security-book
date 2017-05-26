@@ -199,13 +199,11 @@ npm shrinkwrap
 
 The outcome is a JSON file `npm-shrinkwrap.json` which npm will always consult when triggered and follow the package versions for it when installing missing packages. For new packages being installed, it will also update this shrinkwrap file with the exact version to pin it down.
 
-# Yarn as npm Package Management
+## Yarn as npm Package Management
 
 [Yarn](https://yarnpkg.com) is a package management client tool for the command line which serves as an alternative to the ubiquitous `npm` tool.
 
 It's originated from Facebook with the purpose of replacing the `npm` client tool in order to provide reliable package resolution, and fast installs, as is required with the likes of Facebook's scale.
-  
-## Characteristics of Yarn
 
 Yarn's advantage can be characterized by the following:
 
@@ -223,9 +221,6 @@ Another optimization step that Yarn is performing is to download packages in par
 
 T> ## cache for offline
 T> Caching packages means you're easily able to get them when working offline. To find out where exactly Yarn saves them run: `yarn cache dir`
-
-
-
 
 ### Deterministic Package Resolution 
 
@@ -245,7 +240,7 @@ When Yarn installs packages it records a SHA1 checksum of the file it downloaded
 While this is not a means of complete security, it provides safety and validation mechanism where if a man-in-the-middle would be tempering with the packages in transit to send a modified version of the package then Yarn will catch it by noticing the checksum change.
 
 
-## Command Line Usage  
+### Command Line Usage  
 
 It's command line interface is also more restrictive for minimizing human errors. For example, if you were to install the `helmet` library with npm, it would be possible to easily mistake and install it in the local `node_modules/` directory without adding it as a dependency to your project through `package.json`. Such as:
   
@@ -255,7 +250,7 @@ npm install helmet
 
 With Yarn, it is impossible to just install a floating module on the project, and the defaults are safe enough to always add your installed module to `package.json` so you never accidentally push code without the modules it depends on.
 
-## Installing Yarn
+#### Installing Yarn
 
 Yarn can be installed using a variety of options, the easiest of them is using the `npm` tool itself:
 
@@ -266,7 +261,7 @@ npm install -g yarn
 I> Other recommended alternative installation methods include the `brew`, and `curl` tools
 I> and are documented here: https://yarnpkg.com/en/docs/install  
 
-## Tracking Dependencies with Yarn
+#### Tracking Dependencies with Yarn
 
 ```bash
 yarn outdated
