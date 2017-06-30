@@ -6,7 +6,54 @@ T> ## Enforcing Secure Code Guidelines
 T> To further strengthen the adoption in your team it is possible to create linting rules and git hooks that ensures source code that is being added to the source code repository is actually following the standards set for a secure code guideline.
 T> OWASP maintains a [secure code guideline document](https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide) as a reference.
 
-## The Risk
+The following sub-sections provide a collection of topics that may be employed to adhere to secure code guidelines: Node.js versioning, user input, and common programmer pitfall around Node.js event loop and encryption.
+
+## Node.js Releases and APIs
+
+[Node.js](https://nodejs.org) as a project, is governed by a technical steering committee and is further extended by a group of collaborators who make the core technical committee and individual working groups such as the Long-Term Working Group, Website Working Group and others.
+
+Reporting a security issue to the Node.js project e-mail the security team at: security@nodejs.org, and follow the [disclosure policy](https://nodejs.org/en/security/).
+
+### Node.js Release Cadence
+
+Understanding and following Node.js releases is important in order to make sure that you are using supported, up-to-date and secure versions of Node.js in production or otherwise.
+
+Node.js follows a similar release cadence to that of Ubuntu Linux distribution, and generally can be described as two main release channels:
+
+1. A release is made every 6 months, where even numbered releases will take place in April, such as version 6, and odd numbered releases will take place in October, such as version 5 and version 7.
+2. Long-Term Releases (often known as LTS) happen for even numbered releases such as v4 and v6 and they turn into LTS-mode when the next odd numbered version is released. What makes LTS special is that after the first six months they become actively maintained for eighteen months further, followed by a maintenance mode for twelve more months to receive critical security and bug fixes. Effectively making even numbered LTS releases supported for a period of three years.
+
+Once a version enters LTS, any new features that gets added must get a committee confirmation ([CTC](https://github.com/nodejs/node/blob/master/GOVERNANCE.md#core-technical-committee) and the [LTS Working Group](https://github.com/nodejs/LTS)).
+
+To give a time-line example, Node.js v4 gets released. Six months after v5 is released. At this point v4 is effectively made LTS and makes a good choice to run in production for the near future, giving you enough time to evaluate and migrate your code to v6 when that makes it into LTS.
+
+![](images/nodejs-release-schedule.png)
+
+T> # Node.js Release Schedule
+T> More information can be found on the official home for the Long-term Support Working Group which is available on GitHub: https://github.com/nodejs/LTS
+
+### API Stability Index
+
+The Node.js API continually receives updates to keep up with changes, during which some APIs prove to be battle-tested and others are either in their very early stages of being introduced into the platform or has out-lived and considered deprecated.
+
+Every API section in the official Node.js documentation will be labelled with a stability index that is also visually highlighted similar to the following:
+
+![](images/nodejs-api-stability-index.png)
+
+It is important to follow-up on these API changes while you upgrade with the fast-paced Node.js release cadence to make sure you are not using any deprecated APIs, and establish guideline for using experimental APIs.
+
+### API Deprecation
+
+As software evolves, APIs are doomed to be modified as they receive updates or get completely replaced with a newer set of APIs. This is true for Node.js and has happened in prior releases as well.
+
+Aside of the Node.js documentation wesite, several ways of tracking breaking, or major API changes include:
+* The official [Node.js Changelog](https://github.com/nodejs/node/blob/master/CHANGELOG.md)
+* The Node.js community employs a methodology of soft-deprecation for APIs by logging out messages of deprecation warnings. Developers, whom are often sensitive to their application debug or console output can easily catch these notifications and take them into account. Node.js pending deprecation CLI option `node --pending-deprecation` (or set the NODE_PENDING_DEPRECATION=1 environment variable) will emit deprecation warnings from the node process.
+
+T> Some examples of recent API deprecations:
+T> The utility class `fs.SyncWriteStream`, and `fs.read()` (reference: https://nodejs.org/en/blog/release/v8.0.0)
+
+## Input Validation
 
 These days attackers aim at application layers as they attempt to exploit vulnerable application code which isn't handling input correctly. Untrusted user input is the first line of defense for an application program code, and mitigating it early in the software development life-cycle is crucial in setting the security boundaries correctly and the foundations for a secure application design.
 
@@ -15,8 +62,6 @@ Failure of securely handling untrusted user input may result in:
 * Injection attacks
 * Information Disclosure
 * Buffer Overflows leading to system compromise or memory leaks
-
-## Input Validation
 
 A program performs input validation to ensure that the received data structure is valid, and as-expected for further handling and manipulation. Untrusted data, such as that which is originating from user input, may contain malicious or invalid data which can lead the program to perform unwanted tasks or cause side-effects.
 
@@ -34,7 +79,7 @@ Often, programmers tend to write their own Regular Expressions to validate input
 
 The ideal solution for validating user input is to use one of the following libraries which are constantly tested for security:
 
-* npm's Validator - provides validation and sanitization capabilities
+* npm's Validator package - provides validation and sanitization capabilities
 * OWASP's EASPIJS - OWASP's own implementation of that provides both input validation as well as output encoding capabilities.
 
 ### Using Validator.js
@@ -430,13 +475,13 @@ Such medium may vary in purpose and can be identified usually as one of the foll
 1. A Reverse Proxy
 2. A Load Balancer
 
-Using a Load Balancer for example, it will most probably terminate the SSL connection to offload this heavy CPU work from web servers, and expose a routable IP and host to the public to access it over a secure HTTP channel. All incoming requests are routed to Node.js web application servers that are not directly exposed outside. 
+Using a Load Balancer for example, it will most probably terminate the SSL connection to offload this heavy CPU work from web servers, and expose a routable IP and host to the public to access it over a secure HTTP channel. All incoming requests are routed to Node.js web application servers that are not directly exposed outside.
 
 These Node.js servers would ideally run without a super-user owner, which is why many Node.js frameworks and server setup guides will feature a server that listens on high ports such as 3000, 4000, 5000, 8888, and 9000. This is so that the server can be executed without requiring a super-user privilege. If the Node.js server is exploited then it doesn't compromise the entire server just from it's own share of OS resources, unless a privilege escalation vulnerability exists.
 
 {pagebreak}
 
-## Summary 
+## Summary
 
 Keeping a security-oriented state of mind while writing code and setting up environments is an essential layer of security. Secure code guidelines may vary in different organizations depending on culture, technology stack and other considerations but they should be followed nonetheless.
 
