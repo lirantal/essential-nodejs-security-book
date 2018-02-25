@@ -30,7 +30,7 @@ Helmet's libraries work by introducing middlewares for ExpressJS which can respo
 
 [Lusca](https://github.com/krakenjs/lusca) is another library to help secure the HTTP transport layer, similar to Helmet, and provides a collection of configurable options to add protection for risks related to Cross-Site-Request-Forgery (CSRF), Content-Security-Policy, and others.
 
-Lusca integrates with ExpressJS web applications using a middleware implementation to mitigate some of the HTTP transport layer vulnerabilities. It is mainly developed and maintained by team members from PayPal who officialy sponsor the work on this library, currently lead by Jean-Charles Sisk.
+Lusca integrates with ExpressJS web applications using a middleware implementation to mitigate some of the HTTP transport layer vulnerabilities. It is mainly developed and maintained by team members from PayPal who officially sponsor the work on this library, currently lead by Jean-Charles Sisk.
 
 ![](images/lusca-badges.png)
 
@@ -231,7 +231,7 @@ As reviewed before with the X-Frame-Options header, there are many attacks relat
 
 Another improvement to the previous set of headers is a header which can tell the browser which content to trust so that the browser is able to prevent attempts to disable malicious content injection that is specified not to be trusted by web servers.
 
-With [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Introducing_Content_Security_Policy) (CSP) it is possible to prevent a wide range of attacks, including Cross-site scripting and other content injections, incluing Clickjacking which we already reviewed and in this regard if CSP is implemented then it obsoletes the need to also use the X-Frame-Options header.
+With [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Introducing_Content_Security_Policy) (CSP) it is possible to prevent a wide range of attacks, including Cross-site scripting and other content injections, including Clickjacking which we already reviewed and in this regard if CSP is implemented then it obsoletes the need to also use the X-Frame-Options header.
 
 ### The Risk
 
@@ -269,7 +269,7 @@ For example, a policy for allowing JavaScript to be executed only from our own d
 Content-Security-Policy: script-src 'self' https://apis.google.com 'unsafe-inline'
 ```
 
-A full list of supported directives can be found on the [CSP policy directives page on MDN](https://developer.mozilla.org/en-US/docs/Web/Security/CSP/CSP_policy_directives) but let's cover some othert common options and their values.
+A full list of supported directives can be found on the [CSP policy directives page on MDN](https://developer.mozilla.org/en-US/docs/Web/Security/CSP/CSP_policy_directives) but let's cover some other common options and their values.
 
 * *default-src* - where a directive doesn't have a value, it defaults to an open, non-restricting configuration. It's safer to set a default for all of the un-configured options and this is the purpose of the *default-src* directive.
 * *script-src* - a directive to set which locations we allow to load or execute JavaScript sources from. If it's set to a value of *'self'* then no inline JavaScript tags are allowed, such as `<script>`, and only sources from our own domain.

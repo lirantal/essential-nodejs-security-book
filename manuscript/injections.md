@@ -140,7 +140,7 @@ In conclusion, there are many ways to validate and confirm the expected input ty
 
 ## NoSQL SSJS Injections
 
-Server-side JavaScript (SSJS) Injection occurs when a server-side component allows the execution of arbitrary JavaScript code in the server context. It may allow this to provide some extended functionality, but nevertheless, this capability opens the door for untrusted input data by the user to be interpreted and executed.
+Server-side JavaScript (SSJS) Injection occurs when a server-side component allows the execution of arbitrary JavaScript code in the server context. It may allow this to provide some extended functionality, but nevertheless, this capability opens the door for un-trusted input data by the user to be interpreted and executed.
  
 Common server-side JavaScript injections can be referred to any use of `eval()`, `setTimeout()`, `setInterval()`, or, `Function()`. All of which, allow parsing arguments which may wrongly originate from a user controlled input data.
 
@@ -251,7 +251,7 @@ Implementing the above would mitigate an input such as `{username: {"$gt": ""}, 
 
 What seems like a working solution should still raise a red flag, especially the username being used without being sanitized first.
 
-Because the password is compared to find an identical match, an attack vector would be to blindly try to match a record with a specific password. If the username is indeed un-santizied we can employ other MongoDB operators to find user records based on specific patterns by ending the following query:
+Because the password is compared to find an identical match, an attack vector would be to blindly try to match a record with a specific password. If the username is indeed un-sanitized we can employ other MongoDB operators to find user records based on specific patterns by ending the following query:
 
 ```bash
 curl -X POST -H "Content-Type: application/json" --data '{"username":{"regex": "demo"}, "password":"123456"}' http://localhost:31337/login
@@ -299,7 +299,7 @@ function listPath(directory) {
 }
 ```
 
-In the above code snippet, the `listPath` function takes a directory reference as a parameter and appends it to the command that gets executed in a shell. The `directory` parameter to the function should be regarded as an untrusted source, such as one that originates from untrusted user input. What would happen if that parameter will be set to `; cat /etc/passwd` ?
+In the above code snippet, the `listPath` function takes a directory reference as a parameter and appends it to the command that gets executed in a shell. The `directory` parameter to the function should be regarded as an un-trusted source, such as one that originates from un-trusted user input. What would happen if that parameter will be set to `; cat /etc/passwd` ?
 Similar to how SQL injection attacks work, the special semi-colon char will end one command statement, and begin a new one, leading to an execution as follows:
 
 ```bash

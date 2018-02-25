@@ -44,7 +44,7 @@ XSS vulnerabilities can be classified in one of the following categories:
 * DOM-based XSS - The nature of this XSS attack lies in the web application code making use of DOM methods which rely on insecure user input. Browsers provide the most commonly used *document* object which allows to interact with the web page structure and the current web request that was made. Vulnerable properties of the *document* object are *document.location* or *document.documentURI* to name a few. If a web application uses one of these properties insecurely to parse data from the request being made and then use it in the web page then an attacker is able to alter the request just like with a reflected XSS attack and thus affect the DOM structure and expose the user's browser to execute the malicious code.
 
 
-Briefly reviewing the sources of untrusted input data which may be vulnerable to XSS attacks:
+Briefly reviewing the sources of un-trusted input data which may be vulnerable to XSS attacks:
 
 * Query string and parameters - these are the most common input injections and include any *GET* parameters, the URL itself or pieces of it, and general *POST* data or other HTML methods.
 
@@ -75,11 +75,11 @@ XSS vulnerabilities expose and attack the end user by exploiting browser executi
 
 There are two primary methods to prevent XSS attacks:
 
-* **Filtering** - by filtering, or sanitizing the untrusted data that originated from the user's input the end result is that the data is modified and removed of the original text that it contained. If for example a user on a blog wanted to comment and give an example of the use of `<script>` tags then filtering based on a blacklist/whitelist  will remove any offending tags such as `<script>`, even if the user did not intend to execute this code on the browser maliciously but rather just to print it and share the text on the website.
+* **Filtering** - by filtering, or sanitizing the un-trusted data that originated from the user's input the end result is that the data is modified and removed of the original text that it contained. If for example a user on a blog wanted to comment and give an example of the use of `<script>` tags then filtering based on a blacklist/whitelist  will remove any offending tags such as `<script>`, even if the user did not intend to execute this code on the browser maliciously but rather just to print it and share the text on the website.
 
  Pitfalls of filtering is that it relies on a blacklist or a whitelist which could be subject to frequent changes, hence it requires maintenance and error-prone, and it usually requires complex string manipulation logic that is often based on regular expressions which by themselves can become a security threat or simply not being written correctly to address future changes and string alterations that the programmer did not expect thus could be bypassed.
 
-* **Escaping/Encoding** - Unlike filtering, encoding the untrusted data preserves all the input which the user supplied by escaping potentially malicious characters with their display character encoding. For example, if the input from the user is expected to be an HTML text and it is also treated as such, then in cases where the input is  `<script>alert('xss')</script>` then it is possible to encode the `<` symbol to its HTML entity representation which is `&lt;`. This character entity has also a number associated with, so the `<` symbol could also be represented with the string `&#60;` which will result in the same encoding behavior. Browsers know how to parse these entities and display them correctly.
+* **Escaping/Encoding** - Unlike filtering, encoding the un-trusted data preserves all the input which the user supplied by escaping potentially malicious characters with their display character encoding. For example, if the input from the user is expected to be an HTML text and it is also treated as such, then in cases where the input is  `<script>alert('xss')</script>` then it is possible to encode the `<` symbol to its HTML entity representation which is `&lt;`. This character entity has also a number associated with, so the `<` symbol could also be represented with the string `&#60;` which will result in the same encoding behavior. Browsers know how to parse these entities and display them correctly.
 
  The important nuance of encoding data is to encode it with the correct context of where it will be used. JSON, HTML, and CSS are all different in their encoding and one does not match the other so based on where the input is planned to be utilized the correct form of encoding should be used.
 
@@ -100,9 +100,9 @@ npm install node-esapi --save
 
 Once installed, the library provides encoding functions for each type of data that should be encoded, so that the following general guideline should be applied:
 
-* Use JavaScript encoding when untrusted input data is to be placed within the context of an executable JavaScript code. For example, a string of input from the user is expected to be used in a JavaScript source code such as `<script>showErrorMessage(userInput)</script>`.
+* Use JavaScript encoding when un-trusted input data is to be placed within the context of an executable JavaScript code. For example, a string of input from the user is expected to be used in a JavaScript source code such as `<script>showErrorMessage(userInput)</script>`.
 
-* Use HTML encoding when untrusted input data is to placed within HTML markup. For example if the data is to be placed inside `<div>` tags, `<span>` tags, etc.
+* Use HTML encoding when un-trusted input data is to placed within HTML markup. For example if the data is to be placed inside `<div>` tags, `<span>` tags, etc.
 
 To encode HTML:
 
@@ -129,7 +129,7 @@ T> node-esapi also includes encoders for CSS, URL, HTML Attributes, and for Base
 
 From the home of Yahoo!, [xss-filters](https://github.com/yahoo/xss-filters) is another XSS encoding library. It is designed to follow HTML5 specification for implementation of XSS filters, and is constantly reviewed by security researchers from Yahoo!.
 
-It is important to notice that *xss-filters* are intended to be used only inside an HTML markup context. You should not use it for any untrusted user input in other contexts like JavaScript or CSS code, or other specific objects like `<svg>`, `<object>`, or `<embed>` tags.
+It is important to notice that *xss-filters* are intended to be used only inside an HTML markup context. You should not use it for any un-trusted user input in other contexts like JavaScript or CSS code, or other specific objects like `<svg>`, `<object>`, or `<embed>` tags.
 
 T> ## Yahoo! is quite active in the Node.js community
 T> Did you know that Yahoo! is an active player in the Node.js community? They have contributed to the npm repository about a hundred of packages altogether with general JavaScript, and frontend libraries, amongst Node.js.
@@ -154,7 +154,7 @@ app.get('/', function(req, res, next) {
 });
 ```
 
-Besides *inHTMLData* there are other APIs that exist to handle encoding untrusted data in other context:
+Besides *inHTMLData* there are other APIs that exist to handle encoding un-trusted data in other context:
 
 * HTML comments *inHTMLComment* - to encode data in HTML comment's such as `<!-- {{comment}} -->`
 
@@ -203,7 +203,7 @@ HTML:
 <input name="csrfToken" value="{{csrfValue}}" {{safeUserInput}}/>
 ```
 
-To further fine-tune the context of the untrusted input from the user, such as whether it is originated from a URI input then it is possible to use a specific method such as:
+To further fine-tune the context of the un-trusted input from the user, such as whether it is originated from a URI input then it is possible to use a specific method such as:
 
 ```js
 var userURIInput = xssFilters.uriInHTMLData();

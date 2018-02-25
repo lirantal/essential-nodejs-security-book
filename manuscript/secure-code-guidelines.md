@@ -46,7 +46,7 @@ It is important to follow-up on these API changes while you upgrade with the fas
 
 As software evolves, APIs are doomed to be modified as they receive updates or get completely replaced with a newer set of APIs. This is true for Node.js and has happened in prior releases as well.
 
-Aside of the Node.js documentation wesite, several ways of tracking breaking, or major API changes include:
+Aside of the Node.js documentation website, several ways of tracking breaking, or major API changes include:
 * The official [Node.js Changelog](https://github.com/nodejs/node/blob/master/CHANGELOG.md)
 * The Node.js community employs a methodology of soft-deprecation for APIs by logging out messages of deprecation warnings. Developers, whom are often sensitive to their application debug or console output can easily catch these notifications and take them into account. Node.js pending deprecation CLI option `node --pending-deprecation` (or set the NODE_PENDING_DEPRECATION=1 environment variable) will emit deprecation warnings from the node process.
 
@@ -55,15 +55,15 @@ T> The utility class `fs.SyncWriteStream`, and `fs.read()` (reference: https://n
 
 ## Input Validation
 
-These days attackers aim at application layers as they attempt to exploit vulnerable application code which isn't handling input correctly. Untrusted user input is the first line of defense for an application program code, and mitigating it early in the software development life-cycle is crucial in setting the security boundaries correctly and the foundations for a secure application design.
+These days attackers aim at application layers as they attempt to exploit vulnerable application code which isn't handling input correctly. Un-trusted user input is the first line of defense for an application program code, and mitigating it early in the software development life-cycle is crucial in setting the security boundaries correctly and the foundations for a secure application design.
 
-Failure of securely handling untrusted user input may result in:
+Failure of securely handling un-trusted user input may result in:
 
 * Injection attacks
 * Information Disclosure
 * Buffer Overflows leading to system compromise or memory leaks
 
-A program performs input validation to ensure that the received data structure is valid, and as-expected for further handling and manipulation. Untrusted data, such as that which is originating from user input, may contain malicious or invalid data which can lead the program to perform unwanted tasks or cause side-effects.
+A program performs input validation to ensure that the received data structure is valid, and as-expected for further handling and manipulation. Un-trusted data, such as that which is originating from user input, may contain malicious or invalid data which can lead the program to perform unwanted tasks or cause side-effects.
 
 Due to JavaScript's loosely typed nature, it is required to follow input validation in particular order for safety:
 
@@ -159,7 +159,7 @@ The `encodedHTML` value will be a valid encoded HTML entities:
 
 #### CSS Encoding
 
-[cssesc](https://github.com/mathiasbynens/cssesc) is a library that serves both Node.JS and the browsers for escaping and optimizing CSS outupt.
+[cssesc](https://github.com/mathiasbynens/cssesc) is a library that serves both Node.JS and the browsers for escaping and optimizing CSS output.
 It has a slimmed down version specifically for Node.JS that is called [CSS.escape](https://github.com/mathiasbynens/CSS.escape).
 
 To install both of them (not actually required):
@@ -264,7 +264,7 @@ There are many variations to a vulnerable regular expression, some examples take
 * ([a-zA-Z]+)*
 
 T> ## Hint
-T> Try exploiting the above two examples by matching them on a text of many a's with an ending ! char. Also, the first example of an e-mail matching regular expression looks suspecious too.
+T> Try exploiting the above two examples by matching them on a text of many a's with an ending ! char. Also, the first example of an e-mail matching regular expression looks suspicious too.
 
 ### Safe Regular Expressions
 
@@ -354,7 +354,7 @@ It affects the entire script, or it can affect only a portion of it, such as a s
 
 ### Eval
 
-The `eval()` function is perhaps of the most frowned upon JavaScript pieces from a security perspective. It parses a JavaScript string as text, and executes it as if it were a JavaScript code. Mixing that with untrusted user input that might find it's way to `eval()` is a recipe for disaster that can end up with server compromise.
+The `eval()` function is perhaps of the most frowned upon JavaScript pieces from a security perspective. It parses a JavaScript string as text, and executes it as if it were a JavaScript code. Mixing that with un-trusted user input that might find it's way to `eval()` is a recipe for disaster that can end up with server compromise.
 
 T> The use of `eval()` isn't specific to JavaScript, but is also found in other programming languages such as PHP, Perl, and others.
 
@@ -464,7 +464,7 @@ T> There are other secure hash functions than bcrypt: Argon2 which is the *new k
 
 ## User Process Privileges
 
-Running web servers which serve requests from an untrusted and open public medium brings with it an inherent risk where malicious attempts will try to compromise the underlying server and operating system through vulnerabilities in the web server.
+Running web servers which serve requests from an un-rusted and open public medium brings with it an inherent risk where malicious attempts will try to compromise the underlying server and operating system through vulnerabilities in the web server.
 
 Web servers have no reason to operate with a super-user privilege level, except for being able to bind and listen for incoming requests on port 80 or 443 which are allowed only to the super-user in Linux and UNIX variants (non super-users may bind to ports larger than 1024 on those operation systems).
 

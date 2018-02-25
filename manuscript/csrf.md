@@ -56,7 +56,7 @@ xhr.send("email=attacker@domain.com");
 This AJAX request can also run automatically when the user loads the attacker's web page with simply binding it to the *onLoad* event.
 
 An even greater risk is where the target web application is actually hosting the CSRF code.
-For example, if the web application allows rich text comments, forums, or any other rich user input then it makes a very appealing target for attackers to inject a CSRF attck there and greatly increase this vulnerability.
+For example, if the web application allows rich text comments, forums, or any other rich user input then it makes a very appealing target for attackers to inject a CSRF attack there and greatly increase this vulnerability.
 
 ## The Solution
 
@@ -74,12 +74,12 @@ All of the above are examples of what not to do in order to protect against CSRF
 
 ### CSRF Tokens
 
-The preferred way to protect against CSRF attacks is by generating a token, which is in essence a random, unguessable string, for every action that is performed by the user. With every user's action this token is then being compared between what the user sent and what the server expects (the previous token that was generated). In cases where the comparison fails the CSRF tokens mis-match and the action is being denied as well due to a potential attack.
+The preferred way to protect against CSRF attacks is by generating a token, which is in essence a random, un-guessable string, for every action that is performed by the user. With every user's action this token is then being compared between what the user sent and what the server expects (the previous token that was generated). In cases where the comparison fails the CSRF tokens mis-match and the action is being denied as well due to a potential attack.
 
 CSRF tokens can be further secured by not using a single token for the entire user session, which might be common with Single Page Application architecture (SPA), but rather new tokens can be generated and compared with for every form action submitted or similar user action being taken.
 
 I> ## Unreadable characters we call CAPTCHAs
-I> The concept of CAPTCHAs was initially introduced to mitigate user spam, bots, and automated web crwaling. It is a possible solution to add security for forms and actions but it is not user friendly.
+I> The concept of CAPTCHAs was initially introduced to mitigate user spam, bots, and automated web crawling. It is a possible solution to add security for forms and actions but it is not user friendly.
 I> By the way, did you know that the meaning of CAPTCHA is: Completely Automated Public Turing Test To Tell Computers and Humans Apart. Luckily we have an acronym for it.
 
 ### CSRF Tokens Implementation

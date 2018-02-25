@@ -9,7 +9,7 @@ I> Some projects are small that they truly require no dependency, others may req
 
 Node.js packages are hosted and managed by a project called [npm](https://www.npmjs.com/), which became the biggest package repository already in 2014. The current state of packages count is illustrated thanks to [modulecounts](http://www.modulecounts.com/) where it is compared with other platform and languages, true to end of 2016 year:
 
-![npm pacakge repository comparison](images/npm-package-repository-comparison.png)
+![npm package repository comparison](images/npm-package-repository-comparison.png)
 
 T> ## npm stands for...
 T> Actually, npm is not an abbreviation for 'node package manager' as some people tend to presume. It isn't an abbreviation for anything, it's just npm.
@@ -18,9 +18,9 @@ T> Actually, npm is not an abbreviation for 'node package manager' as some peopl
 
 Understanding your dependency tree, and your dependencies dependencies is a vital action that needs careful review to ensure that the libraries you intend to use are mature, and of high quality.
 
-When we reviewed the libraries in this book we presented the project's badges to present the maturity and quality level of the project. With the plethora of Node.js packages, it's easy to mistaken pick an outdated, unmaintained or otherwise low quality project.
+When we reviewed the libraries in this book we presented the project's badges to present the maturity and quality level of the project. With the plethora of Node.js packages, it's easy to mistaken pick an outdated, un-maintained or otherwise low quality project.
 
-Taking [ExpressJS](https://www.npmjs.com/package/express) project as an example, let's review the npm pacakge page for it which reveals useful information and can help to evaluate a package https://www.npmjs.com/package/express.
+Taking [ExpressJS](https://www.npmjs.com/package/express) project as an example, let's review the npm package page for it which reveals useful information and can help to evaluate a package https://www.npmjs.com/package/express.
 
 ### Project Activity
 
@@ -69,7 +69,7 @@ A real output of a scan will look something like the following:
 
 ![nsp check scan](images/nsp-check.png)
 
-In the above report nsp detected a security issue in the meanjs project. The dependency `grunt-cli` introduces a vulnerable package called `minimatch`. It is required to upgrade to a newer version of `grunt-cli` to receive an updated, patched version of `minimatch` as well (this is not guaranteed though).
+In the above report nsp detected a security issue in the [MEAN.JS](https://gitter.im/meanjs/mean) project. The dependency `grunt-cli` introduces a vulnerable package called `minimatch`. It is required to upgrade to a newer version of `grunt-cli` to receive an updated, patched version of `minimatch` as well (this is not guaranteed though).
 
 T> ## Report output
 T> nsp supports different types of reporting output such as a summary, json output and others so it can be easily integrated with other automation and build tools if necessary.
@@ -79,7 +79,7 @@ nsp has grown beyond a command-line tool and is part of an ecosystem and cloud o
 ### Snyk
 [Snyk](https://snyk.io) is a service for continuously monitoring your project's dependencies for any known vulnerabilities. Snyk provides a command-line interface, as well as a robust GitHub integration that can further simplify the process.
 
-Snyk tests dependencies agains their [open-source vulnerability database](https://snyk.io/vuln/), and has dedicated researchers actively discovering new vulnerabilities to be disclosed. Similar to nsp (Node Security Platform), Snyk's GitHub integration scans a projects `package.json` to see what versions of dependencies are currently installed, and compares those versions to their database. The command-line interface goes a step further and scans the installed packages themselves.
+Snyk tests dependencies against their [open-source vulnerability database](https://snyk.io/vuln/), and has dedicated researchers actively discovering new vulnerabilities to be disclosed. Similar to nsp (Node Security Platform), Snyk's GitHub integration scans a projects `package.json` to see what versions of dependencies are currently installed, and compares those versions to their database. The command-line interface goes a step further and scans the installed packages themselves.
 
 To use the command-line interface, you first install Snyk as a global module:
 
@@ -97,7 +97,7 @@ Snyk will test your installed packages against their vulnerability database and 
 
 ![snyk test scan](images/snyk-test.png)
 
-In this example, you can see that Snyk found two vulnerabilities. For each vulnerability, Snyk provides information about the serverity, a link to a detailed description, and the path through which the vulnerable package got into your system.
+In this example, you can see that Snyk found two vulnerabilities. For each vulnerability, Snyk provides information about the severity, a link to a detailed description, and the path through which the vulnerable package got into your system.
 
 Snyk also prompts you to run `snyk wizard` which will walk you through the process of fixing those vulnerabilities. Before you do that, you'll want to authenticate using the authorization token you receive when you first sign up for the service. This ensures you won't run into any API rate limits, and also enables you to setup continuous monitoring, which we'll talk about shortly.
 
@@ -141,9 +141,9 @@ When you login to your Snyk account, there is a button allowing you to test your
 
 ![snyk GitHub integration](images/your-github-repos.png)
 
-You can see in the screenshot above that for each repository, Snyk will tell you the number of high, medium and low priority vulnerabilities, as well as give you the option to "Watch" the repo. Selecting this will add the repository as a project to Snyk so that Snyk can continuously check it against any newly disclosed vulnerabilities.
+You can see in the screenshot above that for each repository, Snyk will tell you the number of high, medium and low priority vulnerabilities, as well as give you the option to "Watch" the repository. Selecting this will add the repository as a project to Snyk so that Snyk can continuously check it against any newly disclosed vulnerabilities.
 
-You also have the option to "Open a fix PR". This will take you to a page where you can review the suggested remediations and create an automated pull request to your project with the required upgrades and patches.
+You also have the option to "Open a fix PR". This will take you to a page where you can review the suggested remediation and create an automated pull request to your project with the required upgrades and patches.
 
 ![snyk GitHub PR](images/Open_a_fix_PR.png)
 
@@ -215,7 +215,7 @@ Yarn's advantage can be characterized by the following:
 
 When Yarn downloads packages it always saves them to a local directory so they can be cached
 locally for offline use. This inherently speeds up the `yarn install` action as there is no
-bandwidth wasted and one can witness a significantly increased speed when installig modules.
+bandwidth wasted and one can witness a significantly increased speed when installing modules.
 
 Another optimization step that Yarn is performing is to download packages in parallel rather than serially, one after the other.
 
