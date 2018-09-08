@@ -135,6 +135,53 @@ ESAPI provides the functionality for the following output encoding contexts:
 * HTML Attributes - encodeForHTMLAttribute
 * Base64 - encodeForBase64
 
+### A Case for Context-aware Encoding
+
+Let's examine the following use-case where a developer understands the importance of encoding user generated input when outputting data.
+
+The building blocks of this example would be:
+- A form input element for an account page that allows editing the profile's first name for the account
+- A link on that page that serves as a hyperlink based on the profile's first name
+
+The HTML view for the page may look as follows, utilizing a server-side variable `{{firstName}}` injected into the view:
+
+```html
+<div class="form-group">
+    <label for="firstName">First Name</label>
+    <input type="text" class="form-control" id="firstName" name="firstName" value="{{firstNameSafeString}}" placeholder="Enter first name">
+</div>
+
+<button type="submit" class="btn btn-default" name="submit">Submit</button>
+
+<a href="{{firstNameSafeString}}">Google search this profile by name</a>
+```
+
+On the server-side, the developer has taken care of encoding the `firstName` variable and *almost* got it right:
+
+```js
+var ESAPI = require('node-esapi')
+
+function profileController(req, res, next) {
+  ProfileService.loadUser(function (err, doc) {
+    // Encode the firstName variable loaded from the database to be suitable
+    // for HTML encoding and let the view template use it
+    doc.firstNameSafeString = ESAPI.encoder().encodeForHTML(doc.firstName)
+    return res.render("profile", doc);
+  })
+}
+```
+
+Now consider that the user had entered the malicious user input of `javascript:alert(1)` for the profile field `firstName`. In the context of the input element on the form, that will have no effect. On the other hand, the hyperlink where this input will be injected into in the view template, the clickable hyperlink will now execute the alert.
+
+This is happening because the hyperlink needs to be treated as a different context due to different encoding needs to take place there. Such as:
+
+```js
+doc.firstNameSafeStringForURL = ESAPI.encoder().encodeForURL(doc.firstName)
+```
+
+Which will ensure that the colon character (`:`) will be encoded using HTTP encoding and the alert call in the malicious input will fail.
+
+
 ### Output Encoding Libraries
 
 Except from OWASP's ESAPI project there are other libraries that can be utilized for output encoding in Node.js server-side.
