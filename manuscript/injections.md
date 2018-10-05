@@ -141,8 +141,8 @@ In conclusion, there are many ways to validate and confirm the expected input ty
 ## NoSQL SSJS Injections
 
 Server-side JavaScript (SSJS) Injection occurs when a server-side component allows the execution of arbitrary JavaScript code in the server context. It may allow this to provide some extended functionality, but nevertheless, this capability opens the door for un-trusted input data by the user to be interpreted and executed.
- 
-Common server-side JavaScript injections can be referred to any use of `eval()`, `setTimeout()`, `setInterval()`, or, `Function()`. All of which, allow parsing arguments which may wrongly originate from a user controlled input data.
+
+Common server-side JavaScript injections can be associated with any use of `eval()` or `new Function()`. In the browser, `setTimeout()`, and `setInterval()` are also vulnerable because unlike in Node.js, they do allow accepting program code as string instead of a function reference. It is recommended to avoid all of these as they all allow parsing arguments which may wrongly originate from a user controlled input data.
 
 MongoDB's Evaluation Query operator, referred to as `$where` allows to match documents when they satisfy a JavaScript expression.
 

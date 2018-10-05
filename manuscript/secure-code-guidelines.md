@@ -410,7 +410,7 @@ While there is no inherent security flaw regarding the use of `eval()` in your c
 T> ## Who said it's evil?
 T> The phrase "eval() is evil" is credited to [Douglas Crockford](https://en.wikipedia.org/wiki/Douglas_Crockford), an active member in the evolution of the JavaScript language, and evangelist of the JSON standard.
 
-Surprisingly enough, eval has friends: `setTimeout()` and `setInterval()` are also regarded as bad coding practices for the same reason that they both accept string as input, which they parse and evaluate for execution.
+Surprisingly enough, eval has friends: `new Function()` in Node.js, and `setTimeout()` and `setInterval()` in a browser context, which are also regarded as bad coding practices for the same reason that they both accept string as input, which they parse and evaluate for execution.
 
 ## Cryptographic Practices
 
