@@ -316,7 +316,7 @@ var child_process = require('child_process');
 
 function listPath(directory) {
   var cmd = "ls";
-  var cmdParams = ['ls'];
+  var cmdParams = ['-alh'];
   cmdParams.push(directory);
   child_process.execFile(cmd, cmdParams, function(err, data) {
     console.log(data);
