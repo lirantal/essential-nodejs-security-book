@@ -1,6 +1,6 @@
 # Contributors
 
-An alphabetical listing of people who have contributed to the Essential NodeJS Security book:
+An alphabetical listing of people who have contributed to the Essential Node.js Security book:
 
   * [Adam Moss](https://github.com/adam-moss)
   * [Cody B. Daig](https://github.com/codydaig)
