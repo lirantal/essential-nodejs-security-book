@@ -348,7 +348,7 @@ console.log(validator.isEmail('liran.tal@gmail.com'));
 
 #### Safe-RegEx
 
-[safe-regex](https://github.com/substack/safe-regex) is a library that can be used for both Node.js as well as frontend browsers to test whether a given regular expression pattern is potentially dangerous. The library hasn't been updated in a while, though it does check the very simple rule of repetitions of sub-expressions which is the primary rule for avoiding vulnerable regular expressions.
+[safe-regex](https://github.com/davisjam/safe-regex) is a library that can be used for both Node.js as well as frontend browsers to test whether a given regular expression pattern is potentially dangerous. The library hasn't been updated in a while, though it does check the very simple rule of repetitions of sub-expressions which is the primary rule for avoiding vulnerable regular expressions.
 
 It is interesting to test the aforementioned e-mail validation regex that was mentioned in an example.
 
