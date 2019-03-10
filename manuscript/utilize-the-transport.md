@@ -48,7 +48,7 @@ HSTS is configured and transmitted from the server to any HTTP web client using 
 
 T> ## Tip
 T>
-T> When a *Strict-Transport-Security* header is sent over HTTP the web client ignores it because the connection is unsecured to begin with.
+T> When a *Strict-Transport-Security* header is sent over HTTP the web client ignores it because the connection is insecure to begin with.
 
 ### The Risk
 
