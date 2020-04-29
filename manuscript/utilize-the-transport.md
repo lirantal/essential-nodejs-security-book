@@ -99,34 +99,6 @@ It is common for web servers to have sub-domains to fetch assets from, or make R
 includeSubDomains: true;
 ```
 
-### Lusca Implementation
-
-If Lusca is not yet installed we can install it with npm as follows:
-
-```bash
-npm install lusca --save
-```
-
-Once lusca is installed, we can set it up for HSTS support with an ExpressJS application setup:
-
-```js
-var lusca = require("lusca");
-
-// Set the expiration time of HTTPS requests to the server to 1 month,
-// specified in milliseconds
-var reqDuration = 2629746000;
-
-app.use(
-  lusca({
-    hsts: {
-      maxAge: requestsDuration,
-    },
-  })
-);
-```
-
-As can be seen, using lusca is very similar to using helmet, including their optional arguments like `maxAge`, and `includeSubDomains`.
-
 {pagebreak}
 
 ## X-Frame-Options
@@ -202,20 +174,6 @@ Or to allow frames to occur from a specified host:
   action: 'allow-from',
   domain: 'https://mydomain.com'
 }
-```
-
-### Lusca Implementation
-
-If the lusca library is already installed and our ExpressJS application is already configured and provides the `app` object, then:
-
-```js
-var lusca = require("lusca");
-
-app.use(
-  lusca({
-    xframe: "SAMEORIGIN",
-  })
-);
 ```
 
 {pagebreak}
@@ -321,36 +279,6 @@ app.use(
 );
 ```
 
-### Lusca Implementation
-
-Lusca's CSP option has three main objects that can be set:
-
-- `policy` - an object for defining the content policy
-- `reportOnly` - a true or false for defining whether the browser should only report violations of the content policy or actually deny such attempts
-- `reportUri` - the URI string to send reporting data as JSON documents via POST requests being made from the browser
-
-With this simple setup constructing a content policy is very similar to the official documentation with regards to directives and their values.
-
-For example, let's setup the following content policy:
-
-- Allow by default content only from our own origin domain, and from https://ajax.googleapis.com
-- For any content violations just report the error, don't actually deny requests from being sent
-- For any content violations send a report to a remote system
-
-```js
-var lusca = require("lusca");
-
-app.use(
-  lusca.csp({
-    policy: {
-      "default-src": "'self' https://ajax.googleapis.com",
-    },
-    reportOnly: true,
-    reportUri: "https://mydomain.com/report",
-  })
-);
-```
-
 ### Gradual CSP Implementation
 
 Your Content Security Policy will grow and change as your web application grows too.
@@ -422,14 +350,6 @@ var helmet = require("helmet");
 app.use(helmet.xssFilter());
 ```
 
-With Lusca, this is quite simple as well:
-
-```js
-var lusca = require("lusca");
-
-app.use(lusca.xssProtection(true));
-```
-
 ### X-Content-Type-Options
 
 The _X-Content-Type-Options_ HTTP header is used by IE, Chrome, and Opera and is used to mitigate a MIME based attack.
@@ -450,14 +370,11 @@ var helmet = require("helmet");
 app.use(helmet.noSniff());
 ```
 
-Lusca has no support for this HTTP header built in.
-
 {pagebreak}
 
 ## Summary
 
-In this chapter we dived into the world of security by implementing HTTP headers for increased security.
-We learned about Helmet, and Lusca Node.js libraries which can be easily added to any ExpressJS project and quickly configured to provide additional security.
+In this chapter we dived into the world of security by implementing HTTP headers for increased security. We learned about Helmet as a library which can be easily added to any ExpressJS project and quickly configured to provide additional security.
 
 The HTTP security headers that we reviewed are:
 
