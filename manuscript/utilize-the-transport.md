@@ -327,7 +327,7 @@ app.use(
 
 ## Other HTTP headers
 
-Some other non-standard HTTP headers exist which are not part of any official specification such as IANA, but are worth looking into as they do provide another layer of security for your users.
+Other non-standard HTTP headers exist and are not part of any official specification such as IANA, but are worth looking into as they do provide another layer of security for your users.
 
 ### X-XSS-Protection
 
@@ -342,16 +342,16 @@ X-XSS-Protection: 1; mode=block
 With Helmet, this protection can be turned on using the following snippet:
 
 ```js
-var helmet = require("helmet");
+const helmet = require("helmet");
 
 app.use(helmet.xssFilter());
 ```
 
 ### X-Content-Type-Options
 
-The _X-Content-Type-Options_ HTTP header is used by IE, Chrome, and Opera and is used to mitigate a MIME based attack.
+The purpose of this header is to instruct the browser to avoid guessing the web server's content type which may lead to an incorrect render than that which the web server intended.
 
-The purpose of this header is to instruct the browser to not sniff override the web server's content type and render the stream as it is sent from the server.
+The _X-Content-Type-Options_ HTTP header is used by IE, Chrome, and Opera and is used to mitigate a MIME based attack.
 
 An example of setting this header:
 
@@ -362,7 +362,7 @@ X-Content-Type-Options: nosniff
 Helmet's implementation:
 
 ```js
-var helmet = require("helmet");
+const helmet = require("helmet");
 
 app.use(helmet.noSniff());
 ```
@@ -371,7 +371,7 @@ app.use(helmet.noSniff());
 
 ## Summary
 
-In this chapter we dived into the world of security by implementing HTTP headers for increased security. We learned about Helmet as a library which can be easily added to any ExpressJS project and quickly configured to provide additional security.
+In this chapter we introduced browser security controls by implementing HTTP headers for increased security. We learned about Helmet as a library which can be easily added to any ExpressJS project and configured it to provide additional security.
 
 The HTTP security headers that we reviewed are:
 
