@@ -4,7 +4,7 @@ Developing web applications means that our program depends on communication prot
 
 Browsers utilize HTTP headers to enforce and confirm such communication standards as well as security policies. Making use of these HTTP headers to increase security for the code running on the browser client-side is a quick and efficient method to mitigate security vulnerabilities and add defense in depth.
 
-## Node.js Packages for HTTP Header Security
+## Node.js Packages for HTTP Security Headers
 
 Responding to requests with security related HTTP headers is an HTTP concern and as such,
 it may be employed with any web framework, or with the basic core http or https modules
