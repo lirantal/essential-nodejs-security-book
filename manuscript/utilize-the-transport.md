@@ -2,29 +2,33 @@
 
 Developing web applications means that our program depends on communication protocols which have already a set of standards defined and implemented for how to transfer data and how to manage it.
 
-Browsers utilize HTTP headers to enforce and confirm such communication standards as well as security policies. Making use of these HTTP headers to increase security for our clients (web browsers) is a quick and efficient method to mitigate and prevent many security vulnerabilities.
+Browsers utilize HTTP headers to enforce and confirm such communication standards as well as security policies. Making use of these HTTP headers to increase security for the code running on the browser client-side is a quick and efficient method to mitigate security vulnerabilities and add defense in depth.
 
-## Node.js Packages to Secure The HTTP Transport
+## Node.js Packages for HTTP Header Security
 
-Let's review two libraries which we can use to implement these security related HTTP headers and apply the solution required for each security mechanism that we will be reviewing:
+Responding to requests with security related HTTP headers is an HTTP concern and as such,
+it may be employed with any web framework, or with the basic core http or https modules
+which Node.js provide.
 
-- Lusca
-- Helmet
+The [Helmet](https://github.com/helmetjs/helmet) library provides an easy abstraction,
+and configuration for the various HTTP security headers that should be used and makes an
+excellent choice for Node.js web applications based on Express.
 
 ### Helmet
 
-[Helmet](https://github.com/helmetjs/helmet) is a pluggable library for ExpressJS which provides a wide range of solutions related to the transport security layer, such as Cross-Site-Scripting (XSS) security, X-Frame protection and many others.
+[Helmet](https://github.com/helmetjs/helmet) is an application-level middleware for ExpressJS, providing widespread support for HTTP security headers, such as `X-XSS-Protection` to mitigate various browser related Cross-Site-Scripting (XSS) security vulnerabilities, X-Frame-Options protection and many others.
 
 ![](images/helmet-badges.png)
 
-Helmet, being a collection of transport security libraries, is well maintained and kept up to date. As such, it makes it a good choice to incorporate in your enterprise or production apps.
+Helmet, being a collection of middleware functions for increased HTTP headers security, is well maintained and kept up to date. As such, it makes it a good choice to incorporate in your
+Node.js web applications.
 
 I> # More on Helmet
 I>
 I> Helmet has been around since 2012 and is considered mature and production-ready with stable releases and adoption by many frameworks and Node.js projects.
-I> It is mainly developed by Evan Hahn, and Adam Baldwin who maintain some dozen npm packages and are very actively involved in ExpressJS and other Node.js projects on GitHub.
+I> It is mainly developed by Evan Hahn, and Adam Baldwin who maintain hundreds of npm packages in the registry between them.
 
-Helmet's libraries work by introducing middlewares for ExpressJS which can respond to requests being served by an ExpressJS application.
+Helmet works by introducing middleware functions for ExpressJS that reply to incoming requests with a set of headers.
 
 ### Lusca
 
