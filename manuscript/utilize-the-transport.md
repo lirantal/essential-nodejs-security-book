@@ -30,18 +30,6 @@ I> It is mainly developed by Evan Hahn, and Adam Baldwin who maintain hundreds o
 
 Helmet works by introducing middleware functions for ExpressJS that reply to incoming requests with a set of headers.
 
-### Lusca
-
-[Lusca](https://github.com/krakenjs/lusca) is another library that helps secure the HTTP transport layer, similar to Helmet, and provides a collection of configurable options to add protection for risks related to Cross-Site-Request-Forgery (CSRF), Content-Security-Policy, and others.
-
-Lusca integrates with ExpressJS web applications using a middleware implementation to mitigate some of the HTTP transport layer vulnerabilities. It is mainly developed and maintained by team members from PayPal who officially sponsor the work on this library, currently lead by Jean-Charles Sisk.
-
-![](images/lusca-badges.png)
-
-T> ## Security-oriented frameworks
-T>
-T> Lusca is a library that is part of a bigger web application framework called [kraken.js](https://github.com/krakenjs/kraken-js) that focuses on security first, and is too, officially maintained by PayPal's own people.
-
 {pagebreak}
 
 ## Strict Transport Security
