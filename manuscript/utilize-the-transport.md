@@ -180,24 +180,23 @@ Or to allow frames to occur from a specified host:
 
 ## Content-Security-Policy
 
-As reviewed before with the X-Frame-Options header, there are many attacks related to content injection in the user's browser whether it is the Clickjacking attack, or other forms of attack such as Cross-Site-Scripting (XSS).
+As reviewed before with the X-Frame-Options header, there are many attacks related to content injection in the user's browser whether it is a Clickjacking attack, or other forms of attacks such as Cross-Site-Scripting (XSS).
 
-Another improvement to the previous set of headers is a header which can tell the browser which content to trust so that the browser is able to prevent attempts to disable malicious content injection that is specified not to be trusted by web servers.
+Another improvement to the previous set of headers we reviewed so far is a header which can tell the browser which content to trust. This allows the browser to prevent attempts of content injection that is not trusted in the policy defined by the application owner.
 
-With [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Introducing_Content_Security_Policy) (CSP) it is possible to prevent a wide range of attacks, including Cross-site scripting and other content injections, including Clickjacking which we have already reviewed and in this regard the implementation of CSP renders the use of the X-Frame-Options header obsolete.
+With a [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Introducing_Content_Security_Policy) (CSP) it is possible to prevent a wide range of attacks, including Cross-site scripting and other content injections. The implementation of a CSP renders the use of the X-Frame-Options header obsolete.
 
 ### The Risk
 
-By default, the CSP header will prevent and mitigate several issues such as:
+Using a Content Security Policy header will prevent and mitigate several issues such as:
 
 - Inline JavaScript code specified with `<script>` tags, and any DOM events which trigger JavaScript execution such as `onClick()` etc.
-- Inline CSS code specified via a `<style>` tag or attribute elements
+- Inline CSS code specified via a `<style>` tag or attribute elements.
 
 ### The Solution
 
-With CSP we can whitelist many configurations for trusted content and as such the initial setup can grow to a set of complex directives.
-Let's review one directive called _connect-src_. It is used to control which remotes the browser is allowed to connect to via XHR, or WebSockets.
-Acceptable values that we can set for this or other directives are:
+With CSP we can whitelist many configurations for trusted content and as such the initial setup can grow to a set of complex directives. Let's review one directive called _connect-src_. It is used to control which remotes the browser is allowed to connect to via XHR, or WebSockets.
+Acceptable values that we can set for this directive:
 
 - _'none'_ - not allowing remote calls such as XHR at all
 - _'self'_ - only allow remote calls to our own domain (an exact domain/hostname. sub-domains aren't allowed)
@@ -209,12 +208,12 @@ Content-Security-Policy: connect-src 'self' https://apis.google.com;
 ```
 
 Another directive to control the whitelist for JavaScript sources is called _script-src_.
-This directive helps mitigate Cross-Site-Scripting (XSS) attacks by instructing the browser what is a valid source for evaluating and executing JavaScript source code.
+This directive helps mitigate Cross-Site-Scripting (XSS) attacks by informing the browser which sources of content to trust when evaluating and executing JavaScript source code.
 
 _script-src_ supports the _'none'_ and _'self'_ keywords as values and includes the following options:
 
 - _'unsafe-inline'_ - allow any inline JavaScript source code such as `<script>`, and DOM events triggering like `onClick()`, or `javascript:` URIs. It also affects CSS for inline tags.
-- _'unsafe-eval'_ - allow execution of code using `eval()`
+- _'unsafe-eval'_ - allow execution of code using `eval()`.
 
 For example, a policy for allowing JavaScript to be executed only from our own domain and from Google's, and allows inline JavaScript code as well:
 
@@ -228,21 +227,20 @@ A full list of supported directives can be found on the [CSP policy directives p
 - _script-src_ - a directive to set which locations we allow to load or execute JavaScript sources from. If it's set to a value of _'self'_ then no inline JavaScript tags are allowed, such as `<script>`, and only sources from our own domain.
 
 I> ## On implementing CSP
-I> It should also be noted that the CSP configuration needs to meet the implementation of your web application architecture so that if you
-I> deny inline <script> blocks then your R&D team is aware of this and do not rely on such inline JavaScript code blocks, otherwise you will be
-I> breaking features and functionality.
+I> It should also be noted that the CSP configuration needs to meet the implementation of your web application architecture. If you
+I> deny inline `<script>` blocks then your R&D team should be aware and well prepared for this as otherwise this will be breaking features and functionality across code that depends on inline JavaScript code blocks.
 
 ### Helmet Implementation
 
-Using helmet we can configure a secured policy for trusted content.
+Using helmet we can configure a secure policy for trusted content.
 Due to the potential for a complex configuration we will review several different policies in smaller blocks of code to easily explain what is happening when we implement CSP.
 
 The following Node.js code will add helmet's CSP middleware on each request so that the server responds with a CSP header and a simple security policy.
 
-We define a whitelist where JavaScript code and CSS resources are only allowed to be loaded from the current origin, which is the exact hostname or domain (no sub-domains will be allowed):
+We define a whitelist in which JavaScript code and CSS resources are only allowed to load from the current origin, which is the exact hostname or domain (no sub-domains will be allowed):
 
 ```js
-var helmet = require("helmet");
+const helmet = require("helmet");
 
 app.use(
   helmet.contentSecurityPolicy({
@@ -258,10 +256,10 @@ It is important to remember that if no default policy is specified then all othe
 
 Let's construct the following content policy for our web application:
 
-- By default, allow resources to be loaded only from our own domain origin, or from our Amazon CDN.
+- By default, allow resources to load only from our own domain origin, or from our Amazon CDN.
 - JavaScript sources are restricted to our own domain and Google's hosted libraries domain so we can load AngularJS from Google.
-- Because our web application doesn't need any kind of iframes, or objects to be embedded and rendered we will disable them.
-- Forms are always only submitted to our own domain origin.
+- Because our web application doesn't need any kind of iframes embedding we will disable such objects (refers to `objectSrc`).
+- Forms should only be submitted to our own domain origin.
 
 ```js
 var helmet = require("helmet");
@@ -282,10 +280,9 @@ app.use(
 ### Gradual CSP Implementation
 
 Your Content Security Policy will grow and change as your web application grows too.
-With the many varied directives it could be challenging to introduce a policy all at once so instead an incremental approach is recommended.
+With the many varied directives it could be challenging to introduce a policy all at once so instead of touch-and-go enforcement, strive for an incremental approach.
 
-The CSP header has a built-in directive which helps in understanding how your web application makes use of content policy.
-This directive is used for reporting any actions performed by the browser for any of the directives and the origins that they call.
+The CSP header has a built-in directive which helps in understanding how your web application makes use of content policy. This directive is used in order to track and report any actions performed by the browser that violate the content security policy.
 
 It's simple to add to any running web application:
 
@@ -293,12 +290,12 @@ It's simple to add to any running web application:
 Content-Security-Policy: default-src 'self'; report-uri https://mydomain.com/report
 ```
 
-Once added, the browser will send a POST request to the URI provided with a JSON format in the body for anything that violates the content security policy of serving content from our own origin domain where the page is served.
+Once added, the browser will send a POST request to the URI provided with a JSON format in the body for anything that violates the content security policy of only serving content from our own origin.
 
-With Helmet this is easily configured:
+With Helmet's `csp` middleware this is easily configured:
 
 ```js
-var helmet = require("helmet");
+const helmet = require("helmet");
 
 app.use(
   helmet.csp({
@@ -310,10 +307,10 @@ app.use(
 );
 ```
 
-Another useful configuration for helmet when we are still evaluating is to instruct the browser to only report on content policy violation and not block them:
+Another useful configuration for helmet when we are still evaluating a Content Security Policy is to instruct the browser to only report on content policy violation and not block them:
 
 ```js
-var helmet = require("helmet");
+const helmet = require("helmet");
 
 app.use(
   helmet.csp({
