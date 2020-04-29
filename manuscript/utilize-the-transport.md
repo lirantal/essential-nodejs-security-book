@@ -1,6 +1,6 @@
 # HTTP Headers Security
 
-Developing web applications means that our program depends on communication protocols which have already set standards for how to transfer data and how to manage it.
+Developing web applications means that our program depends on communication protocols which have already a set of standards defined and implemented for how to transfer data and how to manage it.
 
 Browsers utilize HTTP headers to enforce and confirm such communication standards as well as security policies. Making use of these HTTP headers to increase security for our clients (web browsers) is a quick and efficient method to mitigate and prevent many security vulnerabilities.
 
@@ -8,8 +8,8 @@ Browsers utilize HTTP headers to enforce and confirm such communication standard
 
 Let's review two libraries which we can use to implement these security related HTTP headers and apply the solution required for each security mechanism that we will be reviewing:
 
-* Lusca
-* Helmet
+- Lusca
+- Helmet
 
 ### Helmet
 
@@ -34,7 +34,6 @@ Lusca integrates with ExpressJS web applications using a middleware implementati
 
 ![](images/lusca-badges.png)
 
-
 T> ## Security-oriented frameworks
 T>
 T> Lusca is a library that is part of a bigger web application framework called [kraken.js](https://github.com/krakenjs/kraken-js) that focuses on security first, and is too, officially maintained by PayPal's own people.
@@ -44,11 +43,11 @@ T> Lusca is a library that is part of a bigger web application framework called 
 ## Strict Transport Security
 
 Strict Transport Security, also known as HSTS, is a protocol standard to enforce secure connections to the server via HTTP over SSL/TLS.
-HSTS is configured and transmitted from the server to any HTTP web client using the HTTP header *Strict-Transport-Security* which specifies a time interval during which the web client should only communicate over an HTTP secured connection (HTTPS).
+HSTS is configured and transmitted from the server to any HTTP web client using the HTTP header _Strict-Transport-Security_ which specifies a time interval during which the web client should only communicate over an HTTP secured connection (HTTPS).
 
 T> ## Tip
 T>
-T> When a *Strict-Transport-Security* header is sent over HTTP the web client ignores it because the connection is insecure to begin with.
+T> When a _Strict-Transport-Security_ header is sent over HTTP the web client ignores it because the connection is insecure to begin with.
 
 ### The Risk
 
@@ -61,7 +60,7 @@ I>
 
 Sending HTTP requests to the web server even though an HTTPS connection was initially made is not a problem on its own, as the user is unaware of why this is happening and wouldn't necessarily suspect a MITM attack. Perhaps the server has a REST endpoint which does not yet support HTTPS.
 
-In the following flow diagram, *Figure 1-1*, we can see an example scenario where the server returns an HTML file for the login page to the browser, which includes some resources that are accessible over HTTP, like the submit button's image.
+In the following flow diagram, _Figure 1-1_, we can see an example scenario where the server returns an HTML file for the login page to the browser, which includes some resources that are accessible over HTTP, like the submit button's image.
 
 If an attacker is able to perform a Man-In-The-Middle attack and "sit on the wire" to listen and sniff any un-encrypted traffic that flows through, then they can access and read those HTTP requests which may include sensitive data such as the user's cookie. Even worse scenarios may include HTTP resources set for POST or PUT endpoints where actual data is being sent and can be sniffed.
 
@@ -69,7 +68,7 @@ If an attacker is able to perform a Man-In-The-Middle attack and "sit on the wir
 
 ### The Solution
 
-When web servers want to protect their web clients through a secured HTTPS connection, they need to send the *Strict-Transport-Security* header with a given value which represents the duration of time in seconds which the web client should send future requests over a secured HTTPS connection.
+When web servers want to protect their web clients through a secured HTTPS connection, they need to send the _Strict-Transport-Security_ header with a given value which represents the duration of time in seconds which the web client should send future requests over a secured HTTPS connection.
 
 e.g. to tell the web client to send further secure HTTPS requests for the next hour:
 
@@ -88,15 +87,17 @@ npm install helmet --save
 Let's setup the hsts middleware to indicate to a web client such as a browser that it should only send HTTPS requests to our server's hostname for the next 1 month:
 
 ```js
-var helmet = require('helmet');
+var helmet = require("helmet");
 
 // Set the expiration time of HTTPS requests to the server to 1 month,
 // specified in milliseconds
 var reqDuration = 2629746000;
 
-app.use(helmet.hsts({
-  maxAge: reqDuration
-}));
+app.use(
+  helmet.hsts({
+    maxAge: reqDuration,
+  })
+);
 ```
 
 In the above snippet, `app` is an ExpressJS app object, which we are instructing to use the `hsts` library.
@@ -104,7 +105,7 @@ In the above snippet, `app` is an ExpressJS app object, which we are instructing
 It is common for web servers to have sub-domains to fetch assets from, or make REST API calls to, in which case we would also like to protect them and enforce HTTPS requests. To do that, we can include the following optional parameter to the hsts options object:
 
 ```js
-  includeSubDomains: true
+includeSubDomains: true;
 ```
 
 ### Lusca Implementation
@@ -118,17 +119,19 @@ npm install lusca --save
 Once lusca is installed, we can set it up for HSTS support with an ExpressJS application setup:
 
 ```js
-var lusca = require('lusca');
+var lusca = require("lusca");
 
 // Set the expiration time of HTTPS requests to the server to 1 month,
 // specified in milliseconds
 var reqDuration = 2629746000;
 
-app.use(lusca({
-  hsts: {
-    maxAge: requestsDuration
-  }
-}));
+app.use(
+  lusca({
+    hsts: {
+      maxAge: requestsDuration,
+    },
+  })
+);
 ```
 
 As can be seen, using lusca is very similar to using helmet, including their optional arguments like `maxAge`, and `includeSubDomains`.
@@ -142,7 +145,6 @@ The [X-Frame-Options](http://tools.ietf.org/html/7034) HTTP header was introduce
 I> ## Deprecation notice
 I> The X-Frame-Options header was never standardized as part of an official specification but many of the popular browsers today still support it.
 I> It's successor is the Content-Security-Policy header which will be covered in the next section and one should focus on implementing CSP for new websites being built.
-
 
 ### The Risk
 
@@ -185,18 +187,20 @@ With helmet, implementing this header is as simple as requiring the helmet packa
 To set the X-Frame-Options to completely deny any frames:
 
 ```js
-var helmet = require('helmet');
+var helmet = require("helmet");
 
-app.use(helmet.frameguard({
-  action: 'deny'
-}));
+app.use(
+  helmet.frameguard({
+    action: "deny",
+  })
+);
 ```
 
 Similarly, we can allow frames to occur only from the same origin by providing the following object:
 
 ```js
 {
-  action: 'sameorigin'
+  action: "sameorigin";
 }
 ```
 
@@ -209,18 +213,18 @@ Or to allow frames to occur from a specified host:
 }
 ```
 
-
 ### Lusca Implementation
 
 If the lusca library is already installed and our ExpressJS application is already configured and provides the `app` object, then:
 
 ```js
-var lusca = require('lusca');
+var lusca = require("lusca");
 
-app.use(lusca({
-    xframe: 'SAMEORIGIN'
-  }
-));
+app.use(
+  lusca({
+    xframe: "SAMEORIGIN",
+  })
+);
 ```
 
 {pagebreak}
@@ -237,17 +241,17 @@ With [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/Secu
 
 By default, the CSP header will prevent and mitigate several issues such as:
 
-* Inline JavaScript code specified with `<script>` tags, and any DOM events which trigger JavaScript execution such as `onClick()` etc.
-* Inline CSS code specified via a `<style>` tag or attribute elements
+- Inline JavaScript code specified with `<script>` tags, and any DOM events which trigger JavaScript execution such as `onClick()` etc.
+- Inline CSS code specified via a `<style>` tag or attribute elements
 
 ### The Solution
 
 With CSP we can whitelist many configurations for trusted content and as such the initial setup can grow to a set of complex directives.
-Let's review one directive called *connect-src*. It is used to control which remotes the browser is allowed to connect to via XHR, or WebSockets.
+Let's review one directive called _connect-src_. It is used to control which remotes the browser is allowed to connect to via XHR, or WebSockets.
 Acceptable values that we can set for this or other directives are:
 
-* *'none'* - not allowing remote calls such as XHR at all
-* *'self'* - only allow remote calls to our own domain (an exact domain/hostname. sub-domains aren't allowed)
+- _'none'_ - not allowing remote calls such as XHR at all
+- _'self'_ - only allow remote calls to our own domain (an exact domain/hostname. sub-domains aren't allowed)
 
 An example for this directive being set by the web server and allows remote calls only to our own domain and to Google's API domain:
 
@@ -255,13 +259,13 @@ An example for this directive being set by the web server and allows remote call
 Content-Security-Policy: connect-src 'self' https://apis.google.com;
 ```
 
-Another directive to control the whitelist for JavaScript sources is called *script-src*.
+Another directive to control the whitelist for JavaScript sources is called _script-src_.
 This directive helps mitigate Cross-Site-Scripting (XSS) attacks by instructing the browser what is a valid source for evaluating and executing JavaScript source code.
 
-*script-src* supports the *'none'* and *'self'* keywords as values and includes the following options:
+_script-src_ supports the _'none'_ and _'self'_ keywords as values and includes the following options:
 
-* *'unsafe-inline'* - allow any inline JavaScript source code such as `<script>`, and DOM events triggering like `onClick()`, or `javascript:` URIs. It also affects CSS for inline tags.
-* *'unsafe-eval'* - allow execution of code using `eval()`
+- _'unsafe-inline'_ - allow any inline JavaScript source code such as `<script>`, and DOM events triggering like `onClick()`, or `javascript:` URIs. It also affects CSS for inline tags.
+- _'unsafe-eval'_ - allow execution of code using `eval()`
 
 For example, a policy for allowing JavaScript to be executed only from our own domain and from Google's, and allows inline JavaScript code as well:
 
@@ -271,8 +275,8 @@ Content-Security-Policy: script-src 'self' https://apis.google.com 'unsafe-inlin
 
 A full list of supported directives can be found on the [CSP policy directives page on MDN](https://developer.mozilla.org/en-US/docs/Web/Security/CSP/CSP_policy_directives) but let's cover some other common options and their values.
 
-* *default-src* - where a directive doesn't have a value, it defaults to an open, non-restricting configuration. It is safer to set a default for all of the un-configured options and this is the purpose of the *default-src* directive.
-* *script-src* - a directive to set which locations we allow to load or execute JavaScript sources from. If it's set to a value of *'self'* then no inline JavaScript tags are allowed, such as `<script>`, and only sources from our own domain.
+- _default-src_ - where a directive doesn't have a value, it defaults to an open, non-restricting configuration. It is safer to set a default for all of the un-configured options and this is the purpose of the _default-src_ directive.
+- _script-src_ - a directive to set which locations we allow to load or execute JavaScript sources from. If it's set to a value of _'self'_ then no inline JavaScript tags are allowed, such as `<script>`, and only sources from our own domain.
 
 I> ## On implementing CSP
 I> It should also be noted that the CSP configuration needs to meet the implementation of your web application architecture so that if you
@@ -289,65 +293,71 @@ The following Node.js code will add helmet's CSP middleware on each request so t
 We define a whitelist where JavaScript code and CSS resources are only allowed to be loaded from the current origin, which is the exact hostname or domain (no sub-domains will be allowed):
 
 ```js
-var helmet = require('helmet');
+var helmet = require("helmet");
 
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    scriptSrc: ["'self'"],
-    styleSrc: ["'self'"]
-  }
-}));
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'"],
+    },
+  })
+);
 ```
 
 It is important to remember that if no default policy is specified then all other types of content policies are open and allowed, and also some content policies simply don't have a default and must be specified to be overridden.
 
 Let's construct the following content policy for our web application:
 
-* By default, allow resources to be loaded only from our own domain origin, or from our Amazon CDN.
-* JavaScript sources are restricted to our own domain and Google's hosted libraries domain so we can load AngularJS from Google.
-* Because our web application doesn't need any kind of iframes, or objects to be embedded and rendered we will disable them.
-* Forms are always only submitted to our own domain origin.
+- By default, allow resources to be loaded only from our own domain origin, or from our Amazon CDN.
+- JavaScript sources are restricted to our own domain and Google's hosted libraries domain so we can load AngularJS from Google.
+- Because our web application doesn't need any kind of iframes, or objects to be embedded and rendered we will disable them.
+- Forms are always only submitted to our own domain origin.
 
 ```js
-var helmet = require('helmet');
+var helmet = require("helmet");
 
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'", 'https://cdn.amazon.com'],
-    scriptSrc: ["'self'", 'https://ajax.googleapis.com'],
-    childSrc: ["'none'"],
-    objectSrc: ["'none'"],
-    formAction: ["'none'"]
-  }
-}));
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'", "https://cdn.amazon.com"],
+      scriptSrc: ["'self'", "https://ajax.googleapis.com"],
+      childSrc: ["'none'"],
+      objectSrc: ["'none'"],
+      formAction: ["'none'"],
+    },
+  })
+);
 ```
 
 ### Lusca Implementation
 
 Lusca's CSP option has three main objects that can be set:
 
-* `policy` - an object for defining the content policy
-* `reportOnly` - a true or false for defining whether the browser should only report violations of the content policy or actually deny such attempts
-* `reportUri` - the URI string to send reporting data as JSON documents via POST requests being made from the browser
+- `policy` - an object for defining the content policy
+- `reportOnly` - a true or false for defining whether the browser should only report violations of the content policy or actually deny such attempts
+- `reportUri` - the URI string to send reporting data as JSON documents via POST requests being made from the browser
 
 With this simple setup constructing a content policy is very similar to the official documentation with regards to directives and their values.
 
 For example, let's setup the following content policy:
 
-* Allow by default content only from our own origin domain, and from https://ajax.googleapis.com
-* For any content violations just report the error, don't actually deny requests from being sent
-* For any content violations send a report to a remote system
+- Allow by default content only from our own origin domain, and from https://ajax.googleapis.com
+- For any content violations just report the error, don't actually deny requests from being sent
+- For any content violations send a report to a remote system
 
 ```js
-var lusca = require('lusca');
+var lusca = require("lusca");
 
-app.use(lusca.csp({
-  policy: {
-    'default-src': "'self' https://ajax.googleapis.com"
-  },
-  reportOnly: true,
-  reportUri: 'https://mydomain.com/report'
-}));
+app.use(
+  lusca.csp({
+    policy: {
+      "default-src": "'self' https://ajax.googleapis.com",
+    },
+    reportOnly: true,
+    reportUri: "https://mydomain.com/report",
+  })
+);
 ```
 
 ### Gradual CSP Implementation
@@ -369,28 +379,32 @@ Once added, the browser will send a POST request to the URI provided with a JSON
 With Helmet this is easily configured:
 
 ```js
-var helmet = require('helmet');
+var helmet = require("helmet");
 
-app.use(helmet.csp({
-  directives: {
-    defaultSrc: ['self'],
-    reportUri: 'https://mydomain.com/report'
-  }
-}));
+app.use(
+  helmet.csp({
+    directives: {
+      defaultSrc: ["self"],
+      reportUri: "https://mydomain.com/report",
+    },
+  })
+);
 ```
 
 Another useful configuration for helmet when we are still evaluating is to instruct the browser to only report on content policy violation and not block them:
 
 ```js
-var helmet = require('helmet');
+var helmet = require("helmet");
 
-app.use(helmet.csp({
-  directives: {
-    defaultSrc: ['self'],
-    reportUri: 'https://mydomain.com/report'
-  },
-  reportOnly: true
-}));
+app.use(
+  helmet.csp({
+    directives: {
+      defaultSrc: ["self"],
+      reportUri: "https://mydomain.com/report",
+    },
+    reportOnly: true,
+  })
+);
 ```
 
 {pagebreak}
@@ -401,7 +415,7 @@ Some other non-standard HTTP headers exist which are not part of any official sp
 
 ### X-XSS-Protection
 
-The HTTP header *X-XSS-Protection* is used by IE8 and IE9 and allows toggling on or off the Cross-Site-Scripting (XSS) filter capability that is built into the browser.
+The HTTP header _X-XSS-Protection_ is used by IE8 and IE9 and allows toggling on or off the Cross-Site-Scripting (XSS) filter capability that is built into the browser.
 
 Turning XSS filtering on for any IE8 and IE9 browsers rendering your web application requires the following HTTP header to be sent:
 
@@ -412,7 +426,7 @@ X-XSS-Protection: 1; mode=block
 With Helmet, this protection can be turned on using the following snippet:
 
 ```js
-var helmet = require('helmet');
+var helmet = require("helmet");
 
 app.use(helmet.xssFilter());
 ```
@@ -420,14 +434,14 @@ app.use(helmet.xssFilter());
 With Lusca, this is quite simple as well:
 
 ```js
-var lusca = require('lusca');
+var lusca = require("lusca");
 
 app.use(lusca.xssProtection(true));
 ```
 
 ### X-Content-Type-Options
 
-The *X-Content-Type-Options* HTTP header is used by IE, Chrome, and Opera and is used to mitigate a MIME based attack.
+The _X-Content-Type-Options_ HTTP header is used by IE, Chrome, and Opera and is used to mitigate a MIME based attack.
 
 The purpose of this header is to instruct the browser to not sniff override the web server's content type and render the stream as it is sent from the server.
 
@@ -440,7 +454,7 @@ X-Content-Type-Options: nosniff
 Helmet's implementation:
 
 ```js
-var helmet = require('helmet');
+var helmet = require("helmet");
 
 app.use(helmet.noSniff());
 ```
@@ -456,8 +470,8 @@ We learned about Helmet, and Lusca Node.js libraries which can be easily added t
 
 The HTTP security headers that we reviewed are:
 
-* Strict Transport Security
-* X Frame Options
-* Content Security Policy
-* X XSS Protection
-* X Content Type Options
+- Strict Transport Security
+- X Frame Options
+- Content Security Policy
+- X XSS Protection
+- X Content Type Options
