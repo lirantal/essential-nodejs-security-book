@@ -34,12 +34,11 @@ Helmet works by introducing middleware functions for ExpressJS that reply to inc
 
 ## Strict Transport Security
 
-Strict Transport Security, also known as HSTS, is a protocol standard to enforce secure connections to the server via HTTP over SSL/TLS.
-HSTS is configured and transmitted from the server to any HTTP web client using the HTTP header _Strict-Transport-Security_ which specifies a time interval during which the web client should only communicate over an HTTP secured connection (HTTPS).
+Strict Transport Security, also known as HSTS, is a protocol standard to enforce secure connections to the server via HTTP over SSL/TLS. HSTS is configured and transmitted from the server to any HTTP web client using the HTTP header _Strict-Transport-Security_ which specifies a time interval during which the browser should only communicate over an HTTP secured connection (HTTPS).
 
 T> ## Tip
 T>
-T> When a _Strict-Transport-Security_ header is sent over HTTP the web client ignores it because the connection is insecure to begin with.
+T> When a _Strict-Transport-Security_ header is sent over an insecure HTTP connection the web browser ignores it because the connection is insecure to begin with.
 
 ### The Risk
 
@@ -50,19 +49,19 @@ I> The [original HSTS draft](https://tools.ietf.org/html/rfc6797) was published 
 I> Collin Jackson from Carnegie Mellon University, and Adam Barth from Google.
 I>
 
-Sending HTTP requests to the web server even though an HTTPS connection was initially made is not a problem on its own, as the user is unaware of why this is happening and wouldn't necessarily suspect a MITM attack. Perhaps the server has a REST endpoint which does not yet support HTTPS.
+Sending insecure HTTP requests to the web server, even though an HTTPS connection was initially made is not a problem on its own, as the user is unaware of why this is happening and wouldn't necessarily suspect a MITM attack. Perhaps the server has a REST endpoint which does not yet support HTTPS.
 
-In the following flow diagram, _Figure 1-1_, we can see an example scenario where the server returns an HTML file for the login page to the browser, which includes some resources that are accessible over HTTP, like the submit button's image.
+In the following flow diagram, _Figure 1-1_, we can see an example scenario where the server returns an HTML file for the login page to the browser, which includes some resources that are accessible over HTTP (`http://cdn.server.com/images/submit.png`), like the submit button's image.
 
-If an attacker is able to perform a Man-In-The-Middle attack and "sit on the wire" to listen and sniff any un-encrypted traffic that flows through, then they can access and read those HTTP requests which may include sensitive data such as the user's cookie. Even worse scenarios may include HTTP resources set for POST or PUT endpoints where actual data is being sent and can be sniffed.
+If an attacker is able to perform a Man-In-The-Middle attack and "sit on the wire" to listen and sniff any un-encrypted traffic that flows through, then they can access and read those HTTP requests which may include sensitive data. Even worse scenarios may include HTTP resources set for POST or PUT endpoints where actual data is being sent and can be sniffed.
 
 ![Figure 1-1 - Visualizing HTTPS MITM Attack](images/figure1-1.png)
 
 ### The Solution
 
-When web servers want to protect their web clients through a secured HTTPS connection, they need to send the _Strict-Transport-Security_ header with a given value which represents the duration of time in seconds which the web client should send future requests over a secured HTTPS connection.
+When web servers want to protect their web clients through a secured HTTPS connection, they need to send the _Strict-Transport-Security_ header with a given value which represents the duration of time in seconds for which the web client should send future requests over a secured HTTPS connection.
 
-e.g. to tell the web client to send further secure HTTPS requests for the next hour:
+e.g. to instruct the browser to upgrade all requests sent to the server to HTTPS for the next hour:
 
 ```
 Strict-Transport-Security: max-age=3600
@@ -76,14 +75,14 @@ To use Helmet's HSTS library we need to download the npm package and we will als
 npm install helmet --save
 ```
 
-Let's setup the hsts middleware to indicate to a web client such as a browser that it should only send HTTPS requests to our server's hostname for the next 1 month:
+Let's setup the `hsts` middleware to indicate to a web client such as a browser that it should only send HTTPS requests to our server's hostname for the next month:
 
 ```js
-var helmet = require("helmet");
+const helmet = require("helmet");
 
-// Set the expiration time of HTTPS requests to the server to 1 month,
-// specified in milliseconds
-var reqDuration = 2629746000;
+// Set the expiration time of HTTPS requests to the
+// server to 1 month, specified in milliseconds
+const reqDuration = 2629746000;
 
 app.use(
   helmet.hsts({
@@ -92,9 +91,9 @@ app.use(
 );
 ```
 
-In the above snippet, `app` is an ExpressJS app object, which we are instructing to use the `hsts` library.
+In the above snippet, we instruct the ExpressJS `app` to use the `hsts` library.
 
-It is common for web servers to have sub-domains to fetch assets from, or make REST API calls to, in which case we would also like to protect them and enforce HTTPS requests. To do that, we can include the following optional parameter to the hsts options object:
+It is common for web servers to have sub-domains to fetch assets from, or make REST API calls to, in which case we would also like to protect them and enforce HTTPS requests. To do that, we can include the following optional parameter to the `hsts` options object:
 
 ```js
 includeSubDomains: true;
