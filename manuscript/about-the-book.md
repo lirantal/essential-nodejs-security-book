@@ -8,6 +8,10 @@ Even though ExpressJS is used as the case study for securing a web application f
 
 Concepts like _secure code_, _nosql injections_, _secure session management_ and others are important security topics and would benefit any Node.js developer whose primary focus is web development.
 
+## Requirements
+
+The source code, and examples through-out this book are based on the [Long Term Support version of Node.js](https://nodejs.org/en/), which at the current edition of the book is Node.js 12.16.3.
+
 ## Source Code
 
 All the source code examples, and many more variations of them can be found in their complete setup and form in the following GitHub repository inside the _code/_ directory [https://github.com/lirantal/nodejssecurity](https://github.com/lirantal/nodejssecurity).
