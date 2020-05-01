@@ -1,8 +1,14 @@
 # HTTP Headers Security
 
-Developing web applications means that our program depends on communication protocols which have already a set of standards defined and implemented for how to transfer data and how to manage it.
+Developing web applications means that our app depends on communication protocols which already have a set of standards defined and implemented for how to transfer data and how to manage it in a secure manner.
 
-Browsers utilize HTTP headers to enforce and confirm such communication standards as well as security policies. Making use of these HTTP headers to increase security for the code running on the browser client-side is a quick and efficient method to mitigate security vulnerabilities and add defense in depth.
+Browsers utilize headers sent over HTTP (secure HTTP connections mostly) to enforce and confirm such communication standards as well as security policies. Making use of these HTTP headers to increase security for the code running on the browser client-side is a quick and efficient method to mitigate security vulnerabilities and add defense in depth.
+
+## Security Headers Caveats
+
+Utilizing security headers can be a great strategy to help prevent security vulnerabilities but a common mistake is to rely on them solely to mitigate such issues. This is because responding to a request with a security header depends on the browser to actually support, implement and adhere to the specification to enforce it. You may consult the [Strict Transport Security browser compatibility matrix](https://caniuse.com/#feat=stricttransportsecurity) to verify if the browsers used for your web application are supported.
+
+As such, security headers should be used as a defense in depth security mechanism that helps in adding a security control, but they shouldn't be the actual security control to defend against vulnerabilities like Cross-site Scripting.
 
 ## Node.js Packages for HTTP Security Headers
 
@@ -39,6 +45,8 @@ Strict Transport Security, also known as HSTS, is a protocol standard to enforce
 T> ## Tip
 T>
 T> When a _Strict-Transport-Security_ header is sent over an insecure HTTP connection the web browser ignores it because the connection is insecure to begin with.
+
+In future requests after the header has been set, the browser consults a preload service, such as [that of Google's](https://hstspreload.org/), in order to determine whether to website has opt-ed in for HSTS.
 
 ### The Risk
 
@@ -91,13 +99,19 @@ app.use(
 );
 ```
 
-In the above snippet, we instruct the ExpressJS `app` to use the `hsts` library.
+In the above snippet, we instruct the ExpressJS `app` to use the `hsts` middleware and respond to all requests with the `Strict-Transport-Security` header set.
+
+Note that if for any reason the browser receives multiple HSTS header directives it will only respect and enforce the policy based on the first one sent.
 
 It is common for web servers to have sub-domains to fetch assets from, or make REST API calls to, in which case we would also like to protect them and enforce HTTPS requests. To do that, we can include the following optional parameter to the `hsts` options object:
 
 ```js
 includeSubDomains: true;
 ```
+
+T> ## Tip
+T>
+T> If it is necessary to instruct the browser to disable the _Strict-Transport-Security_ a server can respond with this header's `max-age` set to `0` which will result in the browser expiring the policy immediately and enable access over an insecure HTTP connection.
 
 {pagebreak}
 
