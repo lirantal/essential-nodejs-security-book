@@ -2,10 +2,16 @@
 
 ## Liran Tal
 
-Liran is actively maintaining and contributing to major open source projects in the areas of JavaScript and Node.js. He takes a lead role in maintaining and developing the MEAN.JS project, and is a top contributor to the MEAN.io full stack JavaScript framework too. He is a seasoned speaker in JavaScript and Node.js events, including the recent OWASP AppSec IL 2016 event with a talk about Node.js Security. 
+Liran is actively maintaining and contributing to major open source projects in the areas of JavaScript and Node.js. He is an active and avid member of the Node.js Foundation's Security working group, where he formalizes security processes, triage 3rd-party library vulnerabilities impacting the Node.js ecosystem and the Node.js project as a whole.
 
-At Hewlett Packard Enterprise, Liran Tal is leading the R&D engineering team for HPE Software's enterprise content market place, distribution, and collaboration platform featuring the MEAN technology stack with AngularJS, Node.js, MongoDB and a Java REST API backend. He plays a key technical role in system architecture design, shaping the technology strategy from planning and development to deployment and maintenance in HPE IaaS cloud.
+At [Snyk](https://snyk.io), he leads the Developer Advocacy team where he engages developers about open source security in various ways, from engineering tools, to education and awareness. Liran also co-authored [O'Reilly's Serverless Security](https://www.oreilly.com/library/view/serverless-security/9781492082538/) with Guy Podjarn, Snyk's president and long-time security professional.
 
-Being an avid supporter and contributor to the open source movement, in 2007 he has redefined network RADIUS management by founding, and developing daloRADIUS, a world-recognized and industry-leading open source project (http://www.daloradius.com).
+Liran is a seasoned international speaker and greatly enjoys building and engaging communities, through which he plays an active ambassador role for Romania's [JSHeroes](https://jsheroes.io), and the online [MyDevSecOps](https://www.mydevsecops.io/) community, among others.
+
+Previously, Liran held roles as an Engineering Manager for Hewlett Packard Enterprise and Nielsen Marketing Cloud, where he played a key technical role in system architecture and shaped the technology strategy in stacks including Angular, React, and Node.js.
 
 Liran graduated cum laude in his Bachelor of Business and Information Systems Analysis studies and enjoys spending his time with his beloved wife Tal, and his magical son Ori. Amongst other things, his hobbies include playing the guitar, hacking all things Linux, and continuously experimenting and contributing to open source, and web development projects.
+
+---
+
+You can follow and engage Liran at https://twitter.com/liran_tal

@@ -2,10 +2,14 @@
 
 # Foreword
 
-Node.js, and JavaScript at large are quickly taking over software for the web. StackOverflow[^survey1] and GitHub's[^survey2] projects statistics strengthen this notion, showcasing JavaScript in the IoT industry, ChatOps projects, and general Enterprises adoption is growing as well for Node.js. With this trend in the rise for the past several years, it is imperative to take into account security practices and learn how to secure and harden Node.js Web Applications.
+Node.js continues to come on-top with regards to developer adoption for backend platform to build the web. The most recent StackOverflow[^survey1] 2019 survey concluded that it is the most commonly used technology out of 58,543 developers participating in the study, and it follows StackOverflow[^survey1] 2016 survey which demonstrated and depicted similar growth trend for Node.js and JavaScript at large.
 
-This book aims to equip existing Node.js developers with expertise and skills in security best practices. The book takes a practical hands-on approach to the Node.js ecosystem by using a good deal of source code examples, as well as leveraging and reviewing well tested and commonly used libraries and industry security standards.
+GitHub's State of the Octoverse 2017[^survey3] projects statistics strengthen this immense growth, showcasing the Node.js repository as the top 10 most discussed and reviewed project.
 
+The omnipresence of Node.js and JavaScript in web development makes it imperative to take into account security practices and learn how to secure and harden Node.js web applications.
 
-[^survey1]: StackOverflow Developer Survey 2016: http://stackoverflow.com/research/developer-survey-2016
-[^survey2]: GitHub Octoverse 2016: https://octoverse.github.com/
+This book aims to equip existing Node.js developers, both beginners and experienced, with expertise and skills in security best practices. The book takes a practical hands-on approach to the Node.js ecosystem by using a good deal of source code examples, as well as leveraging and reviewing well tested and commonly used libraries and industry security standards.
+
+[^survey1]: StackOverflow Developer Survey 2019: https://insights.stackoverflow.com/survey/2019
+[^survey2]: StackOverflow Developer Survey 2016: https://insights.stackoverflow.com/survey/2016
+[^survey3]: GitHub Octoverse 2017: https://octoverse.github.com/2017/
