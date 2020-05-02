@@ -125,7 +125,7 @@ I> It's successor is the Content-Security-Policy (CSP) header which will be cove
 
 ### The Risk
 
-The [Clickjacking](https://www.owasp.org/index.php/Clickjacking) attack is about misleading the user to perform a seemingly naive and harmless operation while in reality the user is clicking buttons that belong to other elements, or typing text into an input field which is under the attacker's control.
+The [Clickjacking](https://www.owasp.org/index.php/Clickjacking) attack, also known as UI redressing, is about misleading the user to perform a seemingly naive and harmless operation while in reality the user is clicking buttons that belong to other elements, or typing text into an input field which is under the attacker's control.
 
 Common examples of employing a Clickjacking attack:
 
