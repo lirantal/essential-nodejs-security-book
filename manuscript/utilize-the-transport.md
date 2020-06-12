@@ -209,7 +209,7 @@ Using a Content Security Policy header will prevent and mitigate several issues 
 
 ### The Solution
 
-With CSP we can whitelist many configurations for trusted content and as such the initial setup can grow to a set of complex directives. Let's review one directive called _connect-src_. It is used to control which remotes the browser is allowed to connect to via XHR, or WebSockets.
+with CSP allowlists, we can allow many configurations for trusted content and as such the initial setup can grow to a set of complex directives. Let's review one directive called _connect-src_. It is used to control which remotes the browser is allowed to connect to via XHR, or WebSockets.
 Acceptable values that we can set for this directive:
 
 - _'none'_ - not allowing remote calls such as XHR at all
@@ -221,7 +221,7 @@ An example for this directive being set by the web server and allows remote call
 Content-Security-Policy: connect-src 'self' https://apis.google.com;
 ```
 
-Another directive to control the whitelist for JavaScript sources is called _script-src_.
+Another directive to control the allowlist for JavaScript sources is called _script-src_.
 This directive helps mitigate Cross-Site-Scripting (XSS) attacks by informing the browser which sources of content to trust when evaluating and executing JavaScript source code.
 
 _script-src_ supports the _'none'_ and _'self'_ keywords as values and includes the following options:
@@ -251,7 +251,7 @@ Due to the potential for a complex configuration we will review several differen
 
 The following Node.js code will add helmet's CSP middleware on each request so that the server responds with a CSP header and a simple security policy.
 
-We define a whitelist in which JavaScript code and CSS resources are only allowed to load from the current origin, which is the exact hostname or domain (no sub-domains will be allowed):
+We define an allowlist in which JavaScript code and CSS resources are only allowed to load from the current origin, which is the exact hostname or domain (no sub-domains will be allowed):
 
 ```js
 const helmet = require("helmet");

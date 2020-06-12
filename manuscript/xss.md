@@ -61,7 +61,7 @@ For example, XSS using HTML event attributes. HTML supports DOM events to be ass
 <button onClick="alert('xss')">Submit</button>
 ```
 
-The risk presented with this attack is that web applications that attempt to blacklist or filter so-called risky HTML tags like the script tags will fail in this case where the attacker is able to inject JavaScript code to the page by including it as part of the allowed DOM events.
+The risk presented with this attack is that web applications that attempt to use a denylist or filter so-called risky HTML tags like the script tags will fail in this case where the attacker is able to inject JavaScript code to the page by including it as part of the allowed DOM events.
 
 More resources to get acquainted with XSS related injection:
 
@@ -75,9 +75,9 @@ XSS vulnerabilities expose and attack the end user by exploiting browser executi
 
 There are two primary methods to prevent XSS attacks:
 
-* **Filtering** - by filtering, or sanitizing the un-trusted data that originated from the user's input the end result is that the data is modified and removed of the original text that it contained. If for example a user on a blog wanted to comment and give an example of the use of `<script>` tags then filtering based on a blacklist/whitelist  will remove any offending tags such as `<script>`, even if the user did not intend to execute this code on the browser maliciously but rather just to print it and share the text on the website.
+* **Filtering** - by filtering, or sanitizing the un-trusted data that originated from the user's input the end result is that the data is modified and removed of the original text that it contained. If for example, a user on a blog wanted to comment and give an example of the use of `<script>` tags, then filtering based on an allowlist/denylist will remove any offending tags such as `<script>`, even if the user did not intend to execute this code on the browser maliciously but rather just to print it and share the text on the website.
 
- Pitfalls of filtering is that it relies on a blacklist or a whitelist which could be subject to frequent changes, hence it requires maintenance and error-prone, and it usually requires complex string manipulation logic that is often based on regular expressions which by themselves can become a security threat or simply not being written correctly to address future changes and string alterations that the programmer did not expect thus could be bypassed.
+ Pitfalls of filtering is that it relies on allowlist/denylist configurations which could be subject to frequent changes, hence it requires maintenance and error-prone, and it usually requires complex string manipulation logic that is often based on regular expressions which by themselves can become a security threat or simply not being written correctly to address future changes and string alterations that the programmer did not expect thus could be bypassed.
 
 * **Escaping/Encoding** - Unlike filtering, encoding the un-trusted data preserves all the input which the user supplied by escaping potentially malicious characters with their display character encoding. For example, if the input from the user is expected to be an HTML text and it is also treated as such, then in cases where the input is  `<script>alert('xss')</script>` then it is possible to encode the `<` symbol to its HTML entity representation which is `&lt;`. This character entity has also a number associated with, so the `<` symbol could also be represented with the string `&#60;` which will result in the same encoding behavior. Browsers know how to parse these entities and display them correctly.
 
