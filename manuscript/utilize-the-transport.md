@@ -67,7 +67,7 @@ If an attacker is able to perform a Man-In-The-Middle attack and "sit on the wir
 
 ### The Solution
 
-When web servers want to protect their web clients through a secured HTTPS connection, they need to send the _Strict-Transport-Security_ header with a given value which represents the duration of time in seconds for which the web client should send future requests over a secured HTTPS connection.
+For web applications to enforce a secure HTTPS connection, they need to send the _Strict-Transport-Security_ header with a given value which represents the duration of time in seconds for which the web client should send future requests over a secured HTTPS connection.
 
 e.g. to instruct the browser to upgrade all requests sent to the server to HTTPS for the next hour:
 
@@ -111,7 +111,7 @@ includeSubDomains: true;
 
 T> ## Tip
 T>
-T> If it is necessary to instruct the browser to disable the _Strict-Transport-Security_ a server can respond with this header's `max-age` set to `0` which will result in the browser expiring the policy immediately and enable access over an insecure HTTP connection.
+T> If it is necessary to instruct the browser to disable the _Strict-Transport-Security_, a server can respond with this header's `max-age` set to `0` which will result in the browser expiring the policy immediately and enable access over an insecure HTTP connection.
 
 {pagebreak}
 
