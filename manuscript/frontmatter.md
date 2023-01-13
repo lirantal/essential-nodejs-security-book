@@ -2,7 +2,7 @@
 
 # Foreword
 
-Node.js continues to come on-top with regards to developer adoption for backend platform to build the web. The most recent StackOverflow[^survey1] 2019 survey concluded that it is the most commonly used technology out of 58,543 developers participating in the study, and it follows StackOverflow[^survey1] 2016 survey which demonstrated and depicted similar growth trend for Node.js and JavaScript at large.
+Node.js continues to come on-top with regards to developer adoption for backend platform to build the web. The most recent StackOverflow[^survey1] 2019 survey concluded that it is the most commonly used technology out of 58,543 developers participating in the study, and it follows StackOverflow[^survey2] 2016 survey which demonstrated and depicted similar growth trend for Node.js and JavaScript at large.
 
 GitHub's State of the Octoverse 2017[^survey3] projects statistics strengthen this immense growth, showcasing the Node.js repository as the top 10 most discussed and reviewed project.
 
