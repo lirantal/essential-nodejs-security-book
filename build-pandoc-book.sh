@@ -6,5 +6,5 @@ pandoc manuscript/frontmatter.md manuscript/about-the-author.md manuscript/about
     -f markdown-smart \
     --table-of-contents \
     --top-level-division=chapter \
-    --resource-path=/data/manuscript/images \
+    --resource-path=/data/manuscript \
     --output=/data/local-preview.pdf
