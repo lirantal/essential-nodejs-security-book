@@ -1,5 +1,5 @@
 {
-  "name": "nodejssecurity",
+  "name": "essential-nodejs-security-book",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lirantal/nodejssecurity.git"
+    "url": "git+https://github.com/lirantal/essential-nodejs-security-book.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/lirantal/nodejssecurity/issues"
+    "url": "https://github.com/lirantal/essential-nodejs-security-book/issues"
   },
-  "homepage": "https://github.com/lirantal/nodejssecurity#readme",
+  "homepage": "https://github.com/lirantal/essential-nodejs-security-book",
   "dependencies": {
     "safe-regex": "^1.1.0"
   }
