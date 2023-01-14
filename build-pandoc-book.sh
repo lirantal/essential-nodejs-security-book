@@ -7,4 +7,5 @@ pandoc manuscript/frontmatter.md manuscript/about-the-author.md manuscript/about
     --table-of-contents \
     --top-level-division=chapter \
     --resource-path=/data/manuscript \
+    --epub-cover-image=cover.jpg \
     --output=/data/local-preview.pdf
