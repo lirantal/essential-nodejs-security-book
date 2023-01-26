@@ -1,10 +1,10 @@
-# Hardening ExpressJS
+# Hardening Express
 
-While ExpressJS is a very popular, and mature library for a web application framework it still can be tuned beyond the default options that it uses and those that are used by its related middleware plugins. ExpressJS is trusted by many users to run in production sites, and an extra attention to details and how to augment it are crucial in ensuring you have a security-hardened setup.
+While Express is a very popular, and mature library for a web application framework it still can be tuned beyond the default options that it uses and those that are used by its related middleware plugins. Express is trusted by many users to run in production sites, and an extra attention to details and how to augment it are crucial in ensuring you have a security-hardened setup.
 
 ## Security Through Obscurity
 
-ExpressJS follows standards for HTTP web servers and as such it will send by default the *X-Powered-By* header which reports to any web request which web server is processing the request. Such information disclosure for attackers is welcomed with open arms as they have gained knowledge on which framework you are using and can focus their request to speer attacks specific to ExpressJS.
+Express follows standards for HTTP web servers and as such it will send by default the *X-Powered-By* header which reports to any web request which web server is processing the request. Such information disclosure for attackers is welcomed with open arms as they have gained knowledge on which framework you are using and can focus their request to speer attacks specific to Express.
 
 One of the first, very basic and easy hardening action web applications can take is to remove this header:
 
@@ -21,7 +21,7 @@ Brute-force attacks may be employed by an attacker to send a series of username/
 
 A popular use-case is where you may have an administrative interface at the */admin* route and an attacker may try to issue automated requests there with different tokens, different cookie identifier etc to try and get in.
 
-To help mitigate and limit requests being made to your web application we can leverage a library called [express-limiter](https://github.com/ded/express-limiter) which provides a very flexible configuration to integrate into an ExpressJS application.
+To help mitigate and limit requests being made to your web application we can leverage a library called [express-limiter](https://github.com/ded/express-limiter) which provides a very flexible configuration to integrate into an Express application.
 
 I> ## Pre-requisite
 I> A pre-requisite for using *express-limiter* is that it requires a Redis datastore to connect to and manage the limits it imposes per request.
@@ -72,7 +72,7 @@ app.get('/login', function(req, res, next) {
 });
 ```
 
-The *lookup* key passed to the *limits* object is very flexible and by default it will match any object/property options in ExpressJS request object. A short list of useful and informative request object properties are:
+The *lookup* key passed to the *limits* object is very flexible and by default it will match any object/property options in Express request object. A short list of useful and informative request object properties are:
 
 * headers.host
 * headers.user-agent
@@ -124,7 +124,7 @@ app.use(nodeLimits({
 
 ## body-parser middleware
 
-The [body-parser](https://github.com/expressjs/body-parser) middleware augments ExpressJS web framework with support for requests being made and parsing the HTTP body data for common data types such as JSON. *body-parser* is quite popular and is reported to serve more than five million downloads a month.
+The [body-parser](https://github.com/expressjs/body-parser) middleware augments Express web framework with support for requests being made and parsing the HTTP body data for common data types such as JSON. *body-parser* is quite popular and is reported to serve more than five million downloads a month.
 
 ![](images/bodyparser-badges.png)
 
@@ -148,7 +148,7 @@ app.use(bodyParser.json({
 }));
 ```
 
-Once the limit has been set, when an incoming request is bigger than the limit then ExpressJS will emit the error *request entity too large* which is a standard HTTP response and reply with a 413 HTTP code.
+Once the limit has been set, when an incoming request is bigger than the limit then Express will emit the error *request entity too large* which is a standard HTTP response and reply with a 413 HTTP code.
 
 I> ## enforcing limits
 I>
@@ -158,6 +158,6 @@ I> Remember that *body-parser* only handles non-multipart form submissions so se
 
 ## Summary
 
-In this chapter we reviewed some tools and configurations that aid in hardening an ExpressJS web application, such as implementing rate limiting to mitigate flood of requests, implementing quota for file uploads and generally hiding the details of ExpressJS as the application framework.
+In this chapter we reviewed some tools and configurations that aid in hardening an Express web application, such as implementing rate limiting to mitigate flood of requests, implementing quota for file uploads and generally hiding the details of Express as the application framework.
 
-The ExpressJS documentation also provides further details and insights with regards to security best practices that help harden and secure ExpressJS applications. [Product Best Practices](http://expressjs.com/en/advanced/best-practice-security.html) review some of this information and will most probably receive updates in the future so this is always a good resource to keep track on.
+The Express documentation also provides further details and insights with regards to security best practices that help harden and secure Express applications. [Product Best Practices](http://expressjs.com/en/advanced/best-practice-security.html) review some of this information and will most probably receive updates in the future so this is always a good resource to keep track on.

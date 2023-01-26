@@ -45,11 +45,11 @@ SELECT id, user FROM users WHERE username = 'admin' -- AND password = ''
 
 ### The Risk
 
-ExpressJS by default will not provide a mechanism to access any data sent in a non-GET request, which is an obvious problem when implementing simple things such as login forms which send form data or a JSON POST request. To quote the [official guide](http://expressjs.com/en/api.html) on expressjs.com on this:
+Express by default will not provide a mechanism to access any data sent in a non-GET request, which is an obvious problem when implementing simple things such as login forms which send form data or a JSON POST request. To quote the [official guide](http://expressjs.com/en/api.html) on expressjs.com on this:
 
 > req.body contains key-value pairs of data submitted in the request body. By default, it is undefined, and is populated when you use body-parsing middleware such as body-parser and multer.
 
-This is where the `body-parser` library comes in. It makes it available to parse non-GET query data and it is widely used today in the majority of ExpressJS projects as the standard way of accessing requests body payload. In-fact it is so popular that as of writing this book, the body-parser library has been downloaded for roughly 5 million times just this past month.
+This is where the `body-parser` library comes in. It makes it available to parse non-GET query data and it is widely used today in the majority of Express projects as the standard way of accessing requests body payload. In-fact it is so popular that as of writing this book, the body-parser library has been downloaded for roughly 5 million times just this past month.
 
 body-parser has two main parsing middlewares which are described as follows:
 
@@ -65,7 +65,7 @@ In the case of the `.json()` method it will further attempt to convert any strin
 
 A typical application will expect to receive the username and password fields either as a normal HTML FORM submit or through an AJAX call where the request sends these fields as a JSON content-type.
 
-In this case, an ExpressJS web application will require the following middlewares:
+In this case, an Express web application will require the following middlewares:
 
 ```js
 app.use(bodyParser.json());
@@ -163,7 +163,7 @@ This can also be shortened and written as follows:
 
 A security vulnerability can be introduced when un-sanitized parameters are passed to the evaluated JavaScript expression for the $where operator.
 
-The following is a very stripped down version of this vulnerability when exploited by an attacker. It demonstrates an ExpressJS application that defined a `/userCountries` GET API which executes a MongoDB injection with a $where operator:  
+The following is a very stripped down version of this vulnerability when exploited by an attacker. It demonstrates an Express application that defined a `/userCountries` GET API which executes a MongoDB injection with a $where operator:  
 
 ```
 app.get('/userCountries', function(req, res) {

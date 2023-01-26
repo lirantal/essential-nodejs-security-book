@@ -109,7 +109,7 @@ Context is the most important thing about getting output encoding right. It is c
 
 [Node ESAPI](https://github.com/ESAPI/node-esapi) is OWASP's Enterprise Security API ported to Node.js.
 
-The Node ESAPI project provides the functionality of encoding output for proper contexts, and it features both a functional way of using it like other npm packages, as well as integration with ExpressJS middleware layer.
+The Node ESAPI project provides the functionality of encoding output for proper contexts, and it features both a functional way of using it like other npm packages, as well as integration with Express middleware layer.
 
 Encoding output in the context of HTML:
 

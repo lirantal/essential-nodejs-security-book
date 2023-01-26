@@ -26,9 +26,9 @@ The risk and impact of any session attack is owning the user's identity and thus
 T> ## On Session Management
 T> OWASP maintains an up to date [Session Management](https://www.owasp.org/index.php/Session_Management_Cheat_Sheet) checklist to validate your web security compliance with security standards.
 
-## Session Security in Node.js and ExpressJS
+## Session Security in Node.js and Express
 
-ExpressJS utilizes the [express-session](https://github.com/expressjs/session) middleware for session management.
+Express utilizes the [express-session](https://github.com/expressjs/session) middleware for session management.
 The project is well maintained, tested and de-facto solution for session management in Node.js.
 
 ![](images/expressjs-badges.png)
@@ -112,7 +112,7 @@ The cookie name seems like a basic and unimportant piece of information as it's 
 Fingerprinting is an field in security which attempts to identify the services and their versions that power a service based on how they work and what they send.
 For example, a common PHP web application sets the cookie name to PHPSESSION, providing an attacker with a head-start of knowing already which platform is powering a web application, how and where to focus the vector of attack. In such cases, the attacker had already gathered information on the system without needing to do anything.
 
-In Node.js case, ExpressJS's session middleware defaults to a cookie with a name of *connect.sid*.
+In Node.js case, Express's session middleware defaults to a cookie with a name of *connect.sid*.
 In attempt to hide this information from the outside world we can change the cookie name to anything else:
 
 ```js
