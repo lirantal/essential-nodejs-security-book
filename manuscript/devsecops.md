@@ -111,7 +111,7 @@ I> Using Components with Known Vulnerabilities makes it to number 9 in the [top 
 
 The previous chapter covered the [snyk](https://snyk.io) tool and platform, and highlights the importance of gaining visibility into risks from bundled applications dependencies.
 
-To mitigate 3rd party vulnerabilities be sure to integrate snyk or another solution as part of your CI so you can catch vulnerable dependencies before they reach production.
+To mitigate 3rd party vulnerabilities be sure to integrate Snyk or another solution as part of your CI so you can catch vulnerable dependencies before they reach production.
 
 {pagebreak}
 
