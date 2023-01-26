@@ -1,6 +1,6 @@
 
 # Essential Node.js Security
-GitHub repository for the book [Essential Node.js Security for ExpressJS Web Applications](https://leanpub.com/essential-nodejs-security) which you can get a PDF copy of Leanpub.com.
+GitHub repository for the book [Essential Node.js Security for Express Web Applications](https://leanpub.com/essential-nodejs-security) which you can get a PDF copy of Leanpub.com.
 
 ![Essential Node.js Security](https://d2sofvawe08yqg.cloudfront.net/essential-nodejs-security/s_hero?1673556658)
 
