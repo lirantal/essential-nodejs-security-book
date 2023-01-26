@@ -153,13 +153,13 @@ To summarize, the server which implements the *csurf* library will always look f
 
 ### ExpressJS csurf Library
 
-[csurf](https://github.com/expressjs/csurf) is another middleware from the ExpressJS family, which provides a mechanism to manage CSRF tokens.
+[csurf](https://github.com/expressjs/csurf) is another middleware from the Express family, which provides a mechanism to manage CSRF tokens.
 
 ![](images/csurf-badges.png)
 
 The *csurf* library makes use of either the server's session storage or the client's cookie storage to persist and compare the CSRF token, therefore it must be used together with either of them. This chapter will cover usage with both of these options.
 
-Installing *csurf* for use in an expressjs project:
+Installing *csurf* for use in an Express project:
 
 ```bash
 npm install csurf --save
