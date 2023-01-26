@@ -1,7 +1,7 @@
 # About The Reviewers
 
 ## Danny Grander
-Danny Grander is a veteran security researcher and the cofounder of Snyk.io, where he 
+Danny Grander is a veteran security researcher and the co-founder of Snyk.io, where he 
 works on open source security and leads Snyk’s security research. Previously, Danny 
 was the CTO of Gita and a lead researcher and developer for a few startups. Danny’s 
 CTF team, Pasten, won both the Chaos Computer Club and Google’s CTFs.
