@@ -112,12 +112,16 @@ var esapiEncoder = esapi.encoder();
 
 app.get('/', function(req, res, next) {
 
-  // example for unsafe user input intended for embedding in HTML markup
+  // example for unsafe user input intended for embedding
+  // in HTML markup
   // req.query.userinput may include the string:
-  // <div><span>Example</span><script>alert('xss')</script></div>
+  // <div>
+  //   <span>Example</span><script>alert('xss')</script>
+  // </div>
   var userInputExample = req.query.userinput;
 
-  // encodedInput is now safe to output in an HTML context of the web page
+  // encodedInput is now safe to output in an HTML
+  // context of the web page
   var encodedInput = esapiEncoder.encodeForHTML(userInputExample);
 });
 ```
