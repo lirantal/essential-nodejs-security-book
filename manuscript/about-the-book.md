@@ -14,6 +14,6 @@ The source code, and examples through-out this book are based on the [Long Term 
 
 ## Source Code
 
-All the source code examples, and many more variations of them can be found in their complete setup and form in the following GitHub repository inside the _code/_ directory [https://github.com/lirantal/essential-nodejs-security-book](https://github.com/lirantal/essential-nodejs-security-book).
+All the source code examples, and many more variations of them can be found in their complete setup and form in the following GitHub repository inside the `code/` directory [https://github.com/lirantal/essential-nodejs-security-book](https://github.com/lirantal/essential-nodejs-security-book).
 
 Feedback and comments are highly appreciated and welcome. If you find any issues, improvements, or room for updates please open a GitHub issue, submit a pull request, or contact the author directly via [email](mailto:liran@lirantal.com) or on [Twitter](https://twitter.com/liran_tal).
