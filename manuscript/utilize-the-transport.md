@@ -24,8 +24,6 @@ excellent choice for Node.js web applications based on Express.
 
 [Helmet](https://github.com/helmetjs/helmet) is an application-level middleware for ExpressJS, providing widespread support for HTTP security headers, such as `X-XSS-Protection` to mitigate various browser related Cross-Site-Scripting (XSS) security vulnerabilities, X-Frame-Options protection and many others.
 
-![](images/helmet-badges.png)
-
 Helmet, being a collection of middleware functions for increased HTTP headers security, is well maintained and kept up to date. As such, it makes it a good choice to incorporate in your
 Node.js web applications.
 
