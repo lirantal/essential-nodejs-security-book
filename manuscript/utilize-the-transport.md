@@ -209,11 +209,11 @@ Using a Content Security Policy header will prevent and mitigate several issues 
 
 ### The Solution
 
-with CSP allowlists, we can allow many configurations for trusted content and as such the initial setup can grow to a set of complex directives. Let's review one directive called _connect-src_. It is used to control which remotes the browser is allowed to connect to via XHR, or WebSockets.
+with CSP allowlists, we can allow many configurations for trusted content and as such the initial setup can grow to a set of complex directives. Let's review one directive called `connect-src`. It is used to control which remotes the browser is allowed to connect to via XHR, or WebSockets.
 Acceptable values that we can set for this directive:
 
-- _'none'_ - not allowing remote calls such as XHR at all
-- _'self'_ - only allow remote calls to our own domain (an exact domain/hostname. sub-domains aren't allowed)
+- `'none'` - not allowing remote calls such as XHR at all
+- `'self'` - only allow remote calls to our own domain (an exact domain/hostname. sub-domains aren't allowed)
 
 An example for this directive being set by the web server and allows remote calls only to our own domain and to Google's API domain:
 
@@ -221,13 +221,13 @@ An example for this directive being set by the web server and allows remote call
 Content-Security-Policy: connect-src 'self' https://apis.google.com;
 ```
 
-Another directive to control the allowlist for JavaScript sources is called _script-src_.
+Another directive to control the allowlist for JavaScript sources is called `script-src`.
 This directive helps mitigate Cross-Site-Scripting (XSS) attacks by informing the browser which sources of content to trust when evaluating and executing JavaScript source code.
 
-_script-src_ supports the _'none'_ and _'self'_ keywords as values and includes the following options:
+`script-src` supports the `'none'` and `'self'` keywords as values and includes the following options:
 
-- _'unsafe-inline'_ - allow any inline JavaScript source code such as `<script>`, and DOM events triggering like `onClick()`, or `javascript:` URIs. It also affects CSS for inline tags.
-- _'unsafe-eval'_ - allow execution of code using `eval()`.
+- `'unsafe-inline'` - allow any inline JavaScript source code such as `<script>`, and DOM events triggering like `onClick()`, or `javascript:` URIs. It also affects CSS for inline tags.
+- `'unsafe-eval'` - allow execution of code using `eval()`.
 
 For example, a policy for allowing JavaScript to be executed only from our own domain and from Google's, and allows inline JavaScript code as well:
 
@@ -237,8 +237,8 @@ Content-Security-Policy: script-src 'self' https://apis.google.com 'unsafe-inlin
 
 A full list of supported directives can be found on the [CSP policy directives page on MDN](https://developer.mozilla.org/en-US/docs/Web/Security/CSP/CSP_policy_directives) but let's cover some other common options and their values.
 
-- _default-src_ - where a directive doesn't have a value, it defaults to an open, non-restricting configuration. It is safer to set a default for all of the un-configured options and this is the purpose of the _default-src_ directive.
-- _script-src_ - a directive to set which locations we allow to load or execute JavaScript sources from. If it's set to a value of _'self'_ then no inline JavaScript tags are allowed, such as `<script>`, and only sources from our own domain.
+- `default-src` - where a directive doesn't have a value, it defaults to an open, non-restricting configuration. It is safer to set a default for all of the un-configured options and this is the purpose of the `default-src` directive.
+- `script-src` - a directive to set which locations we allow to load or execute JavaScript sources from. If it's set to a value of `'self'` then no inline JavaScript tags are allowed, such as `<script>`, and only sources from our own domain.
 
 I> ## On implementing CSP
 I> It should also be noted that the CSP configuration needs to meet the implementation of your web application architecture. If you
