@@ -14,4 +14,4 @@ Liran graduated cum laude in his Bachelor of Business and Information Systems An
 
 ---
 
-You can follow and engage with Liran at https://twitter.com/liran_tal
+You can follow Liran on [Twitter](https://twitter.com/liran_tal)
